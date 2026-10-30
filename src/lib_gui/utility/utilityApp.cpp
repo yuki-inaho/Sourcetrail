@@ -165,7 +165,7 @@ utility::ProcessOutput utility::executeProcess(
 			}
 
 			output += text;
-			if (logProcessOutput)
+			if (logProcessOutput && !text.empty())
 			{
 				logBuffer += text;
 				const bool isEndOfLine = (logBuffer.back() == '\n');

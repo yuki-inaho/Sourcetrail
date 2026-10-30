@@ -6,7 +6,9 @@
 class MessageQuitApplication: public Message<MessageQuitApplication>
 {
 public:
-	MessageQuitApplication() {}
+	explicit MessageQuitApplication(int exitCode = 0): exitCode(exitCode) {}
+
+	const int exitCode;
 
 	static const std::string getStaticType()
 	{

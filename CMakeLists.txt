@@ -857,6 +857,10 @@ set_property(
 		$<$<BOOL:${BUILD_PYTHON_LANGUAGE_PACKAGE}>:${LIB_PYTHON_INCLUDE_PATHS}>
 )
 
+# The outcome value tests need the headers, without propagating a language-standard
+# requirement into the existing Clang adapter tests.
+target_include_directories(${TEST_PROJECT_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/src/lib_core")
+
 if (WIN32)
 	set_target_properties(${TEST_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "/bigobj")
 	set_property(

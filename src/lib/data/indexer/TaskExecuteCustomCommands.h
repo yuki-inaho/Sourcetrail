@@ -1,6 +1,9 @@
 #ifndef TASK_EXECUTE_CUSTOM_COMMANDS_H
 #define TASK_EXECUTE_CUSTOM_COMMANDS_H
 
+#include <atomic>
+#include <memory>
+#include <mutex>
 #include <set>
 #include <vector>
 
@@ -12,6 +15,7 @@
 #include "TimeStamp.h"
 
 class DialogView;
+class ExternalIndexerRunState;
 class IndexerCommandCustom;
 class IndexerCommandProvider;
 class PersistentStorage;
@@ -28,7 +32,8 @@ public:
 		std::shared_ptr<PersistentStorage> storage,
 		std::shared_ptr<DialogView> dialogView,
 		size_t indexerThreadCount,
-		const FilePath& projectDirectory);
+		const FilePath& projectDirectory,
+		std::shared_ptr<ExternalIndexerRunState> runState = nullptr);
 
 private:
 	void doEnter(std::shared_ptr<Blackboard> blackboard) override;
@@ -47,11 +52,12 @@ private:
 	std::unique_ptr<IndexerCommandProvider> m_indexerCommandProvider;
 	std::shared_ptr<PersistentStorage> m_storage;
 	std::shared_ptr<DialogView> m_dialogView;
+	std::shared_ptr<ExternalIndexerRunState> m_runState;
 	const size_t m_indexerThreadCount;
 	const FilePath m_projectDirectory;
 
 	TimeStamp m_start;
-	bool m_interrupted = false;
+	std::atomic<bool> m_interrupted {false};
 	size_t m_indexerCommandCount;
 	std::vector<std::shared_ptr<IndexerCommandCustom>> m_serialCommands;
 	std::vector<std::shared_ptr<IndexerCommandCustom>> m_parallelCommands;

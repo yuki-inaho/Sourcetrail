@@ -1,0 +1,40 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/external.srctrlprj"
+  ],
+  "database_state": "schema-25",
+  "indexed_counts": [
+    3,
+    3
+  ],
+  "indexed_files": 1,
+  "log": "retry.log",
+  "log_sha256": "054c2a7bf4865348e549fb5d543b41468fc97a79d8e0fdbd8443bd8ad8995ca0",
+  "node_count": 3,
+  "receipts": [
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 172473,
+      "source": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/commands 日本語 with spaces/failure.toy"
+    },
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 172474,
+      "source": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/commands 日本語 with spaces/success.toy"
+    }
+  ],
+  "returncode": 0,
+  "snapshot": "retry.snapshot.json",
+  "snapshot_sha256": "55fc4a6e1181f955927e265f8fc443eae2fe12b50a2caa44464c7ad7ee3e84af",
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

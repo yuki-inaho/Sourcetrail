@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "007-external-indexer-failure-baseline",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+    "mode": "working-tree",
+    "note": "日付はAsia/Tokyo。新しい人工対象と基準取得時の実行器を読解。実アプリのソース版は呼出し側の申告であり、バイナリーハッシュは005の成功済み14段階と一致する。現在のソースには未ビルドの変更があり得るため、HEADからビルド版を自動推定しない。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "tests/external_indexer/fixtures/expected.json",
+      "symbol": "TOY-EXTERNAL-001",
+      "sha256": "236d904f62db1e7166145b8dffd1820a61b332461878e84cc7619e9e079a8b5a",
+      "excerpt": "\"failure_exit_code\": 1",
+      "contracts": [
+        "EXECUTION-001",
+        "GRAPH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "6種の実行結果と直列・並列の旧索引保持を独立した期待値として定義した。",
+      "uncertainty": "汎用Customは出力能力を交渉しないため、終了0からグラフ完全性は判定しない。",
+      "next_action": "新実装で同じ期待値と元の正常系14観測を確認する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "tests/external_indexer/fixtures/driver.py",
+      "symbol": "TOY_EXTERNAL_STDERR_WARNING",
+      "sha256": "4e23e693749250b037d636a96eb54ca5163e7787ea43ae76ef5e514e43b1e7fd",
+      "excerpt": "exit_code = 7 if mode == \"exit7\" else 0",
+      "contracts": [
+        "EXECUTION-001",
+        "GRAPH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "人工プログラムのモード・終了値・cwd・引数を別の実行記録で確認した。",
+      "uncertainty": "自分で索引を書く解析器ではなく、実行境界に限定した対象。",
+      "next_action": "解析器出力の検証は別の能力契約と対象で追加する。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline-harness.py",
+      "symbol": "def observe_preservation",
+      "sha256": "56936106ad553f046031b8f2255ce0f564856ff0484c346f9b6dcfcef90c49e7",
+      "excerpt": "def observe_preservation(directory: Path, executable: Path, output: Path, spec: dict, *, parallel: bool) -> dict:",
+      "contracts": [
+        "EXECUTION-001",
+        "GRAPH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "実アプリのC++解析で元索引を作り、失敗する更新後の全保存観測を比較した。両スケジュールで元索引が失われた。",
+      "uncertainty": "この版は基準取得時の保存用スナップショットであり、現在の実行器の更新先ではない。",
+      "next_action": "実行器本体を変更した際はハッシュを別に記録し、過去の基準を上書きしない。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/verification.json",
+      "description": "基準取得コマンド・失敗状態・入力設定修正と版の照合"
+    },
+    {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline/summary.json",
+      "description": "全6ケースと直列・並列の保持・再試行の観測"
+    },
+    {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline-harness.py",
+      "description": "基準取得時の実行器。summaryのハッシュと一致"
+    },
+    {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline/nonzero-exit/execution.log",
+      "description": "実際のexit7がアプリexit0へ化ける原文ログ"
+    },
+    {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline/preservation-parallel/failed-update.snapshot.json",
+      "description": "失敗後に採用された候補の観測"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "local-agent"
+  }
+}

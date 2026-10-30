@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 kxefbhfr/missing-executable/external.srctrlprj"
+  ],
+  "database_state": "uninitialized-empty",
+  "indexed_counts": [
+    0,
+    1
+  ],
+  "indexed_files": 0,
+  "log": "execution.log",
+  "log_sha256": "973854a1638464b6a3590f33140b8419fea7d2e227d286b4e340e54523300ca8",
+  "node_count": 0,
+  "receipts": [],
+  "returncode": 1,
+  "snapshot": null,
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

@@ -189,6 +189,7 @@ add_files(
 	data/indexer/CombinedIndexerCommandProvider.h
 	data/indexer/ExternalIndexerCommandBuilder.cpp
 	data/indexer/ExternalIndexerCommandBuilder.h
+	data/indexer/ExternalIndexerRunState.h
 	data/indexer/Indexer.h
 	data/indexer/IndexerBase.cpp
 	data/indexer/IndexerBase.h

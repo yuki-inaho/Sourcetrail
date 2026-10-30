@@ -3,6 +3,7 @@
 #include "ApplicationSettings.h"
 #include "CombinedIndexerCommandProvider.h"
 #include "DialogView.h"
+#include "ExternalIndexerRunState.h"
 #include "IndexerCommand.h"
 #include "IndexerCommandCustom.h"
 #include "PersistentStorage.h"
@@ -548,6 +549,7 @@ void Project::buildIndex(RefreshInfo info, std::shared_ptr<DialogView> dialogVie
 	tempStorage->setup();
 
 	std::shared_ptr<TaskGroupSequence> taskSequential = std::make_shared<TaskGroupSequence>();
+	const auto externalIndexerRunState = std::make_shared<ExternalIndexerRunState>();
 
 	if (info.mode != REFRESH_ALL_FILES &&
 		(info.filesToClear.size() || info.nonIndexedFilesToClear.size()))
@@ -721,10 +723,12 @@ void Project::buildIndex(RefreshInfo info, std::shared_ptr<DialogView> dialogVie
 			tempStorage,
 			dialogView,
 			adjustedIndexerThreadCount,
-			getProjectSettingsFilePath().getParentDirectory()));
+			getProjectSettingsFilePath().getParentDirectory(),
+			externalIndexerRunState));
 	}
 
-	taskSequential->addTask(std::make_shared<TaskFinishParsing>(tempStorage, dialogView));
+	taskSequential->addTask(
+		std::make_shared<TaskFinishParsing>(tempStorage, dialogView, externalIndexerRunState));
 
 	taskSequential->addTask(std::make_shared<TaskGroupSelector>()->addChildTasks(
 		std::make_shared<TaskGroupSequence>()->addChildTasks(
@@ -741,9 +745,13 @@ void Project::buildIndex(RefreshInfo info, std::shared_ptr<DialogView> dialogVie
 					TabId::app(), std::make_shared<TaskLambda>([this]() { discardTempStorage(); }));
 			}))));
 
-	taskSequential->addTask(std::make_shared<TaskLambda>([dialogView, this]() {
-		m_refreshStage = RefreshStageType::NONE;
-		MessageIndexingFinished().dispatch();
+	taskSequential->addTask(std::make_shared<TaskLambda>([externalIndexerRunState, this]() {
+		// Storage disposition above is queued on the app scheduler. Queue the
+		// terminal event behind it so a headless quit cannot overtake cleanup.
+		Task::dispatch(TabId::app(), std::make_shared<TaskLambda>([externalIndexerRunState, this]() {
+			m_refreshStage = RefreshStageType::NONE;
+			MessageIndexingFinished(externalIndexerRunState->snapshot().exitCode()).dispatch();
+		}));
 	}));
 
 	taskSequential->addTask(std::make_shared<TaskGroupSelector>()->addChildTasks(

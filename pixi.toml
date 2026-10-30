@@ -70,6 +70,7 @@ test-python-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-
 test-legacy = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^legacy$'", depends-on = ["build"] }
 test-contracts = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -L contract", depends-on = ["build"], description = "Check executable implementation and verification-tool contracts" }
 test-toys = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^toy-projects$'", depends-on = ["build"], description = "Run checked-in synthetic C++ and Python projects with independent semantic expectations" }
+test-external-indexer = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^external-indexer-e2e$'", depends-on = ["build"], description = "Check real external process failures, candidate rejection, and successful retry" }
 verify-docs = { cmd = "python script/verification/check_docs.py", description = "Validate contract traceability, source anchors, reports, and documentation links" }
 verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }, { task = "verify-portability", environment = "portability" }], description = "Run implementation and toy tests, documentation, bounded models, and portable core conformance" }
 test = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml", depends-on = ["build"], description = "Run the existing suite and both languages' regression and E2E tests" }

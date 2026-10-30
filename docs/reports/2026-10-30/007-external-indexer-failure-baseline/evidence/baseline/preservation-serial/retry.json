@@ -1,0 +1,39 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 _wnm044i/preservation-serial/external.srctrlprj"
+  ],
+  "indexed_counts": [
+    3,
+    3
+  ],
+  "indexed_files": 1,
+  "log": "retry.log",
+  "log_sha256": "2ab6c3e706178244e4e33fbc5d088cad409b0c05c2dbc2c17dfc70619fd01dd2",
+  "node_count": 3,
+  "receipts": [
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 _wnm044i/preservation-serial",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 422,
+      "source": "/tmp/external indexer 日本語 _wnm044i/preservation-serial/commands 日本語 with spaces/failure.toy"
+    },
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 _wnm044i/preservation-serial",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 423,
+      "source": "/tmp/external indexer 日本語 _wnm044i/preservation-serial/commands 日本語 with spaces/success.toy"
+    }
+  ],
+  "returncode": 0,
+  "snapshot": "retry.snapshot.json",
+  "snapshot_sha256": "55fc4a6e1181f955927e265f8fc443eae2fe12b50a2caa44464c7ad7ee3e84af",
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

@@ -19,7 +19,7 @@
 | C／C++ | 内部 Clang 解析 → `ParserClient` → 中間結果 | pixi は LLVM／Clang 11.1 系。C++ の定義、呼び出し、オーバーロード、マクロ、依存、診断、更新を試験 | C++20／23 全機能、modules、coroutines 等の対応証明はない。C の全規格も本変更の新規試験では網羅しない |
 | Python | 外部索引器 → 作業 DB → Python 後処理 | 固定アーカイブ `v1_db25_p6`。試験ランナー Python 3.11 系と、旧索引器に渡す Python 3.8 系環境を分離 | Python 3.10 以降の構文一般や新しい型構文等の対応は未実装・未検証 |
 | Java | 内部 Java 言語パッケージ | 実装は残っている | pixi の基準ビルドは Java OFF。既存言語だから自動的に検証済みとはしない |
-| Custom | 外部コマンド、DB パス等の置換変数 | 既存の拡張入口 | 任意の外部索引器が共通契約を満たす保証はない |
+| Custom | 外部コマンド、DB パス等の置換変数 | 起動・非ゼロ終了の集約、失敗候補の破棄とCLI終了を人工対象で検査する境界 | 任意の外部索引器の出力能力・意味的完全性は交渉しない |
 | Rust | 専用アダプターなし | 本変更は必要な境界と受入条件を記述 | Rust の解析・Cargo 統合・UI 登録は未実装 |
 
 根拠: [pixi.toml](../../pixi.toml)、[download_python_indexer.sh](../../script/download_python_indexer.sh)、[SourceGroupPythonEmpty.cpp](../../src/lib_python/project/SourceGroupPythonEmpty.cpp)、[SourceGroupSettingsWithCppStandard.cpp](../../src/lib/settings/source_group/component/cxx/SourceGroupSettingsWithCppStandard.cpp)。
@@ -30,7 +30,7 @@
 
 ## 提案するアダプターの契約
 
-これは新 API が既に実装されたという記述ではない。Python 更新や Rust 実装に着手する前の設計条件である。[ADR-0004](../adr/0004-language-capabilities.md)
+以下の全項目を交渉する新APIは未実装である。現在は [ADR-0007](../adr/0007-external-indexer-outcomes.md)に従い、実行管理のうち外部コマンドの起動・非ゼロ終了を分類し、失敗を候補DBの破棄とCLI終了へ渡す境界を実装する。版・構文・能力・座標・出力の交渉は、Python更新やRust実装に着手する際の設計条件として残る。[ADR-0004](../adr/0004-language-capabilities.md)
 
 | 項目 | 宣言・入力に必要な内容 | 拒否または劣化表示する条件 |
 | --- | --- | --- |
@@ -45,6 +45,14 @@
 | 実行条件 | コマンド、引数列、cwd、環境、タイムアウト、終了状態 | 子プロセス失敗、版交渉失敗、出力欠損 |
 
 同じ「呼び出しをたどる」という操作を提供するために、全言語へ同一の構文分類を押し付ける必要はない。共通の最小能力と、言語固有の追加能力を別に定義する。
+
+### 現在強制する外部実行結果の境界
+
+`EXECUTION-001` は、一度発生した実行失敗を同じ処理中の後続成功で消さず、失敗した候補を採用しない。正常終了したコマンドだけを索引済み件数へ加え、後始末の後にCLIへ失敗を伝える。PythonとCustomが同じ境界を使うため、将来の外部アダプターも既存の実行結果の経路へ接続できる。[実行結果の契約と人工対象](../contracts/external-indexing.md)
+
+stderrへの警告や、終了コード0でDBへ何も書かない場合はプロセス成功として扱う。実行成功、構文診断、完全なグラフ出力を分け、後の能力交渉で出力の要件を明示する。タイムアウトと取消の一般契約は未実装である。
+
+次のエンジン更新では、この実行結果の試験に加え、mtimeの同時刻・逆行時刻を含む入力分類 `GAP-002` と、バイト・文字・表示位置を分ける座標契約 `GAP-003` を確認する。固定トイの成功を、未宣言の構文や位置規約へ広げない。
 
 ## Python を更新する作業
 
@@ -95,7 +103,7 @@ Rust ではソースファイルだけでなく、crate、edition、features、c
 | Source Group の生成 | [SourceGroupFactory.cpp](../../src/lib/project/SourceGroupFactory.cpp), 各 `SourceGroupFactoryModule*` | 対象列挙、除外、依存、部分消去を規定 |
 | 実行側の登録 | [src/app/main.cpp](../../src/app/main.cpp), [src/indexer/main.cpp](../../src/indexer/main.cpp) | GUI 側だけ登録してもワーカーは動かない |
 | 内部コマンド／IPC | [IndexerCommandType.h](../../src/lib/data/indexer/IndexerCommandType.h), [SharedIndexerCommand.cpp](../../src/lib/data/indexer/interprocess/shared_types/SharedIndexerCommand.cpp) | 列挙追加だけでは共有メモリー変換を満たさない |
-| 外部実行 | [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp), [TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp) | DB 版、並列書き込み、失敗、後処理を契約化 |
+| 外部実行 | [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp), [TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp), [ExternalIndexerOutcome.h](../../src/lib_core/ExternalIndexerOutcome.h) | 起動・非ゼロ終了はEXECUTION-001へ接続。DB版、出力検査、並列書き込み、後処理の能力を追加で規定 |
 | 共通表現 | [ParserClient.h](../../src/lib/data/parser/ParserClient.h), [NodeKind.h](../../src/lib/data/NodeKind.h), [Edge.h](../../src/lib/data/graph/Edge.h) | 足りない意味は ADR と版変更を伴って追加 |
 | 設定 UI・表示 | [QtProjectWizard.cpp](../../src/lib_gui/qt/project_wizard/QtProjectWizard.cpp), [NodeType.cpp](../../src/lib/data/NodeType.cpp) | 設定入力・フィルター・アイコン・探索表示を確認 |
 | 検証 | [tests/python](../../tests/python/), [src/test](../../src/test/), [契約](../contracts/) | 対応能力の宣言と実行する例を一対一で追跡 |

@@ -16,6 +16,7 @@ add_files(
 	CxxEndToEndTestSuite.cpp
 	CxxTypeNameTestSuite.cpp
 	ExternalIndexerCommandTestSuite.cpp
+	ExternalIndexerOutcomeTestSuite.cpp
 	FileManagerTestSuite.cpp
 	FilePathFilterTestSuite.cpp
 	FilePathTestSuite.cpp

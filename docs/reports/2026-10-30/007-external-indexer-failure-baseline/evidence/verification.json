@@ -1,0 +1,32 @@
+{
+  "base_commit": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+  "record_timezone": "Asia/Tokyo",
+  "baseline_command": "pixi run --locked python tests/external_indexer/harness.py --output build/external-indexer/baseline --binary-source-revision 78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+  "exit_code": 1,
+  "intentional_result": "The old implementation violates the new authored execution contract; failure is preserved, not accepted as a test pass.",
+  "binary_sha256": "51b9e74eb9d344ea136b89c17aaf0eb59eaa801f984a1974a94004f1b76889d7",
+  "binary_matches_prior_successful_toy_record": true,
+  "prior_record": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/summary.json",
+  "baseline_harness_source_sha256": "56936106ad553f046031b8f2255ce0f564856ff0484c346f9b6dcfcef90c49e7",
+  "correct_fixture_receipts_verified": true,
+  "failed_process_cases": [
+    "missing-executable",
+    "nonzero-exit",
+    "mixed-serial",
+    "mixed-parallel"
+  ],
+  "compatible_process_success_cases": [
+    "stderr-zero",
+    "silent-zero"
+  ],
+  "accepted_index_lost_after_failure": [
+    "serial",
+    "parallel"
+  ],
+  "setup_corrections": [
+    "The initial placeholder was mistyped and did not expand; receipt checks rejected unexecuted fixtures.",
+    "The corrected executable path needed quotes under the legacy Custom command-line parser; receipt checks again rejected unexecuted fixtures.",
+    "Only the final quoted %{SOURCE_FILE_PATH} fixture run is the baseline in this batch."
+  ],
+  "comparison_scope": "Process outcomes and accepted schema25 observations. No timeout/cancellation/OS atomicity claim."
+}

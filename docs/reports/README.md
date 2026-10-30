@@ -13,7 +13,7 @@
 | `YYYY-MM-DD/NNN-topic/report.md` | 何を、どの方法で調べ、何が分かったか |
 | `YYYY-MM-DD/NNN-topic/evidence/` | 実行結果など、レポートの主張を支える最小限の証跡 |
 
-日付とタイムゾーンは各バッチに記録する。001〜003は Asia/Tokyo、004以降の今回の作業は実行環境の UTC を使う。
+日付とタイムゾーンは各バッチに記録する。001〜003と007以降は Asia/Tokyo、004〜006は当時の実行環境の UTC を使う。
 バッチの番号はその日のディレクトリ内で重複させない。レビュー・訂正・再検証は、新しい番号で元のバッチを参照する。
 
 ## バッチ一覧
@@ -26,6 +26,8 @@
 | [2026-10-30 / 004-toy-project-design-and-baseline](2026-10-30/004-toy-project-design-and-baseline/report.md) | 人工C++／Python対象の設計・14段階の基準・発見した欠落 | 5 source 単位 | 失敗した元基準を保持し、修正と構造変更を別々に確認 |
 | [2026-10-30 / 005-portable-core-and-verification](2026-10-30/005-portable-core-and-verification/report.md) | 可搬コア・共通コマンド・Rust参照移植・797ケース・全14観測一致 | 9 source 単位 | assistant側の指摘を解消、ユーザー側のレビュー待ち |
 | [2026-10-30 / 006-published-evidence-repair](2026-10-30/006-published-evidence-repair/report.md) | CIで検出した証跡の追跡漏れと、Git indexだけでの文書再検査 | 2 source 単位 | 元の失敗と訂正を保持、ユーザー側のレビュー待ち |
+| [2026-10-30 / 007-external-indexer-failure-baseline](2026-10-30/007-external-indexer-failure-baseline/report.md) | 人工外部索引器の設計と、実行失敗の誤成功・旧索引置換の再現 | 3 source 単位 | 独立した期待と失敗基準を保持、修正後の照合とユーザー側レビューへ |
+| [2026-10-30 / 008-external-indexer-outcomes](2026-10-30/008-external-indexer-outcomes/report.md) | 外部実行の成否・候補破棄・終端通知、838ケース、14観測一致とTLA+の検証 | 10 source 単位 | assistant側指摘と観測器の初期状態認識を修正、ユーザー側レビュー待ち |
 
 ## 入力版と履歴
 

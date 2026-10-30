@@ -1,0 +1,23 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 kxefbhfr/preservation-serial clean/external.srctrlprj"
+  ],
+  "database_state": "schema-25",
+  "indexed_counts": [
+    1,
+    1
+  ],
+  "indexed_files": 1,
+  "log": "clean.log",
+  "log_sha256": "02e760405b80dd20584d277b5bfa42bcdaec1cc8cd6dde7b9a424c6731b10d28",
+  "node_count": 3,
+  "receipts": [],
+  "returncode": 0,
+  "snapshot": "clean.snapshot.json",
+  "snapshot_sha256": "55fc4a6e1181f955927e265f8fc443eae2fe12b50a2caa44464c7ad7ee3e84af",
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

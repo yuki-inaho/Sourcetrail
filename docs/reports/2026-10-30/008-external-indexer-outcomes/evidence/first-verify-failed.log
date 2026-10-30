@@ -1,0 +1,477 @@
+✨ Pixi task (configure in default): cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON: (Configure the application with C++ and Python indexing)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Version: 0.0.0
+-- setting up the buildtype for versioning
+bash: ''
+-- 'Treat warnings as errors' policy is disabled
+-- Found LLVM 11.1.0
+-- Trying to find Clang compiler headers in '.' build config in directory '/workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/default/./lib/clang/11.1.0/include'.
+-- Found headers for '.' build config.
+CMake Warning (dev) at CMakeLists.txt:188 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Qt 5.15.8
+CMake Deprecation Warning at src/lib_core/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Building the Java indexer will be skipped. You can enable building this target by setting 'BUILD_JAVA_LANGUAGE_PACKAGE' to 'ON'.
+CMake Warning (dev) at CMakeLists.txt:558 (add_custom_command):
+  The following keywords are not supported when using
+  add_custom_command(TARGET): DEPENDS.
+
+  Policy CMP0175 is not set: add_custom_command() rejects invalid arguments.
+  Run "cmake --help-policy CMP0175" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:753 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:754 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- create symlink: /workspace/scratch/715c5c4089e4/Sourcetrail/bin/app/data -> /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/data
+-- Configuring done (0.4s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+
+✨ Pixi task (python-parser-ready in python-parser): python --version: (Prepare the Python environment inspected by the legacy indexer)
+Python 3.8.20
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/12] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+[2/11] Automatic MOC for target Sourcetrail_lib_gui
+[3/10] Building CXX object CMakeFiles/Sourcetrail_lib.dir/src/lib/data/TaskFinishParsing.cpp.o
+[4/10] Building CXX object CMakeFiles/Sourcetrail_lib_gui.dir/src/lib_gui/qt/view/QtDialogView.cpp.o
+[5/10] Linking CXX static library libSourcetrail_lib_gui.a
+[6/10] Linking CXX static library libSourcetrail_lib.a
+[7/10] Linking CXX executable app/sourcetrail_indexer
+[8/10] Linking CXX executable app/Sourcetrail
+[9/10] Building CXX object CMakeFiles/Sourcetrail_test.dir/src/test/ExternalIndexerOutcomeTestSuite.cpp.o
+[10/10] Linking CXX executable test/Sourcetrail_test
+
+✨ Pixi task (test in default): ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml: (Run the existing suite and both languages' regression and E2E tests)
+Internal ctest changing into directory: /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+Test project /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+      Start  1: external-indexer-e2e
+ 1/12 Test  #1: external-indexer-e2e .............***Failed    1.48 sec
+EEEEEEEE.............                                                    [100%]
+==================================== ERRORS ====================================
+_____ ERROR at setup of test_external_process_outcome[missing-executable] ______
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+________ ERROR at setup of test_external_process_outcome[nonzero-exit] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+_________ ERROR at setup of test_external_process_outcome[stderr-zero] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+_________ ERROR at setup of test_external_process_outcome[silent-zero] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+________ ERROR at setup of test_external_process_outcome[mixed-serial] _________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+_______ ERROR at setup of test_external_process_outcome[mixed-parallel] ________
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+____ ERROR at setup of test_failed_update_preserves_accepted_index[serial] _____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+___ ERROR at setup of test_failed_update_preserves_accepted_index[parallel] ____
+
+tmp_path_factory = TempPathFactory(_given_basetemp=None, _trace=<pluggy._tracing.TagTracerSub object at 0x7ff3c5860510>, _basetemp=PosixPath('/tmp/pytest-of-root/pytest-57'), _retention_count=3, _retention_policy='all')
+
+    @pytest.fixture(scope="module")
+    def observation(tmp_path_factory):
+        output = Path(os.environ.get("SOURCETRAIL_EXTERNAL_OUTPUT", str(tmp_path_factory.mktemp("external-outcomes"))))
+        executable = Path(os.environ.get("SOURCETRAIL_BINARY", str(ROOT / "build/pixi/app/Sourcetrail")))
+>       return run_suite(executable, output.resolve())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/external_indexer/test_external_indexer.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/external_indexer/harness.py:247: in run_suite
+    observed = project.run(output / case["id"], "execution")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/external_indexer/harness.py:142: in run
+    snapshot = read_snapshot(self.database, self.directory)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+database = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable/external.srctrldb')
+project_root = PosixPath('/tmp/external indexer 日本語 01daosal/missing-executable')
+
+    def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:
+        """Read an existing DB in a single read transaction; fail closed on drift."""
+        if not database.is_file():
+            raise SnapshotError(f"Index database does not exist: {database}")
+        normal = Normalizer(project_root)
+        try:
+            with closing(sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                if db.execute("PRAGMA quick_check").fetchall() != [("ok",)]:
+                    raise SnapshotError("SQLite integrity check failed")
+                if db.execute("PRAGMA foreign_key_check").fetchall():
+                    raise SnapshotError("SQLite foreign-key check failed")
+                version = db.execute("SELECT value FROM meta WHERE key = 'storage_version'").fetchall()
+                if version != [("25",)]:
+>                   raise SnapshotError(f"Unsupported schema version: {version!r}")
+E                   script.verification.semantic_graph.SnapshotError: Unsupported schema version: []
+
+script/verification/semantic_graph.py:109: SnapshotError
+=========================== short test summary info ============================
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[missing-executable]
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[nonzero-exit]
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[stderr-zero]
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[silent-zero]
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[mixed-serial]
+ERROR tests/external_indexer/test_external_indexer.py::test_external_process_outcome[mixed-parallel]
+ERROR tests/external_indexer/test_external_indexer.py::test_failed_update_preserves_accepted_index[serial]
+ERROR tests/external_indexer/test_external_indexer.py::test_failed_update_preserves_accepted_index[parallel]
+13 passed, 8 errors in 1.32s
+
+      Start  2: toy-projects
+ 2/12 Test  #2: toy-projects .....................   Passed   25.45 sec
+      Start  3: legacy
+ 3/12 Test  #3: legacy ...........................   Passed    3.63 sec
+      Start  4: cpp-contracts
+ 4/12 Test  #4: cpp-contracts ....................   Passed    0.77 sec
+      Start  5: verification-contracts
+ 5/12 Test  #5: verification-contracts ...........   Passed    9.98 sec
+      Start  6: cpp-regression
+ 6/12 Test  #6: cpp-regression ...................   Passed    0.15 sec
+      Start  7: cpp-e2e
+ 7/12 Test  #7: cpp-e2e ..........................   Passed   11.54 sec
+      Start  8: python-regression
+ 8/12 Test  #8: python-regression ................   Passed    2.30 sec
+      Start  9: python-e2e
+ 9/12 Test  #9: python-e2e .......................   Passed   10.93 sec
+      Start 10: core-refresh-contracts
+10/12 Test #10: core-refresh-contracts ...........   Passed    0.02 sec
+      Start 11: core-command-contracts
+11/12 Test #11: core-command-contracts ...........   Passed    0.00 sec
+      Start 12: core-execution-contracts
+12/12 Test #12: core-execution-contracts .........   Passed    0.00 sec
+
+92% tests passed, 1 tests failed out of 12
+
+Label Time Summary:
+contract            =  37.71 sec*proc (7 tests)
+cpp                 =  39.41 sec*proc (8 tests)
+e2e                 =  49.40 sec*proc (4 tests)
+external-indexer    =   1.48 sec*proc (1 test)
+legacy              =   3.63 sec*proc (1 test)
+portability         =   0.03 sec*proc (3 tests)
+python              =  50.14 sec*proc (5 tests)
+regression          =   6.08 sec*proc (3 tests)
+toy                 =  25.45 sec*proc (1 test)
+
+Total Test time (real) =  66.26 sec
+
+The following tests FAILED:
+	  1 - external-indexer-e2e (Failed)                     contract cpp e2e external-indexer python
+Errors while running CTest

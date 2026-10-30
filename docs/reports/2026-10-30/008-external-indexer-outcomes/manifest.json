@@ -1,0 +1,211 @@
+{
+  "batch_id": "008-external-indexer-outcomes",
+  "created_on": "2026-10-30",
+  "evidence": [
+    {
+      "description": "実行コマンドと終了値、838ケース、入力ハッシュ、意図した変更、14保存観測の一致",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/verification.json"
+    },
+    {
+      "description": "全12スイートの原文出力を含むJUnit",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/ctest-results.xml"
+    },
+    {
+      "description": "Pixi全ゲートの最終実出力",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/verify.log"
+    },
+    {
+      "description": "外部実行6ケースと保持・再試行2系列の実観測",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/external-indexer/summary.json"
+    },
+    {
+      "description": "C++とPythonの従来トイ14段階を再検証した記録",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/summary.json"
+    },
+    {
+      "description": "5構成のTLC終了値・探索状態・モデルハッシュ",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/formal-summary.json"
+    },
+    {
+      "description": "C++コア／Rust参照実装32778入力の適合検査",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/portability-summary.json"
+    },
+    {
+      "description": "assistant側独立レビューの指摘・修正確認・限定範囲",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/integration-review.json"
+    },
+    {
+      "description": "初回統合実行で検出したハーネスの空DB誤解",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/first-verify-failed.log"
+    },
+    {
+      "description": "全33Markdown・20契約・6プロファイル・8レポートの文書検査",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/docs-final.log"
+    },
+    {
+      "description": "Git indexだけを別ディレクトリへ出した公開対象の文書検査",
+      "path": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/index-export-docs.log"
+    }
+  ],
+  "kind": "source",
+  "report": "report.md",
+  "review": {
+    "reviewer": "local-agent",
+    "status": "pending"
+  },
+  "schema_version": 1,
+  "source_revision": {
+    "base_commit": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+    "mode": "working-tree",
+    "note": "Asia/Tokyo。基準コミットからの作業差分を含む。各SHA256は最終読解時の実ファイルを示し、基準コミットに変更内容が存在すると主張しない。"
+  },
+  "units": [
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "PORTABILITY-001"
+      ],
+      "excerpt": "return hasFailure() ? 1 : 0;",
+      "finding_type": "observed",
+      "id": "ANN-001",
+      "next_action": "別言語へ移す場合は同じ独立期待と順序入力へ接続する。",
+      "observation": "外部プロセスの分類と開始・確定・成功・失敗の計数を標準C++の値処理に分離。後続成功で失敗は消えない。",
+      "path": "src/lib_core/ExternalIndexerOutcome.h",
+      "sha256": "169bf33e330d84a91ccca00ef8511de378bc96f1712ebcb984444ea81515d847",
+      "symbol": "classifyExternalProcess",
+      "uncertainty": "コマンド識別子、ワーカーjoin、出力の妥当性はこの値型の責務ではない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001"
+      ],
+      "excerpt": "mutable std::mutex m_mutex;",
+      "finding_type": "observed",
+      "id": "ANN-002",
+      "next_action": "取消を実装する前に確定済みと未確定を分けた終端契約を設計する。",
+      "observation": "実行ごとの状態とmutexをアダプターに置き、480回の並行開始・確定で値を照合した。",
+      "path": "src/lib/data/indexer/ExternalIndexerRunState.h",
+      "sha256": "b924a6364bd76e79b495c0d25c0adfd5fca2e9a0ea1095d361ce67cc74063d7a",
+      "symbol": "class ExternalIndexerRunState",
+      "uncertainty": "任意のスレッドスケジュールや例外中断の証明ではない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "PROCESS-001"
+      ],
+      "excerpt": "m_runState->settleCommand(outcome);",
+      "finding_type": "observed",
+      "id": "ANN-003",
+      "next_action": "OSプロセス制御は独立した障害対象と期限の契約で追加する。",
+      "observation": "プロセス結果を共通分類し成功数への加算を成功時だけに限定。全ワーカーjoin後、失敗出力のマージとPython後処理を行わない。",
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "sha256": "48b09783bfae3f8ea262a76212598cffbae978fbcda7f1adf12775384059df95",
+      "symbol": "TaskExecuteCustomCommands::runIndexerCommand",
+      "uncertainty": "通常の出力パイプ待機・タイムアウト実装は変更していない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "PUBLICATION-001"
+      ],
+      "excerpt": "m_dialogView->clearDialogs();",
+      "finding_type": "observed",
+      "id": "ANN-004",
+      "next_action": "GUIの操作可能状態と進捗表示を実画面で観測するE2Eを追加する。",
+      "observation": "失敗候補を問い合わせ・最適化・採用確認に渡さず、破棄とダイアログ解除を要求して後始末を継続する。",
+      "path": "src/lib/data/TaskFinishParsing.cpp",
+      "sha256": "e0263b31aaaab7dea5267c1e7ac9859a0bd0389f93f35f2f923b9c7df5177478",
+      "symbol": "TaskFinishParsing::doUpdate",
+      "uncertainty": "実GUI操作と同一GUIプロセス内の再試行は未実測。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "PUBLICATION-001"
+      ],
+      "excerpt": "MessageIndexingFinished(externalIndexerRunState->snapshot().exitCode()).dispatch();",
+      "finding_type": "observed",
+      "id": "ANN-005",
+      "next_action": "renameと削除の障害注入を別の公開契約で設計する。",
+      "observation": "候補処分と終端通知を同じapp schedulerに順に追加し、通知の先行を防ぐ。",
+      "path": "src/lib/project/Project.cpp",
+      "sha256": "8a233bf2ac992d2b17317f7f51202feaa62811bc157fed5b68039cf48fdd5280",
+      "symbol": "Project::buildIndex",
+      "uncertainty": "削除失敗やプロセスクラッシュを含む公開原子性は対象外。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "PROCESS-001"
+      ],
+      "excerpt": "Qt::QueuedConnection",
+      "finding_type": "observed",
+      "id": "ANN-006",
+      "next_action": "対応OSのプロセス／イベントループ確認を能力表へ追加する。",
+      "observation": "メッセージの終了値を値で保持し、Qtメインスレッド上のexitへ渡す。CLIの実行で終了1を確認した。",
+      "path": "src/lib_gui/qt/QtCoreApplication.cpp",
+      "sha256": "5c335d653ee1977541da220f21629b20b367e1a5166f0ef5e719698d9d28ab10",
+      "symbol": "QtCoreApplication::handleMessage",
+      "uncertainty": "全OS・全Qt版の実行結果ではない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001"
+      ],
+      "excerpt": "m_mainWindow->hideWindowsTaskbarProgress();",
+      "finding_type": "observed",
+      "id": "ANN-007",
+      "next_action": "実GUI検証では三つの解除を別々に観測する。",
+      "observation": "既存のQtスレッド内コールバックでウィンドウ、タスクバー進捗、UIブロックを解除する。",
+      "path": "src/lib_gui/qt/view/QtDialogView.cpp",
+      "sha256": "1357bc62c6745e85ebba74959a0115f131c3eea8cbb2b73b16f105706e5be733",
+      "symbol": "QtDialogView::clearDialogs",
+      "uncertainty": "Windows表示はソース読解のみで実行済みとしない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "GRAPH-001"
+      ],
+      "excerpt": "return \"uninitialized-empty\", None",
+      "finding_type": "observed",
+      "id": "ANN-008",
+      "next_action": "出力能力交渉を設計するとき、別の不正出力トイを作成する。",
+      "observation": "実CLIの失敗・保持・再試行を観測し、未初期化の空DBと採用済み意味スナップショットを区別する。",
+      "path": "tests/external_indexer/harness.py",
+      "sha256": "46c29c66dd21c4da7a63dee4788e5054de7e321598c4ce8a69904c9a78d35689",
+      "symbol": "read_index_observation",
+      "uncertainty": "人工索引器はグラフを書かず、終了0を完全索引と扱わない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001"
+      ],
+      "excerpt": "NoPublicationAfterFailure == failed # {} => candidate # \"published\"",
+      "finding_type": "observed",
+      "id": "ANN-009",
+      "next_action": "取消や期限の状態を導入する変更時にモデルと負例を先に拡張する。",
+      "observation": "2〜3コマンドの開始・確定・候補処分・後始末・通知を374到達状態で検査した。",
+      "path": "docs/contracts/formal/ExternalIndexing.tla",
+      "sha256": "ba3efd70702567c9dad512ff9b25aab0339ddea1b684c4231dd0fd3352669792",
+      "symbol": "NoPublicationAfterFailure",
+      "uncertainty": "C++との機械的refinement証明、任意個数、進行性を保証しない。"
+    },
+    {
+      "contracts": [
+        "EXECUTION-001",
+        "REFRESH-001"
+      ],
+      "excerpt": "\"NoPublicationAfterFailure\"",
+      "finding_type": "observed",
+      "id": "ANN-010",
+      "next_action": "新モデル追加時にも構文エラーや別の違反を成功にしない負例を維持する。",
+      "observation": "既存更新モデルと新実行モデルを同じ固定版TLCで検査。負例は指定の不変条件違反を要求する。",
+      "path": "script/verification/check_models.py",
+      "sha256": "6c8cdeae0fb38c597dc119500d8edfddc5a15a9db5299192c7ae26e094b447da",
+      "symbol": "external-indexing-negative-control",
+      "uncertainty": "モデル検査の成功だけからアダプターやOSの正しさを推論しない。"
+    }
+  ]
+}

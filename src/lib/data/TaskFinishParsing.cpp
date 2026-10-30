@@ -1,7 +1,10 @@
 #include "TaskFinishParsing.h"
 
+#include <utility>
+
 #include "Blackboard.h"
 #include "DialogView.h"
+#include "ExternalIndexerRunState.h"
 #include "MessageIndexingFinished.h"
 #include "MessageIndexingStatus.h"
 #include "MessageStatus.h"
@@ -10,8 +13,12 @@
 #include "utilityString.h"
 
 TaskFinishParsing::TaskFinishParsing(
-	std::shared_ptr<PersistentStorage> storage, std::shared_ptr<DialogView> dialogView)
-	: m_storage(storage), m_dialogView(dialogView)
+	std::shared_ptr<PersistentStorage> storage,
+	std::shared_ptr<DialogView> dialogView,
+	std::shared_ptr<ExternalIndexerRunState> runState)
+	: m_storage(storage)
+	, m_dialogView(dialogView)
+	, m_runState(runState ? std::move(runState) : std::make_shared<ExternalIndexerRunState>())
 {
 }
 
@@ -25,11 +32,40 @@ void TaskFinishParsing::terminate()
 
 void TaskFinishParsing::doEnter(std::shared_ptr<Blackboard> blackboard)
 {
-	m_storage->setMode(SqliteIndexStorage::STORAGE_MODE_READ);
+	if (!m_runState->snapshot().hasFailure())
+	{
+		m_storage->setMode(SqliteIndexStorage::STORAGE_MODE_READ);
+	}
 }
 
 Task::TaskState TaskFinishParsing::doUpdate(std::shared_ptr<Blackboard> blackboard)
 {
+	const sourcetrail::core::ExternalIndexerOutcome outcome = m_runState->snapshot();
+	if (outcome.hasFailure())
+	{
+		// EXECUTION-001: execution failure is independent of parser diagnostics.
+		// Complete the task sequence so it closes and discards the candidate before
+		// sending the terminal result. Never offer failed process output for adoption.
+		int indexedSourceFileCount = 0;
+		blackboard->get("indexed_source_file_count", indexedSourceFileCount);
+		int sourceFileCount = 0;
+		blackboard->get("source_file_count", sourceFileCount);
+		MessageStatus(
+			L"Indexing failed: " + std::to_wstring(indexedSourceFileCount) + L"/" +
+				std::to_wstring(sourceFileCount) + L" source files indexed; " +
+				std::to_wstring(outcome.failed) +
+				L" external commands failed. Discarding temporary index.",
+			true,
+			false)
+			.dispatch();
+		// Custom execution uses an indexing-progress dialog, not an unknown-progress
+		// dialog. Clear the active terminal UI and unblock the project in either case.
+		m_dialogView->clearDialogs();
+		MessageIndexingStatus(false).dispatch();
+		blackboard->set("discard_database", true);
+		return STATE_SUCCESS;
+	}
+
 	TimeStamp start = TimeStamp::now();
 
 	m_dialogView->showUnknownProgressDialog(L"Finish Indexing", L"Optimizing database");

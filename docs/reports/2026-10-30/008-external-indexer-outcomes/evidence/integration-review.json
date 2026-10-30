@@ -1,0 +1,393 @@
+{
+  "schema_version": 1,
+  "review_id": "external-indexer-outcomes-independent-review",
+  "recorded_at_utc": "2026-10-30 07:47:14 UTC",
+  "reviewer": {
+    "agent": "/root/integration_review",
+    "role": "assistant-side independent reviewer",
+    "independence": "A separate assistant agent reviewed the working-tree candidate. Production and test changes were implemented by root and adapter_execution_audit.",
+    "status": "completed",
+    "source_or_test_edits_performed": false,
+    "application_builds_or_broad_gates_run": false
+  },
+  "user_local_agent_review": {
+    "status": "pending",
+    "note": "This assistant-side review does not stand in for the user's requested local-agent review."
+  },
+  "repository": {
+    "root": "/workspace/scratch/715c5c4089e4/Sourcetrail",
+    "branch": "refactor/external-indexer-outcomes",
+    "base_commit": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+    "head_at_source_capture": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+    "revision_scope": "Uncommitted working-tree candidate above the base commit. Source SHA-256 values identify the reviewed bytes; HEAD alone does not identify these changes."
+  },
+  "output_authorization": {
+    "path": "build/external-indexer/integration-review.json",
+    "scope": "Root explicitly authorized this output-only review receipt after the read-only review. No source or tests were modified."
+  },
+  "result": {
+    "status": "completed-with-resolved-findings",
+    "original_findings": 3,
+    "resolved_original_findings": 3,
+    "open_review_findings": 0,
+    "production_blockers": [],
+    "additional_placeholder_review": "completed; no new blocker",
+    "full_gate_result": "Owned by root; not independently re-executed or certified by this receipt."
+  },
+  "scope": [
+    "Successful external-process behavior and the distinction between transport outcome, scheduler completion, diagnostics and graph validity.",
+    "Shared run-state accounting, mutex protection, worker join barrier and retained failures.",
+    "TaskFinishParsing forced candidate discard, continuation of TaskGroupSequence, GUI terminal cleanup and candidate storage disposition.",
+    "Task::dispatch and actual TaskScheduler queue semantics for cleanup before terminal notification.",
+    "QtCoreApplication queued exit-code propagation and existing successful defaults.",
+    "ExternalIndexing.tla bounded safety model, implementation correspondence and required negative-control result.",
+    "Real-CLI artificial target harness, fixture receipts, accepted-index preservation, retry checks and fail-closed observations.",
+    "Source-grounded recognition of an uninitialized, completely empty main database after first-candidate rejection.",
+    "CTest platform registration and evidence/source provenance."
+  ],
+  "findings": [
+    {
+      "id": "EXEC-REVIEW-001",
+      "severity": "high",
+      "status": "resolved; independently rechecked in source",
+      "title": "Failed external execution left the GUI indexing dialog and blocked UI active.",
+      "evidence": [
+        "TaskExecuteCustomCommands uses updateCustomIndexingDialog, which creates QtIndexingProgressDialog.",
+        "The original failure branch in TaskFinishParsing called only hideUnknownProgressDialog.",
+        "QtDialogView::hideUnknownProgress pops only QtUnknownProgressDialog and does not unblock the UI while other windows remain.",
+        "Bypassing finishedIndexingDialog also bypassed its Windows taskbar progress cleanup."
+      ],
+      "affected_paths": [
+        "src/lib/data/TaskFinishParsing.cpp",
+        "src/lib_gui/qt/view/QtDialogView.cpp",
+        "src/test/ExternalIndexerOutcomeTestSuite.cpp"
+      ],
+      "resolution": [
+        "The failure branch calls clearDialogs.",
+        "QtDialogView::clearDialogs clears windows, hides Windows taskbar progress and unblocks the UI in the same Qt-thread callback.",
+        "TrackingFinishDialog assertions require clearCalls == 1, unknownProgressHideCalls == 0 and finishedCalls == 0."
+      ],
+      "validation_scope": "Independent source review of the complete call path and added assertions. The reviewer did not build or execute the C++ test or operate a real GUI/Windows desktop."
+    },
+    {
+      "id": "EXEC-REVIEW-002",
+      "severity": "medium",
+      "status": "resolved; independently reproduced before and after",
+      "title": "Receipt counts allowed duplicate successes to stand in for an unexecuted failing input.",
+      "evidence": [
+        "Before the fix, check_case accepted a mixed-serial observation with two copies of success.toy's successful receipt, CLI code 1 and count [1, 2].",
+        "observe_preservation checked only the number of failed-run receipts and did not verify retry receipt contents."
+      ],
+      "affected_paths": [
+        "tests/external_indexer/harness.py",
+        "tests/external_indexer/test_external_indexer.py"
+      ],
+      "resolution": [
+        "Shared check_receipts requires the exact expected source set without duplicates and validates mode, exit code, arguments, cwd and positive integer PID.",
+        "Both failed-update and retry preservation phases call the shared checker.",
+        "Negative controls cover duplicate-success, wrong-retry-mode, wrong-cwd, wrong-exit and unexpected-source."
+      ],
+      "validation_scope": "Twelve read-only test-function calls passed after the receipt fix. The original duplicate-success reproduction is rejected. All ten groups of saved baseline case/preservation receipts pass the new receipt checker.",
+      "baseline_integrity_note": "The saved baseline receipts already contained the proper failure and success invocations. This finding did not invalidate the baseline's actual execution evidence."
+    },
+    {
+      "id": "EXEC-REVIEW-003",
+      "severity": "medium",
+      "status": "resolved; independently rechecked in source",
+      "title": "A Linux-specific shebang fixture was registered as an E2E test on other platforms.",
+      "evidence": [
+        "The fixture relies on executable .toy scripts, chmod, POSIX shebang execution and Linux HOME/.config settings.",
+        "The initial CTest condition checked only BUILD_CXX_LANGUAGE_PACKAGE, including Windows where the fixture cannot be executed as designed."
+      ],
+      "affected_paths": [
+        "cmake/testing.cmake",
+        "tests/external_indexer/README.md"
+      ],
+      "resolution": "CTest registration now requires BUILD_CXX_LANGUAGE_PACKAGE AND CMAKE_SYSTEM_NAME STREQUAL \"Linux\".",
+      "validation_scope": "Source verification only. This does not claim that Windows or macOS execution has been tested."
+    }
+  ],
+  "placeholder_observation_review": {
+    "origin": "Root's final integration run exposed a harness assumption, then root requested this follow-up review.",
+    "original_failure": "The first failed external run correctly discarded its candidate, leaving initialized tables in the main DB but no storage_version row. Strict read_snapshot raised Unsupported schema version: [].",
+    "production_source_basis": [
+      "Project::load constructs the main PersistentStorage and calls setup.",
+      "PersistentStorage::setup calls SqliteStorage::setupMetaTable and SqliteIndexStorage::setupTables without writing an index storage version.",
+      "Project::buildIndex writes project_settings and calls updateVersion on tempStorage, the candidate.",
+      "The actual initial index shape is the twelve SCHEMA data tables plus meta, with no rows in any of the thirteen tables and only sqlite_autoindex_occurrence_1 as a non-table schema object."
+    ],
+    "resolution": {
+      "helper": "tests/external_indexer/harness.py::read_index_observation",
+      "absent": [
+        "absent",
+        null
+      ],
+      "uninitialized_empty": [
+        "uninitialized-empty",
+        null
+      ],
+      "accepted": "schema-25 plus the actual result of unchanged read_snapshot",
+      "recognition_requirements": [
+        "Read-only SQLite URI and one read transaction for placeholder inspection.",
+        "PRAGMA quick_check returns exactly ok and PRAGMA foreign_key_check is empty.",
+        "The table set is exactly SCHEMA plus meta.",
+        "The column names and order match every expected table, including meta(id,key,value).",
+        "Every table, including meta, contains zero rows.",
+        "The sole non-table sqlite_master object is the occurrence primary-key autoindex with its known identity and null SQL."
+      ],
+      "invalid_forms": "All other forms go through the unchanged strict semantic reader or raise SnapshotError; unversioned nonempty data and metadata, unknown versions, drift and corrupt files are not synthesized as empty graphs.",
+      "first_run_outcome_checks": "Fresh success cases require schema-25. Fresh failure cases require absent or uninitialized-empty, so an accepted failed candidate is rejected.",
+      "preservation_guard": "The seed must be a real nonempty snapshot containing the authored explicit function and an indexed file. The failed update must equal that seed. None from an absent/placeholder DB cannot equal it.",
+      "semantic_graph_changed": false
+    },
+    "result": "Independently reviewed and checked with nine in-memory observations using all thirteen CREATE TABLE statements extracted from production source. No blocker found.",
+    "structural_limit": "Placeholder recognition checks the declared table/column observation shape, known non-table objects, emptiness and SQLite integrity. It does not claim byte-for-byte DDL equivalence or a general proof of every storage constraint."
+  },
+  "implementation_assessments": [
+    {
+      "subject": "Shared outcomes and the worker barrier",
+      "conclusion": "ExternalIndexerRunState serializes begin, settle and snapshot under its mutex. TaskExecuteCustomCommands joins all workers before consulting failures and merging/finalizing. A later success cannot decrement or erase failed.",
+      "evidence_type": "source review"
+    },
+    {
+      "subject": "Task completion and candidate discard",
+      "conclusion": "External failure remains separate from Task::STATE_FAILURE, so the sequence reaches TaskFinishParsing, storage disposition and terminal notification. Failed output is not offered through the keep/discard UI and is not postprocessed or merged.",
+      "evidence_type": "source review"
+    },
+    {
+      "subject": "Queue ordering",
+      "conclusion": "Task::dispatch appends through TaskScheduler::pushTask on the same app scheduler. A running non-background disposition task completes before the next task is processed. The terminal task queued after disposition cannot overtake it in the reviewed ordinary completion path.",
+      "evidence_type": "source review of Task, TaskScheduler, TaskGroupSequence and Project"
+    },
+    {
+      "subject": "CLI exit",
+      "conclusion": "MessageIndexingFinished carries the outcome to MessageQuitApplication. QtCoreApplication copies the exit value and invokes QCoreApplication::exit through a queued Qt-thread callback. Existing message constructors retain exit code zero by default.",
+      "evidence_type": "source review"
+    },
+    {
+      "subject": "Successful behavior and model scope",
+      "conclusion": "A zero exit without transport error remains process success, including stderr or no graph writes. Parser diagnostics and graph completeness remain separate. ExternalIndexing models bounded safety with the join/barrier and one-settle-per-command preconditions; it is not an automatic C++ refinement proof or a liveness/OS model.",
+      "evidence_type": "source/model/documentation correspondence review"
+    }
+  ],
+  "independently_executed_checks": [
+    {
+      "id": "receipt-false-positive-reproduction",
+      "type": "read-only direct function invocation",
+      "result": "The original duplicate-success input was accepted before the fix and rejected after it.",
+      "count": 1,
+      "count_meaning": "One specific before/after reproduction, not two suite cases.",
+      "retained_command_evidence": "Narrated review evidence; the successful final placeholder probe below is the exact retained command in this receipt."
+    },
+    {
+      "id": "receipt-hardening-controls",
+      "type": "read-only direct test-function calls using Pixi Python, with bytecode writes disabled",
+      "executed_calls": 12,
+      "passed_calls": 12,
+      "composition": {
+        "existing_fault_checker_parameters": 6,
+        "new_receipt_checker_parameters": 5,
+        "traceability_check": 1
+      },
+      "note": "These were direct calls to the existing test functions, not a pytest suite run. The missing-binary test, which writes files, was not independently rerun.",
+      "retained_command_evidence": "Narrated review evidence."
+    },
+    {
+      "id": "saved-baseline-receipts-under-new-checker",
+      "type": "read-only receipt validation",
+      "groups_checked": 10,
+      "composition": {
+        "single_case_groups": 6,
+        "failed_update_and_retry_groups_across_two_schedules": 4
+      },
+      "errors": 0,
+      "retained_command_evidence": "Narrated review evidence."
+    },
+    {
+      "id": "baseline-hash-integrity",
+      "type": "read-only SHA-256 comparison",
+      "files_checked": 28,
+      "composition": {
+        "logs": 14,
+        "semantic_snapshots": 14
+      },
+      "mismatches": 0,
+      "retained_command_evidence": "Narrated review evidence."
+    },
+    {
+      "id": "authored-function-observations",
+      "type": "read-only observations against saved real C++ snapshots",
+      "observations": {
+        "seed_contains_previous_function": true,
+        "seed_contains_replacement_function": false,
+        "retry_contains_previous_function": false,
+        "retry_contains_replacement_function": true
+      },
+      "note": "Inspected exact explicit-function/signature observations, not substring matches through arbitrary snapshot text.",
+      "retained_command_evidence": "Narrated review evidence."
+    },
+    {
+      "id": "model-receipt-consistency",
+      "type": "read-only inspection of previously executed TLC evidence",
+      "current_external_model_hash_matches_receipt": true,
+      "independently_ran_tlc": false,
+      "observed_results": [
+        {
+          "name": "external-indexing",
+          "module": "ExternalIndexing.tla",
+          "config": "ExternalIndexing.cfg",
+          "returncode": 0,
+          "distinct_states": 374,
+          "generated_states": 656,
+          "pending_states": 0,
+          "passed": true
+        },
+        {
+          "name": "external-indexing-negative-control",
+          "module": "ExternalIndexing.tla",
+          "config": "ExternalIndexingMutant.cfg",
+          "returncode": 12,
+          "actual_violation": "NoPublicationAfterFailure",
+          "distinct_states": 178,
+          "generated_states": 270,
+          "pending_states": 88,
+          "passed": true
+        }
+      ],
+      "note": "The mutant's nonzero pending count is consistent with stopping at the required counterexample; it is not a completed normal-model search."
+    },
+    {
+      "id": "production-ddl-placeholder-probe",
+      "type": "in-memory SQLite checks using production CREATE TABLE statements",
+      "ddl_statements_extracted": 13,
+      "observation_cases": 9,
+      "accepted_cases": 2,
+      "rejected_damaged_cases": 7,
+      "result": "passed",
+      "related_fault_checker_function_calls": 7,
+      "related_fault_checker_passed": 7,
+      "note": "Six fault-checker parameters repeat the earlier six; accepted-failed-candidate is new. These seven calls must not be added to the earlier twelve as nineteen distinct tests. The absent branch and physically corrupt-file case were source-reviewed, not executed by this in-memory probe.",
+      "exact_command_retained_below": true
+    },
+    {
+      "id": "diff-hygiene",
+      "type": "read-only command",
+      "command": "git diff --check",
+      "result": "passed"
+    },
+    {
+      "id": "semantic-reader-preservation",
+      "type": "read-only diff",
+      "command": "git diff -- script/verification/semantic_graph.py",
+      "result": "No diff."
+    }
+  ],
+  "exact_successful_probe": {
+    "provenance": "Copied from the successful read-only tool invocation retained in the review conversation. This is the actual executed script, not a later reconstruction of a new test.",
+    "working_directory": "/workspace/scratch/715c5c4089e4/Sourcetrail",
+    "command": "PYTHONDONTWRITEBYTECODE=1 .pixi/envs/default/bin/python - <<'PY'\nfrom pathlib import Path\nimport ast,json,re,sqlite3,sys\nfrom unittest.mock import patch\nsys.path.insert(0,'tests/external_indexer')\nimport harness\nimport test_external_indexer as tests\nstorage=Path('src/lib/data/storage/sqlite/SqliteStorage.cpp').read_text()\nindex=Path('src/lib/data/storage/sqlite/SqliteIndexStorage.cpp').read_text()\nblocks=[storage.split('void SqliteStorage::setupMetaTable()',1)[1].split('void SqliteStorage::clearMetaTable()',1)[0],index.split('void SqliteIndexStorage::setupTables()',1)[1].split('void SqliteIndexStorage::setupPrecompiledStatements()',1)[0]]\nstatement_pattern=r'm_database\\.execDML\\(\\s*((?:\"(?:\\\\.|[^\"\\\\])*\"\\s*)+)\\);'\nliteral_pattern=r'\"(?:\\\\.|[^\"\\\\])*\"'\nddl=[''.join(ast.literal_eval(s) for s in re.findall(literal_pattern,match)) for block in blocks for match in re.findall(statement_pattern,block)]\nassert len(ddl)==13,len(ddl)\nclass MemoryPath(type(Path())):\n def exists(self):return True\n def is_file(self):return True\n def resolve(self,*args,**kwargs):return self\n def as_uri(self):return 'file:///independent-placeholder-review'\nreal_connect=sqlite3.connect\nresults={}\ncases={'production-empty':None,'accepted-empty':\"INSERT INTO meta VALUES (1,'storage_version','25')\",'unversioned-element':'INSERT INTO element VALUES (1)','unversioned-metadata':\"INSERT INTO meta VALUES (1,'project','unexpected')\",'unknown-version':\"INSERT INTO meta VALUES (1,'storage_version','26')\",'missing-column':'ALTER TABLE meta DROP COLUMN value','extra-table':'CREATE TABLE unexpected_data(id)','extra-view':'CREATE VIEW unexpected_view AS SELECT * FROM node','extra-index':'CREATE INDEX unexpected_index ON node(id)'}\nfor name,mutation in cases.items():\n base=real_connect(':memory:')\n for sql in ddl:base.execute(sql)\n if mutation:base.execute(mutation)\n base.commit()\n def clone(connection_string,**kwargs):\n  assert connection_string.endswith('?mode=ro') and kwargs=={'uri':True}\n  db=real_connect(':memory:');base.backup(db);return db\n try:\n  with patch.object(harness.sqlite3,'connect',clone):\n   state,snapshot=harness.read_index_observation(MemoryPath('/independent-placeholder-review'),Path.cwd())\n  if name=='production-empty':assert (state,snapshot)==('uninitialized-empty',None)\n  elif name=='accepted-empty':assert state=='schema-25' and snapshot is not None and snapshot['nodes']==[]\n  else:raise AssertionError(f'Accepted damaged production shape: {name}')\n  results[name]=state\n except harness.SnapshotError:\n  assert name not in ('production-empty','accepted-empty')\n  results[name]='rejected'\n finally:base.close()\nfor damage in ['exit-zero','count-failure','missing-receipt','wrong-mode','left-candidate','unexpected-index','accepted-failed-candidate']:\n tests.test_fault_checker_rejects_false_success(damage)\nseed=json.loads(Path('build/external-indexer/baseline/preservation-serial/seed.snapshot.json').read_text())\nassert seed is not None and seed['nodes'] and None!=seed\nprint(json.dumps({'production_ddl_statements':len(ddl),'in_memory_checks':results,'fault_checker_controls':7,'lost_accepted_index_cannot_equal_seed':None!=seed,'filesystem_writes':0},indent=2))\nPY",
+    "exit_code": 0,
+    "stdout": {
+      "production_ddl_statements": 13,
+      "in_memory_checks": {
+        "production-empty": "uninitialized-empty",
+        "accepted-empty": "schema-25",
+        "unversioned-element": "rejected",
+        "unversioned-metadata": "rejected",
+        "unknown-version": "rejected",
+        "missing-column": "rejected",
+        "extra-table": "rejected",
+        "extra-view": "rejected",
+        "extra-index": "rejected"
+      },
+      "fault_checker_controls": 7,
+      "lost_accepted_index_cannot_equal_seed": true,
+      "filesystem_writes": 0
+    },
+    "replay_prerequisites": [
+      "A checkout with the captured source hashes and its Pixi default Python environment.",
+      "The recorded baseline seed at build/external-indexer/baseline/preservation-serial/seed.snapshot.json. The baseline is also archived in report007; relocation requires an explicit path adjustment.",
+      "This probe does not execute Sourcetrail or create a database on disk."
+    ]
+  },
+  "reviewer_command_setup_notes": [
+    "An earlier attempt to import pytest using the system Python failed before running controls; the successful control invocation used the existing Pixi Python.",
+    "The first in-memory probe attempt used a clone argument named uri, which conflicted with sqlite3.connect(uri=True); no completed result was claimed. The exact successful script uses connection_string."
+  ],
+  "parent_reported_validation_not_independently_rerun": {
+    "source": "Messages from /root before this receipt was written",
+    "reports": [
+      "Pure external-indexer controls passed: 23 passed, 8 E2E cases deselected.",
+      "After the placeholder fix, external-indexer-e2e passed in 23.93 seconds.",
+      "The other eleven CTest suites had passed before the placeholder-only harness correction.",
+      "The root-owned final gate's remaining stages were running at the last update."
+    ],
+    "note": "Use report008's final gate receipts for authoritative final application/test counts and completion status."
+  },
+  "evidence_references": {
+    "baseline_summary": {
+      "path": "build/external-indexer/baseline/summary.json",
+      "sha256_at_capture": "673375a26b54bd1652ac0e77cbe17d39c856c55b8a7053f0e43c579e9d0ebc5b"
+    },
+    "original_baseline_harness": {
+      "path": "docs/reports/2026-10-30/007-external-indexer-failure-baseline/evidence/baseline-harness.py",
+      "sha256": "56936106ad553f046031b8f2255ce0f564856ff0484c346f9b6dcfcef90c49e7",
+      "matches_baseline_summary_harness_sha256": true
+    },
+    "formal_summary": {
+      "path": "build/formal/summary.json",
+      "sha256_at_capture": "7ded1073d1500756f99520282223a82e7d523a0f03cd8cecf26eb3b21671da6f",
+      "note": "Root may produce a later final-gate receipt. This hash records the file present at this review capture."
+    }
+  },
+  "limitations": [
+    "No application build, full CTest gate, C++ focused test execution, or new live application E2E run was performed by this independent reviewer.",
+    "GUI cleanup was verified in source and through inspection of the added tracking-dialog assertions. Real GUI operation and Windows taskbar behavior were not exercised.",
+    "Harness retry checks invoke a new CLI process. Same-process GUI retry is not an independently demonstrated runtime result.",
+    "Linux is the demonstrated harness environment. This receipt does not claim Windows/macOS support, modern parser syntax support or a Rust source indexer.",
+    "Timeout, cancellation, descendant-process cleanup, malformed/corrupt indexer output, engine/schema negotiation and crash-atomic publication remain separate acceptance work.",
+    "The TLA+ model explores its declared finite safety domain. It does not establish liveness, arbitrary thread schedules, operating-system process semantics, filesystem atomicity or automatic equivalence with the C++ implementation.",
+    "The user-side local-agent review is pending."
+  ],
+  "source_sha256_capture_time_utc": "2026-10-30 07:47:14 UTC",
+  "source_sha256": {
+    "src/lib_core/ExternalIndexerOutcome.h": "169bf33e330d84a91ccca00ef8511de378bc96f1712ebcb984444ea81515d847",
+    "src/lib/data/indexer/ExternalIndexerRunState.h": "b924a6364bd76e79b495c0d25c0adfd5fca2e9a0ea1095d361ce67cc74063d7a",
+    "src/lib/data/indexer/TaskExecuteCustomCommands.cpp": "48b09783bfae3f8ea262a76212598cffbae978fbcda7f1adf12775384059df95",
+    "src/lib/data/indexer/TaskExecuteCustomCommands.h": "abe468c4717f923f519dd0127a087a16f6f3646c1861ba284e2434579d9b39c3",
+    "src/lib/data/TaskFinishParsing.cpp": "e0263b31aaaab7dea5267c1e7ac9859a0bd0389f93f35f2f923b9c7df5177478",
+    "src/lib/data/TaskFinishParsing.h": "f658c301bf9f4fd5573f4f9d6149d51aca50b2e9c69619dbb0ee4721761829d9",
+    "src/lib/project/Project.cpp": "8a233bf2ac992d2b17317f7f51202feaa62811bc157fed5b68039cf48fdd5280",
+    "src/lib/app/Application.cpp": "7f1db0fafda7c076e1d0f74e6be12424c9cc7926602fff7545b3e7a6ede17f6e",
+    "src/lib/utility/messaging/type/MessageQuitApplication.h": "d469ce71ea8878d66903459c62447ff6ba3aea111a6d945fc9ff25167c5b0fdf",
+    "src/lib/utility/messaging/type/indexing/MessageIndexingFinished.h": "d9e3eccc9527f84fae25c7e8df166ebc39832fdcef185a6405b45284ba254139",
+    "src/lib_gui/qt/QtCoreApplication.cpp": "5c335d653ee1977541da220f21629b20b367e1a5166f0ef5e719698d9d28ab10",
+    "src/lib_gui/qt/view/QtDialogView.cpp": "1357bc62c6745e85ebba74959a0115f131c3eea8cbb2b73b16f105706e5be733",
+    "src/lib_gui/utility/utilityApp.cpp": "7188f8a15cdf50c8aa726cc67405215c4fe8ce3adab0d703c880beec7093d45f",
+    "src/lib/utility/scheduling/Task.cpp": "2156cb8cf021041a5acc0fc963ded4634777db7400b6968f6b024509bb36f270",
+    "src/lib/utility/scheduling/TaskScheduler.cpp": "37509a51c3e37e895d0ec1b57bd7c5e921e2fd6b1574ae613017111e85b3772d",
+    "src/lib/utility/scheduling/TaskGroupSequence.cpp": "2092356e2757543a484057a232223385f1fad8485d2ef4df832e0485b3670bb9",
+    "src/lib/utility/scheduling/TaskRunner.cpp": "1ea08d606be1fc716190218ca7458b17e2ced9f7ad3773adc9179dd9e06cb3e2",
+    "src/lib/data/storage/sqlite/SqliteStorage.cpp": "a21acc03097d0003a0ebea64c558fe6c18ee6dedbf37a1bdd58e317afeffac1f",
+    "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp": "31b9c1b5828eac9001db34eedbd1736627732fd4ec0a055e0a236658a7712c9e",
+    "src/lib/data/storage/PersistentStorage.cpp": "55ac51d110596e68ba4aa242e51d52253844163674812a8ef15bdf253f978163",
+    "src/test/ExternalIndexerOutcomeTestSuite.cpp": "e3e918284c12b599189b1219e3e19aa426f2af3086d56af24f65424a0d678b24",
+    "src/test/UtilityTestSuite.cpp": "dd9b7bbe6fca6b4b7bfa353c0d4d967d1484aa4a6c4df9d38461db2cad209ec6",
+    "tests/core/external_indexer_outcome_test.cpp": "258a8eb4f8c9a96341104183452790e6955ae03e03f00e1a830e27ec8eb1ae29",
+    "cmake/testing.cmake": "11cc32e38c50ec10bd9f195bd8f22a489acf69ea51d53b4f29e4048f250df245",
+    "tests/external_indexer/harness.py": "46c29c66dd21c4da7a63dee4788e5054de7e321598c4ce8a69904c9a78d35689",
+    "tests/external_indexer/test_external_indexer.py": "56ee86934db4e89d2bafcc24c6ae9e0773ac6f73f0df4d05742ce68e377d3cc5",
+    "tests/external_indexer/fixtures/driver.py": "4e23e693749250b037d636a96eb54ca5163e7787ea43ae76ef5e514e43b1e7fd",
+    "tests/external_indexer/fixtures/expected.json": "236d904f62db1e7166145b8dffd1820a61b332461878e84cc7619e9e079a8b5a",
+    "tests/external_indexer/README.md": "0de08d1ade24903f37f29f2c84f605753f619e4f401f41f9be7cafbbc6e1e5de",
+    "script/verification/semantic_graph.py": "5bf9c1f0cd90027af55be427a5a428f567d65855e7eef991241de9b298dcdbbc",
+    "script/verification/check_models.py": "6c8cdeae0fb38c597dc119500d8edfddc5a15a9db5299192c7ae26e094b447da",
+    "tests/contracts/test_models.py": "3663e3ea69b955be9bb21fa1ccdc016fb9cdab0d22667c6a43eefc149ab8529b",
+    "docs/contracts/formal/ExternalIndexing.tla": "ba3efd70702567c9dad512ff9b25aab0339ddea1b684c4231dd0fd3352669792",
+    "docs/contracts/formal/ExternalIndexing.cfg": "954bf0163a87a03cb44b47d5d0127dc06112835ebe38122cb96e044cd1aa2d82",
+    "docs/contracts/formal/ExternalIndexingMutant.cfg": "b958f13a6c25fcaf81b485419da841834e3dff376dd9674124d2dcdb47d3aa54",
+    "docs/contracts/external-indexing.md": "2853a2dacacf85b3efcd24194bce59d1f732417f30bcb7e67dbebfe653637ede",
+    "docs/adr/0007-external-indexer-outcomes.md": "eb460a267fafa921ee266f42f58d5a840226dbc61d4918ae24724b7be0c00e80",
+    "docs/contracts/formal/README.md": "e9b099e9ee78c69048a3deb5f1be34c8fb295d1ecac9e49d6b23a7b535dfc2e6"
+  }
+}
