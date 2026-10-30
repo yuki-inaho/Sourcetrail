@@ -62,6 +62,20 @@ If you want to support a certain feature request or you have the same bug that a
 
 # How to Build
 
+## Reproducible Linux development with Pixi
+
+The repository includes a locked Pixi environment for building with C++ and Python
+indexing and running regression and command-line E2E tests:
+
+```sh
+pixi install --locked
+pixi run --locked build
+pixi run --locked test
+```
+
+See [Development and indexing tests with Pixi](docs/pixi-development.md) for the
+supported platform, prerequisites, individual test tasks, and troubleshooting.
+
 Building Sourcetrail requires several dependencies to be in place on your machine. However, our CMake based setup allows to disable indexing support for specific languages which reduces the number of dependencies to a minimum.
 
 ## Building the Base Application

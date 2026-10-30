@@ -2,6 +2,28 @@
 
 #include "utilityString.h"
 
+TEST_CASE("trim preserves Unicode text and removes ASCII whitespace", "[cxx][regression][unicode]")
+{
+	const std::wstring text = L"日本語 argument with spaces";
+
+	SECTION("wide strings keep the first non-ASCII character")
+	{
+		REQUIRE(utility::trim(text + L"\n") == text);
+		REQUIRE(utility::trim(L" \t" + text + L"\r\n") == text);
+		REQUIRE(utility::trim(L" \t\r\n").empty());
+		REQUIRE(utility::trim(L"").empty());
+	}
+
+	SECTION("UTF-8 bytes are classified as unsigned characters")
+	{
+		const std::string utf8Text = utility::encodeToUtf8(text);
+		REQUIRE(utility::trim(utf8Text + "\n") == utf8Text);
+		REQUIRE(utility::trim(" \t" + utf8Text + "\r\n") == utf8Text);
+		REQUIRE(utility::trim(" \t\r\n").empty());
+		REQUIRE(utility::trim("").empty());
+	}
+}
+
 TEST_CASE("split with char delimiter")
 {
 	std::deque<std::string> result = utility::split("A,B,C", ',');

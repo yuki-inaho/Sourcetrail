@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cwctype>
 #include <iterator>
 #include <string>
 
@@ -547,8 +548,9 @@ std::wstring breakSignature(
 
 std::string trim(const std::string& str)
 {
-	auto wsfront = std::find_if_not(str.begin(), str.end(), [](int c) { return std::isspace(c); });
-	auto wsback = std::find_if_not(str.rbegin(), str.rend(), [](int c) {
+	auto wsfront = std::find_if_not(
+		str.begin(), str.end(), [](unsigned char c) { return std::isspace(c); });
+	auto wsback = std::find_if_not(str.rbegin(), str.rend(), [](unsigned char c) {
 					  return std::isspace(c);
 				  }).base();
 	return (wsback <= wsfront ? std::string() : std::string(wsfront, wsback));
@@ -556,9 +558,10 @@ std::string trim(const std::string& str)
 
 std::wstring trim(const std::wstring& str)
 {
-	auto wsfront = std::find_if_not(str.begin(), str.end(), [](int c) { return std::isspace(c); });
-	auto wsback = std::find_if_not(str.rbegin(), str.rend(), [](int c) {
-					  return std::isspace(c);
+	auto wsfront = std::find_if_not(
+		str.begin(), str.end(), [](wchar_t c) { return std::iswspace(c); });
+	auto wsback = std::find_if_not(str.rbegin(), str.rend(), [](wchar_t c) {
+					  return std::iswspace(c);
 				  }).base();
 	return (wsback <= wsfront ? std::wstring() : std::wstring(wsfront, wsback));
 }

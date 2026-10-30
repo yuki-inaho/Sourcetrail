@@ -1,0 +1,49 @@
+name: Pixi regression and E2E tests
+
+on:
+  push:
+    branches:
+      - master
+      - chore/pixi-python-cpp-tests
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pixi-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install the locked development environment
+        uses: prefix-dev/setup-pixi@ad1da6449d9e506fd127fd67ab2d054a769f6a94 # v0.11.2
+        with:
+          pixi-version: v0.83.0
+          locked: true
+          cache: true
+
+      - name: Build and run all tests
+        run: pixi run --locked test
+
+      - name: Retain test reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: linux-test-results
+          path: |
+            build/pixi/test-results.xml
+            build/pixi/Testing/Temporary/LastTest.log
+            build/pixi/Testing/Temporary/LastTestsFailed.log
+          if-no-files-found: ignore
+          retention-days: 14

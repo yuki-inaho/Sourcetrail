@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <source_groups>
+        <source_group_19e8ca8b-626b-4d7c-aeb0-21719c9622eb>
+            <name>Python end-to-end fixture</name>
+            <source_extensions>
+                <source_extension>.py</source_extension>
+            </source_extensions>
+            <source_paths>
+                <source_path>src</source_path>
+            </source_paths>
+            <status>enabled</status>
+            <type>Python Source Group</type>
+        </source_group_19e8ca8b-626b-4d7c-aeb0-21719c9622eb>
+    </source_groups>
+    <version>8</version>
+</config>
