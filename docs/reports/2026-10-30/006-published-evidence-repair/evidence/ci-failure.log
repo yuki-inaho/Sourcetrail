@@ -1,0 +1,99 @@
+2026-10-30T04:35:34.8968154Z [494/497] Building CXX object CMakeFiles/Sourcetrail_test.dir/src/test/UtilityTestSuite.cpp.o
+2026-10-30T04:35:35.6147351Z [495/497] Building CXX object CMakeFiles/Sourcetrail_test.dir/src/test/UtilityStringTestSuite.cpp.o
+2026-10-30T04:35:36.4630098Z [496/497] Building CXX object CMakeFiles/Sourcetrail_test.dir/src/test/Vector2TestSuite.cpp.o
+2026-10-30T04:35:38.0687656Z [497/497] Linking CXX executable test/Sourcetrail_test
+2026-10-30T04:35:38.0710941Z 
+2026-10-30T04:35:38.0712583Z ✨ Pixi task (test in default): ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml: (Run the existing suite and both languages' regression and E2E tests)
+2026-10-30T04:35:38.0758103Z Internal ctest changing into directory: /home/runner/work/Sourcetrail/Sourcetrail/build/pixi
+2026-10-30T04:35:38.0760580Z Test project /home/runner/work/Sourcetrail/Sourcetrail/build/pixi
+2026-10-30T04:35:38.0769474Z       Start  1: toy-projects
+2026-10-30T04:36:03.7088363Z  1/10 Test  #1: toy-projects .....................   Passed   25.63 sec
+2026-10-30T04:36:03.7090312Z       Start  2: legacy
+2026-10-30T04:36:07.3342512Z  2/10 Test  #2: legacy ...........................   Passed    3.63 sec
+2026-10-30T04:36:07.3342864Z       Start  3: cpp-contracts
+2026-10-30T04:36:08.0573097Z  3/10 Test  #3: cpp-contracts ....................   Passed    0.72 sec
+2026-10-30T04:36:08.0573607Z       Start  4: verification-contracts
+2026-10-30T04:36:17.6303589Z  4/10 Test  #4: verification-contracts ...........   Passed    9.57 sec
+2026-10-30T04:36:17.6303982Z       Start  5: cpp-regression
+2026-10-30T04:36:27.7490389Z  5/10 Test  #5: cpp-regression ...................   Passed   10.12 sec
+2026-10-30T04:36:27.7490787Z       Start  6: cpp-e2e
+2026-10-30T04:36:39.2796590Z  6/10 Test  #6: cpp-e2e ..........................   Passed   11.53 sec
+2026-10-30T04:36:39.2796963Z       Start  7: python-regression
+2026-10-30T04:36:41.3011528Z  7/10 Test  #7: python-regression ................   Passed    2.02 sec
+2026-10-30T04:36:41.3011917Z       Start  8: python-e2e
+2026-10-30T04:40:52.0594576Z  8/10 Test  #8: python-e2e .......................   Passed  250.76 sec
+2026-10-30T04:40:52.0596033Z       Start  9: core-refresh-contracts
+2026-10-30T04:40:52.0827732Z  9/10 Test  #9: core-refresh-contracts ...........   Passed    0.02 sec
+2026-10-30T04:40:52.0828243Z       Start 10: core-command-contracts
+2026-10-30T04:40:52.0844738Z 10/10 Test #10: core-command-contracts ...........   Passed    0.00 sec
+2026-10-30T04:40:52.0848355Z 
+2026-10-30T04:40:52.0848612Z 100% tests passed, 0 tests failed out of 10
+2026-10-30T04:40:52.0848883Z 
+2026-10-30T04:40:52.0849142Z Label Time Summary:
+2026-10-30T04:40:52.0849442Z contract       =  35.95 sec*proc (5 tests)
+2026-10-30T04:40:52.0849812Z cpp            =  48.03 sec*proc (6 tests)
+2026-10-30T04:40:52.0850158Z e2e            = 287.92 sec*proc (3 tests)
+2026-10-30T04:40:52.0850502Z legacy         =   3.63 sec*proc (1 test)
+2026-10-30T04:40:52.0850842Z portability    =   0.02 sec*proc (2 tests)
+2026-10-30T04:40:52.0851174Z python         = 287.98 sec*proc (4 tests)
+2026-10-30T04:40:52.0851499Z regression     =  15.76 sec*proc (3 tests)
+2026-10-30T04:40:52.0851840Z toy            =  25.63 sec*proc (1 test)
+2026-10-30T04:40:52.0852027Z 
+2026-10-30T04:40:52.0852141Z Total Test time (real) = 314.01 sec
+2026-10-30T04:40:52.0863403Z 
+2026-10-30T04:40:52.0864232Z ✨ Pixi task (verify-docs in default): python script/verification/check_docs.py: (Validate contract traceability, source anchors, reports, and documentation links)
+2026-10-30T04:40:52.1618624Z ERROR: docs/reports/2026-10-30/005-portable-core-and-verification/report.md: broken local link: evidence/baseline-corrected/build-inputs.json
+2026-10-30T04:40:52.1619864Z {"passed": false, "markdown_files": 28, "contracts": 19, "language_profiles": 6, "reports": 5, "error_count": 1}
+2026-10-30T04:40:52.1847061Z ##[error]Process completed with exit code 1.
+2026-10-30T04:40:52.1930413Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-30T04:40:52.1930757Z with:
+2026-10-30T04:40:52.1930936Z   name: linux-test-results
+2026-10-30T04:40:52.1932066Z   path: build/pixi/test-results.xml
+build/pixi/Testing/Temporary/LastTest.log
+build/pixi/Testing/Temporary/LastTestsFailed.log
+build/formal/summary.json
+build/formal/*.log
+build/core/core-results.xml
+build/portability/summary.json
+build/toy-projects/current/summary.json
+build/toy-projects/current/**/*.snapshot.json
+build/toy-projects/current/**/*.log
+build/toy-projects/current/**/*.diff
+
+2026-10-30T04:40:52.1933232Z   if-no-files-found: ignore
+2026-10-30T04:40:52.1933433Z   retention-days: 14
+2026-10-30T04:40:52.1933621Z   compression-level: 6
+2026-10-30T04:40:52.1933809Z   overwrite: false
+2026-10-30T04:40:52.1934000Z   include-hidden-files: false
+2026-10-30T04:40:52.1934206Z ##[endgroup]
+2026-10-30T04:40:52.3320072Z (node:5800) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-30T04:40:52.3321238Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-30T04:40:52.3427133Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-30T04:40:52.3429418Z The least common ancestor is /home/runner/work/Sourcetrail/Sourcetrail/build. This will be the root directory of the artifact
+2026-10-30T04:40:52.3430052Z With the provided path, there will be 31 files uploaded
+2026-10-30T04:40:52.3432405Z Artifact name is valid!
+2026-10-30T04:40:52.3432903Z Root directory input is valid!
+2026-10-30T04:40:52.7292423Z Beginning upload of artifact content to blob storage
+2026-10-30T04:40:52.7740248Z (node:5800) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-30T04:40:53.1812968Z Uploaded bytes 68215
+2026-10-30T04:40:53.2588892Z Finished uploading artifact content to blob storage!
+2026-10-30T04:40:53.2589818Z SHA256 digest of uploaded artifact zip is 805139fe753f7fe970248219bae68c139bff805cafa689250d14353f766be6ee
+2026-10-30T04:40:53.2591011Z Finalizing artifact upload
+2026-10-30T04:40:53.7034866Z Artifact linux-test-results.zip successfully finalized. Artifact ID 12954382606
+2026-10-30T04:40:53.7035749Z Artifact linux-test-results has been successfully uploaded! Final size is 68215 bytes. Artifact ID is 12954382606
+2026-10-30T04:40:53.7040776Z Artifact download URL: https://github.com/yuki-inaho/Sourcetrail/actions/runs/41003049508/artifacts/12954382606
+2026-10-30T04:40:53.7233012Z Post job cleanup.
+2026-10-30T04:40:53.8022394Z Post job cleanup.
+2026-10-30T04:40:53.8683079Z [command]/usr/bin/git version
+2026-10-30T04:40:53.8714222Z git version 2.56.0
+2026-10-30T04:40:53.8742284Z Temporarily overriding HOME='/home/runner/work/_temp/3e9efb65-0380-4d08-9b9f-50cb3604aa3a' before making global git config changes
+2026-10-30T04:40:53.8743400Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-30T04:40:53.8746570Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Sourcetrail/Sourcetrail
+2026-10-30T04:40:53.8778167Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-30T04:40:53.8806430Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-30T04:40:53.9004109Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-30T04:40:53.9032194Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-30T04:40:53.9228877Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-30T04:40:53.9258082Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-30T04:40:53.9628723Z Cleaning up orphan processes
+2026-10-30T04:40:53.9951661Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,85 @@
+{
+  "base_commit": "6eb332cac35eb6f0f61e754a3317415f654fd807",
+  "timezone": "Etc/UTC",
+  "check_scope": "publication evidence only; no code, tests, models or dependency changes",
+  "missing_before_fix": [
+    "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/build-inputs.json"
+  ],
+  "checks": [
+    {
+      "name": "published-tree-reproduction",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "/workspace/scratch/715c5c4089e4/Sourcetrail/script/verification/check_docs.py",
+        "--root",
+        "/tmp/sourcetrail-original-evidence-s5g1tz_f"
+      ],
+      "export_command": [
+        "git",
+        "archive",
+        "HEAD"
+      ],
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "stdout": "ERROR: docs/reports/2026-10-30/005-portable-core-and-verification/report.md: broken local link: evidence/baseline-corrected/build-inputs.json\n{\"passed\": false, \"markdown_files\": 28, \"contracts\": 19, \"language_profiles\": 6, \"reports\": 5, \"error_count\": 1}\n",
+      "stderr": "",
+      "tree": "407dd711afdc6ff664e503228e2c2f152c0b6acf"
+    },
+    {
+      "name": "working-tree-and-history",
+      "command": [
+        "/workspace/scratch/715c5c4089e4/tooling/pixi",
+        "run",
+        "--locked",
+        "verify-docs"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"passed\": true, \"markdown_files\": 29, \"contracts\": 19, \"language_profiles\": 6, \"reports\": 6, \"error_count\": 0}\n",
+      "stderr": "✨ Pixi task (verify-docs in default): python script/verification/check_docs.py: (Validate contract traceability, source anchors, reports, and documentation links)\n"
+    },
+    {
+      "name": "tracked-index-export",
+      "command": [
+        "/workspace/scratch/715c5c4089e4/tooling/pixi",
+        "run",
+        "--locked",
+        "python",
+        "script/verification/check_docs.py",
+        "--root",
+        "/tmp/sourcetrail-index-evidence-ebnym6b3"
+      ],
+      "export_command": [
+        "git",
+        "checkout-index",
+        "--all",
+        "--prefix",
+        "/tmp/sourcetrail-index-evidence-ebnym6b3/"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"passed\": true, \"markdown_files\": 29, \"contracts\": 19, \"language_profiles\": 6, \"reports\": 6, \"error_count\": 0}\n",
+      "stderr": "",
+      "exported_tree_before_recording_this_result": "4687002734f2c4c13e9cc8b17784b7f281ca879e"
+    },
+    {
+      "name": "functional-files-unchanged",
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only",
+        "HEAD"
+      ],
+      "paths": [
+        ".gitignore",
+        "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/build-inputs.json",
+        "docs/reports/2026-10-30/006-published-evidence-repair/evidence/ci-failure.json",
+        "docs/reports/2026-10-30/006-published-evidence-repair/evidence/ci-failure.log",
+        "docs/reports/2026-10-30/006-published-evidence-repair/evidence/verification.json",
+        "docs/reports/2026-10-30/006-published-evidence-repair/manifest.json",
+        "docs/reports/2026-10-30/006-published-evidence-repair/report.md",
+        "docs/reports/README.md"
+      ]
+    }
+  ],
+  "missing_file_sha256": "af3b88a943a7a897dde137962756cdfbd67cc66117f1fdbe4ba9c6cde28e6d06"
+}

@@ -25,6 +25,7 @@
 | [2026-10-30 / 003-integration-verification](2026-10-30/003-integration-verification/report.md) | 全725テスト・形式モデル・意図した修正の統合確認 | 4 source 単位 | 同じ版での再実行と後続改善のレビュー待ち |
 | [2026-10-30 / 004-toy-project-design-and-baseline](2026-10-30/004-toy-project-design-and-baseline/report.md) | 人工C++／Python対象の設計・14段階の基準・発見した欠落 | 5 source 単位 | 失敗した元基準を保持し、修正と構造変更を別々に確認 |
 | [2026-10-30 / 005-portable-core-and-verification](2026-10-30/005-portable-core-and-verification/report.md) | 可搬コア・共通コマンド・Rust参照移植・797ケース・全14観測一致 | 9 source 単位 | assistant側の指摘を解消、ユーザー側のレビュー待ち |
+| [2026-10-30 / 006-published-evidence-repair](2026-10-30/006-published-evidence-repair/report.md) | CIで検出した証跡の追跡漏れと、Git indexだけでの文書再検査 | 2 source 単位 | 元の失敗と訂正を保持、ユーザー側のレビュー待ち |
 
 ## 入力版と履歴
 

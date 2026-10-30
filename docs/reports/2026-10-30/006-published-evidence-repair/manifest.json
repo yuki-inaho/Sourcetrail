@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "006-published-evidence-repair",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "6eb332cac35eb6f0f61e754a3317415f654fd807",
+    "mode": "working-tree",
+    "note": "公開済みコミットを基準に除外規則を訂正した作業ツリーを読解。日付はUTC。005の既存記録を変更せず、欠落していたローカルの証跡を同じ内容で追加する。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": ".gitignore",
+      "symbol": "!docs/reports/**/evidence/**/build-inputs.json",
+      "sha256": "05fd92a0716bc1634269df35edd52774ce084022300f9fba0dc042b75a88dee7",
+      "excerpt": "!docs/reports/**/evidence/**/build-inputs.json",
+      "contracts": [
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "任意階層に適用されるbuild-*が既存のビルド入力記録も除外していた。レポート証跡内の同名JSONにだけ例外を追加した。",
+      "uncertainty": "別名の生成物や証跡についての包含を保証しない。",
+      "next_action": "追加する記録ごとにgit statusとステージ済みexportを確認する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "script/verification/check_docs.py",
+      "symbol": "def check_markdown",
+      "sha256": "b67c4711458eae7ef9b32ed47371390642519b712049f005bd8cdfc56962e8c7",
+      "excerpt": "elif not destination.exists():",
+      "contracts": [
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "ローカルリンクの存在は作業ディレクトリのファイルシステムで判定される。追跡ファイルだけのexportへ同じ検査器を適用して公開漏れを再現・確認する。",
+      "uncertainty": "アーカイブだけではGit履歴の存在を検査できず、意味的な正しさも保証しない。",
+      "next_action": "通常のチェックアウトとステージ済みexportの双方で検査する。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/006-published-evidence-repair/evidence/ci-failure.log",
+      "description": "失敗したCIジョブログ末尾100行の未編集抜粋"
+    },
+    {
+      "path": "docs/reports/2026-10-30/006-published-evidence-repair/evidence/ci-failure.json",
+      "description": "対象コミット・ジョブ・失敗位置"
+    },
+    {
+      "path": "docs/reports/2026-10-30/006-published-evidence-repair/evidence/verification.json",
+      "description": "修正前の再現と修正後の文書検査"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/build-inputs.json",
+      "description": "今回追跡へ追加する既存の中間ビルド入力"
+    },
+    {
+      "path": "docs/reports/2026-10-30/006-published-evidence-repair/evidence/independent-review.json",
+      "description": "assistant側の独立担当が公開済みGit treeだけを監査した結果。ユーザー側レビューとは別。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "local-agent"
+  }
+}

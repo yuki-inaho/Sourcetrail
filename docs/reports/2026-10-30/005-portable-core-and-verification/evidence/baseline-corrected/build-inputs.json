@@ -1,0 +1,7 @@
+{
+  "base_commit": "993ab43eba5b3055a409a73f686021233a687523",
+  "production_change": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+  "production_file_sha256": "31b9c1b5828eac9001db34eedbd1736627732fd4ec0a055e0a236658a7712c9e",
+  "patch_sha256": "a728ad8addb5e3a81e032f3c60acbefbb8ebfa91321140035a5315cf080e7a7b",
+  "mode": "base commit plus recorded cleanup correction only; refactors temporarily excluded from build"
+}

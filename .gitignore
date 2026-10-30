@@ -4,6 +4,8 @@
 __pycache__/
 *.py[cod]
 build-*
+# Recorded build provenance belongs in the annotation reports.
+!docs/reports/**/evidence/**/build-inputs.json
 /distr/
 /deps/
 
