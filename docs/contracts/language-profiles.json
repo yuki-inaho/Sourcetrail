@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "profiles": [
+    {
+      "id": "cxx-clang11-core",
+      "language": "C++",
+      "status": "tested-fixtures",
+      "engine": {
+        "name": "Clang",
+        "version": "11.1.0"
+      },
+      "target": {
+        "standard_flag": "-std=c++17"
+      },
+      "modes": [
+        "full",
+        "updated",
+        "incomplete"
+      ],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "overload-call-resolution",
+        "declaration-definition-identity",
+        "preprocessor-isolation",
+        "include-dependencies",
+        "source-locations",
+        "diagnostics",
+        "incremental-clean-comparison"
+      ],
+      "limitations": [
+        "固定された例で確認した能力であり、C++17規格全体の適合性ではない。",
+        "C++20/23の対応は未宣言。"
+      ],
+      "evidence": [
+        "src/test/CxxRegressionTestSuite.cpp",
+        "src/test/CxxEndToEndTestSuite.cpp",
+        "tests/contracts/test_index_equivalence.py"
+      ]
+    },
+    {
+      "id": "python-jedi017-full",
+      "language": "Python",
+      "status": "tested-fixtures",
+      "engine": {
+        "name": "SourcetrailPythonIndexer",
+        "release": "v1_db25_p6",
+        "jedi": "0.17.2",
+        "parso": "0.7.0"
+      },
+      "target": {
+        "environment": "Python 3.8",
+        "test_runner": "Python 3.11"
+      },
+      "modes": [
+        "full"
+      ],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "definitions",
+        "calls",
+        "imports",
+        "inheritance",
+        "qualified-methods",
+        "source-locations",
+        "diagnostics",
+        "unicode-paths"
+      ],
+      "limitations": [
+        "単一の実行環境版から言語仕様全体の対応を推論しない。",
+        "浅い解析と完全解析は異なるプロファイル。",
+        "更新要求が全体再索引化へ昇格する場合がある。"
+      ],
+      "evidence": [
+        "tests/python/test_regression.py",
+        "tests/python/test_e2e.py"
+      ]
+    },
+    {
+      "id": "python-jedi017-shallow",
+      "language": "Python",
+      "status": "tested-fixtures",
+      "engine": {
+        "name": "SourcetrailPythonIndexer",
+        "release": "v1_db25_p6",
+        "jedi": "0.17.2",
+        "parso": "0.7.0"
+      },
+      "target": {
+        "environment": "Python 3.8",
+        "test_runner": "Python 3.11"
+      },
+      "modes": [
+        "shallow"
+      ],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "definitions",
+        "calls",
+        "imports",
+        "inheritance",
+        "qualified-methods",
+        "unicode-paths"
+      ],
+      "limitations": [
+        "単一の実行環境版から言語仕様全体の対応を推論しない。",
+        "浅い解析と完全解析は異なるプロファイル。",
+        "更新要求が全体再索引化へ昇格する場合がある。",
+        "位置の完全な規約と浅い解析の構文診断は追加の専用適合試験が必要。"
+      ],
+      "evidence": [
+        "tests/python/test_e2e.py"
+      ]
+    },
+    {
+      "id": "python-modern",
+      "language": "Python",
+      "status": "planned",
+      "engine": {
+        "name": "to-be-selected"
+      },
+      "target": {
+        "versions": "to-be-selected"
+      },
+      "modes": [],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "capability-negotiation",
+        "modern-syntax",
+        "diagnostic-position-mapping"
+      ],
+      "limitations": [
+        "解析器とソース取得/配布方法の選定後に、版と受入例を固定する。"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "cxx-modern",
+      "language": "C++",
+      "status": "planned",
+      "engine": {
+        "name": "Clang",
+        "version": "to-be-selected"
+      },
+      "target": {
+        "standards": [
+          "C++20",
+          "C++23"
+        ]
+      },
+      "modes": [],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "capability-negotiation",
+        "concepts",
+        "modules",
+        "coroutines",
+        "modern-standard-library"
+      ],
+      "limitations": [
+        "新LLVMのビルドとAST API移行、各能力の意味検証が必要。"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "rust-core",
+      "language": "Rust",
+      "status": "planned",
+      "engine": {
+        "name": "to-be-selected"
+      },
+      "target": {
+        "edition": "to-be-selected",
+        "project_context": "Cargo workspace/features/target"
+      },
+      "modes": [],
+      "requires_contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001",
+        "REFRESH-001",
+        "DIAGNOSTIC-001"
+      ],
+      "capabilities": [
+        "definitions",
+        "references",
+        "calls",
+        "module-dependencies",
+        "trait-impl-mapping",
+        "macro-provenance",
+        "diagnostics",
+        "incremental-clean-comparison"
+      ],
+      "limitations": [
+        "Rust専用アダプターは未実装。",
+        "共通グラフへの写像と未対応能力の扱いをADRで確定する。"
+      ],
+      "evidence": []
+    }
+  ]
+}

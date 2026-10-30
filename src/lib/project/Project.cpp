@@ -486,48 +486,41 @@ void Project::buildIndex(RefreshInfo info, std::shared_ptr<DialogView> dialogVie
 	if (info.mode != REFRESH_ALL_FILES &&
 		(info.filesToClear.size() || info.nonIndexedFilesToClear.size()))
 	{
+		const std::set<FilePath> clearedFiles = utility::concat(
+			info.filesToClear, info.nonIndexedFilesToClear);
 		for (const std::shared_ptr<SourceGroup>& sourceGroup: m_sourceGroups)
 		{
-			if (sourceGroup->getStatus() == SOURCE_GROUP_STATUS_ENABLED &&
-				!sourceGroup->allowsPartialClearing())
+			if (sourceGroup->getStatus() != SOURCE_GROUP_STATUS_ENABLED ||
+				sourceGroup->allowsPartialClearing())
 			{
-				bool abortIndexing = false;
-				for (const FilePath& sourcePath:
-					 utility::concat(info.filesToClear, info.nonIndexedFilesToClear))
-				{
-					if (sourceGroup->containsSourceFilePath(sourcePath))
-					{
-						abortIndexing = true;
-						break;
-					}
-				}
-
-				if (abortIndexing)
-				{
-					if (m_hasGUI &&
-						dialogView->confirm(
-							L"<p>This project contains a source group of type \"" +
-								utility::decodeFromUtf8(
-									sourceGroupTypeToString(sourceGroup->getType())) +
-								L"\" that cannot be partially cleared. Do you want to re-index the "
-								L"whole project instead?</p>",
-							{L"Full Re-Index", L"Cancel"}) == 1)
-					{
-						MessageStatus(L"Cannot partially clear project. Indexing aborted.").dispatch();
-						m_refreshStage = RefreshStageType::NONE;
-						dialogView->clearDialogs();
-						return;
-					}
-					else
-					{
-						const bool shallow = info.shallow;
-						info = getRefreshInfo(REFRESH_ALL_FILES);
-						info.shallow = shallow;
-					}
-				}
-
-				break;
+				continue;
 			}
+
+			// SOURCE-GROUP-001: deleted files are absent from the current source set but
+			// can still belong to this group's configured paths. Check every relevant group.
+			if (sourceGroup->filterToContainedFilePaths(clearedFiles).empty())
+			{
+				continue;
+			}
+
+			if (m_hasGUI &&
+				dialogView->confirm(
+					L"<p>This project contains a source group of type \"" +
+						utility::decodeFromUtf8(sourceGroupTypeToString(sourceGroup->getType())) +
+						L"\" that cannot be partially cleared. Do you want to re-index the "
+						L"whole project instead?</p>",
+					{L"Full Re-Index", L"Cancel"}) == 1)
+			{
+				MessageStatus(L"Cannot partially clear project. Indexing aborted.").dispatch();
+				m_refreshStage = RefreshStageType::NONE;
+				dialogView->clearDialogs();
+				return;
+			}
+
+			const bool shallow = info.shallow;
+			info = getRefreshInfo(REFRESH_ALL_FILES);
+			info.shallow = shallow;
+			break;
 		}
 	}
 

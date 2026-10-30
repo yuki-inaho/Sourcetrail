@@ -3,12 +3,38 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
-add_test(NAME legacy COMMAND ${TEST_PROJECT_NAME} "~[regression]~[e2e]" --warn NoTests)
+add_test(NAME legacy COMMAND ${TEST_PROJECT_NAME} "~[regression]~[e2e]~[contract]" --warn NoTests)
 set_tests_properties(legacy PROPERTIES
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/test"
     ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
     LABELS "legacy;regression"
     TIMEOUT 600
+)
+
+add_test(NAME cpp-contracts COMMAND ${TEST_PROJECT_NAME} "[contract]" --warn NoTests)
+set_tests_properties(cpp-contracts PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/test"
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+    LABELS "cpp;contract"
+    TIMEOUT 600
+)
+
+find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
+set(VERIFICATION_CONTRACT_ARGS)
+if(NOT BUILD_CXX_LANGUAGE_PACKAGE)
+    list(APPEND VERIFICATION_CONTRACT_ARGS
+        --ignore "${CMAKE_SOURCE_DIR}/tests/contracts/test_index_equivalence.py"
+    )
+endif()
+add_test(NAME verification-contracts
+    COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/contracts"
+        ${VERIFICATION_CONTRACT_ARGS}
+)
+set_tests_properties(verification-contracts PROPERTIES
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    ENVIRONMENT "QT_QPA_PLATFORM=offscreen;SOURCETRAIL_BINARY=$<TARGET_FILE:${APP_PROJECT_NAME}>"
+    LABELS "python;contract"
+    TIMEOUT 120
 )
 
 if(BUILD_CXX_LANGUAGE_PACKAGE)

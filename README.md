@@ -12,6 +12,7 @@ __Links__
 * [Download](https://github.com/CoatiSoftware/Sourcetrail/releases)
 * [Quick Start Guide](DOCUMENTATION.md#getting-started)
 * [Documentation](DOCUMENTATION.md)
+* [Internal architecture, contracts, ADRs, and review reports](docs/README.md)
 * [Changelog](CHANGELOG.md)
 
 !["Sourcetrail User Interface"](docs/readme/user_interface.png "Sourcetrail User Interface")

@@ -4,6 +4,24 @@ The checked-in `pixi.toml` and `pixi.lock` provide a Linux x86-64 environment fo
 building Sourcetrail with both C/C++ and Python indexing enabled. The same tasks
 run locally and in `.github/workflows/pixi-tests.yml`.
 
+The [internal documentation index](README.md) connects architecture, ADRs,
+executable contracts, bounded TLA+ models, and review reports. To run the complete
+verification gate, including the separate Java environment:
+
+```sh
+pixi install --locked --all
+pixi run --locked verify
+```
+
+`pixi run --locked test-contracts` selects the C++ planning/source-group contracts
+and the Python verification-tool and graph-equivalence tests.
+`pixi run --locked verify-docs` checks documentation traceability.
+`pixi run -e formal --locked verify-models` checks the bounded TLA+ model and its
+required negative control. This environment fixes OpenJDK 17 and downloads the
+official TLC 1.7.4 JAR with a pinned SHA-256. See the
+[model scope and limits](contracts/formal/README.md); these checks do not prove
+the entire application or advertise support for new language versions.
+
 ## Set up and build
 
 Install [Pixi](https://pixi.prefix.dev/latest/installation/) 0.83.0 or newer, then
@@ -32,8 +50,9 @@ The build task prepares this additional locked environment automatically, and
 the tests explicitly pass its interpreter to the analyzer.
 
 The build enables `BUILD_CXX_LANGUAGE_PACKAGE` and `BUILD_PYTHON_LANGUAGE_PACKAGE`,
-and disables `BUILD_JAVA_LANGUAGE_PACKAGE`. The Java toolchain is outside this
-environment. The Pixi lock currently covers `linux-64` only; the original manual
+and disables `BUILD_JAVA_LANGUAGE_PACKAGE`. Java source indexing is outside this
+build; the separate `formal` environment uses Java only to run TLC.
+The Pixi lock currently covers `linux-64` only; the original manual
 Windows and macOS build instructions still describe those platforms.
 The host must provide Linux 4.18 or newer and glibc 2.28 or newer, as recorded in
 the lockfile. The older compiler sysroot does not lower these runtime requirements.
@@ -67,7 +86,8 @@ Every named test task depends on the build, so it also works from a fresh checko
 
 | Task | Coverage |
 | --- | --- |
-| `pixi run --locked test` | All five suites below |
+| `pixi run --locked test` | All seven CTest suites, including both contract suites |
+| `pixi run --locked test-contracts` | C++ refresh/source-group contracts and Python graph/verification contracts |
 | `pixi run --locked test-legacy` | Existing Catch tests, excluding the newly tagged suites |
 | `pixi run --locked test-cpp-regression` | Production C++ parser, symbol graph, source locations, and diagnostics |
 | `pixi run --locked test-cpp-e2e` | Actual application, compilation database, persisted C++ index, and refresh |
@@ -136,5 +156,6 @@ version before installing the archive. Failed downloads or validation leave an
 existing installation intact, and repeated builds reuse a verified installation.
 
 GitHub Actions installs the committed lock, builds both language packages, and
-runs all five CTest suites. Test logs and the JUnit report are retained as workflow
-artifacts, including on failure.
+runs all seven CTest suites, documentation checks, and bounded TLA+ verification.
+Test logs, the JUnit report, model results, and model counterexamples are retained
+as workflow artifacts, including on failure.

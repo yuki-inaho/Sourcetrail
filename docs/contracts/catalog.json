@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "contracts": [
+    {
+      "id": "GRAPH-001",
+      "title": "保存グラフの観測上の同等性",
+      "status": "enforced",
+      "scope": "同一入力・設定・能力プロファイルで完了したschema25索引の意味比較。",
+      "sources": [
+        {
+          "path": "script/verification/semantic_graph.py",
+          "symbol": "def read_snapshot"
+        }
+      ],
+      "verification": [
+        {
+          "path": "tests/contracts/test_semantic_graph.py",
+          "anchor": "read_snapshot"
+        },
+        {
+          "path": "tests/contracts/test_index_equivalence.py",
+          "anchor": "read_snapshot"
+        },
+        {
+          "path": "tests/python/test_e2e.py",
+          "anchor": "snapshot_diff"
+        }
+      ],
+      "docs": [
+        "docs/contracts/README.md",
+        "docs/adr/0001-semantic-observations.md"
+      ],
+      "limitations": [
+        "索引対象プログラムの実行意味、GUI操作、性能は保証しない。",
+        "比較器が扱わないDB版・表・意味上の衝突は拒否する。"
+      ]
+    },
+    {
+      "id": "NAME-001",
+      "title": "名前・シグネチャ・同一性を保持する",
+      "status": "enforced",
+      "scope": "階層、区切り、シグネチャ前置部と後置部を保持し、オーバーロードを混同しない。",
+      "sources": [
+        {
+          "path": "src/lib/data/name/NameHierarchy.cpp",
+          "symbol": "NameHierarchy::serialize"
+        },
+        {
+          "path": "script/verification/semantic_graph.py",
+          "symbol": "def name"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/CxxRegressionTestSuite.cpp",
+          "anchor": "cxx regression resolves calls to the correct overload"
+        },
+        {
+          "path": "tests/contracts/test_semantic_graph.py",
+          "anchor": "read_snapshot"
+        }
+      ],
+      "docs": [
+        "docs/architecture/domain-model.md",
+        "docs/adr/0001-semantic-observations.md"
+      ],
+      "limitations": [
+        "将来の言語・構成別グローバルID規約は別ADRが必要。",
+        "数値DB IDは永続的な意味キーではない。"
+      ]
+    },
+    {
+      "id": "RELATION-001",
+      "title": "参照の種類・方向・曖昧性",
+      "status": "enforced",
+      "scope": "呼び出し、継承、包含等の有向辺と補助成分を保存・比較する。",
+      "sources": [
+        {
+          "path": "src/lib/data/graph/Edge.h",
+          "symbol": "EDGE_CALL"
+        },
+        {
+          "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+          "symbol": "runPythonPostProcessing"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/CxxRegressionTestSuite.cpp",
+          "anchor": "cxx regression resolves calls to the correct overload"
+        },
+        {
+          "path": "tests/python/test_e2e.py",
+          "anchor": "EDGE_INHERITANCE"
+        },
+        {
+          "path": "tests/contracts/test_semantic_graph.py",
+          "anchor": "read_snapshot"
+        }
+      ],
+      "docs": [
+        "docs/architecture/domain-model.md",
+        "docs/architecture/storage-and-query.md"
+      ],
+      "limitations": [
+        "意味が異なる言語間の全グラフ同型は要求しない。",
+        "Python浅い解析の推測辺を確定参照と同一視しない。"
+      ]
+    },
+    {
+      "id": "LOCATION-001",
+      "title": "ソース位置と出現の保存",
+      "status": "characterized",
+      "scope": "ファイル、位置種別、開始終了位置、対象要素との結び付きを保持する。",
+      "sources": [
+        {
+          "path": "src/lib/data/parser/ParserClientImpl.cpp",
+          "symbol": "recordReference"
+        },
+        {
+          "path": "src/lib/data/location/LocationType.h",
+          "symbol": "LOCATION_TOKEN"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/CxxRegressionTestSuite.cpp",
+          "anchor": "retaining both source locations"
+        },
+        {
+          "path": "tests/python/test_regression.py",
+          "anchor": "test_function_definitions_calls_and_source_locations"
+        },
+        {
+          "path": "tests/contracts/test_semantic_graph.py",
+          "anchor": "read_snapshot"
+        }
+      ],
+      "docs": [
+        "docs/architecture/domain-model.md"
+      ],
+      "limitations": [
+        "UTF-8バイト/文字/UTF-16列の言語横断規約はGAP-003。",
+        "空行の終端列0等を一律に拒否する仕様へは変更していない。"
+      ]
+    },
+    {
+      "id": "REFRESH-001",
+      "title": "変更ファイルから更新計画を決定する",
+      "status": "enforced",
+      "scope": "固定した入力集合と依存閉包から、消去集合・索引集合を決定する。",
+      "sources": [
+        {
+          "path": "src/lib/project/RefreshPlan.cpp",
+          "symbol": "RefreshPlan::forUpdatedFiles"
+        },
+        {
+          "path": "src/lib/project/RefreshInfoGenerator.cpp",
+          "symbol": "getRefreshInfoForUpdatedFiles"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/RefreshPlanTestSuite.cpp",
+          "anchor": "32768"
+        },
+        {
+          "path": "docs/contracts/formal/RefreshPlan.tla",
+          "anchor": "ResultMatchesContract"
+        },
+        {
+          "path": "docs/contracts/formal/RefreshPlan.tla",
+          "anchor": "Refinement"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/contracts/formal/README.md",
+        "docs/adr/0002-pure-refresh-planning.md"
+      ],
+      "limitations": [
+        "形式検査は3ファイルの有限モデル。C++全体の定理証明ではない。",
+        "変更検出・依存DBの固定性・索引実行・公開はモデルの外。"
+      ]
+    },
+    {
+      "id": "REFRESH-002",
+      "title": "共有依存を不要に消去しない",
+      "status": "enforced",
+      "scope": "影響を受けないソースが使う依存を、追加の消去対象から保護する。",
+      "sources": [
+        {
+          "path": "src/lib/project/RefreshPlan.cpp",
+          "symbol": "staticReferencedFiles"
+        },
+        {
+          "path": "src/lib/data/storage/PersistentStorage.cpp",
+          "symbol": "getReferenced"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/RefreshPlanTestSuite.cpp",
+          "anchor": "shared"
+        },
+        {
+          "path": "docs/contracts/formal/RefreshPlan.tla",
+          "anchor": "SharedDependenciesPreserved"
+        },
+        {
+          "path": "script/verification/check_models.py",
+          "anchor": "refresh-negative-control"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/contracts/formal/README.md"
+      ],
+      "limitations": [
+        "依存自体が変更済み/影響対象なら消去される。",
+        "includeとimportは別々の推移閉包の和集合。混合閉包への変更は同等ではない。"
+      ]
+    },
+    {
+      "id": "REFRESH-003",
+      "title": "未完了ファイルの再試行",
+      "status": "enforced",
+      "scope": "更新対象に加え未完了ファイルと依存ソースを再試行する。",
+      "sources": [
+        {
+          "path": "src/lib/project/RefreshInfoGenerator.cpp",
+          "symbol": "getRefreshInfoForIncompleteFiles"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/RefreshInfoGeneratorTestSuite.cpp",
+          "anchor": "refresh incomplete files reindexes affected sources"
+        },
+        {
+          "path": "src/test/CxxEndToEndTestSuite.cpp",
+          "anchor": "repairs incomplete files"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md"
+      ],
+      "limitations": [
+        "TLA+更新モデルの対象外。DBを使ったC++試験とCLI試験で検査する。"
+      ]
+    },
+    {
+      "id": "SOURCE-GROUP-001",
+      "title": "ソースグループ所属と除外集合",
+      "status": "enforced",
+      "scope": "containsは実際の所属判定、getSourceFilePathsExceptは全ソースから指定集合を除いた結果。 部分消去不可のグループは、現在の所属だけでなく設定上の所有範囲で削除対象を判定し、該当する全グループを調べる。",
+      "sources": [
+        {
+          "path": "src/lib/project/SourceGroup.cpp",
+          "symbol": "SourceGroup::containsSourceFilePath"
+        },
+        {
+          "path": "src/lib/project/SourceGroup.cpp",
+          "symbol": "SourceGroup::getSourceFilePathsExcept"
+        },
+        {
+          "path": "src/lib/project/Project.cpp",
+          "symbol": "sourceGroup->filterToContainedFilePaths(clearedFiles)"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/SourceGroupContractTestSuite.cpp",
+          "anchor": "[contract][source-group]"
+        },
+        {
+          "path": "tests/python/test_e2e.py",
+          "anchor": "test_deleted_file_in_later_nonpartial_group_forces_full_refresh"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/architecture/evolution-plan.md",
+        "docs/adr/0002-pure-refresh-planning.md"
+      ],
+      "limitations": [
+        "所属判定は旧実装からの意図した不具合修正。誤った旧結果との同等性を要求しない。",
+        "旧filterToContainedSourceFilePathは互換用に差集合のまま残す。",
+        "設定したディレクトリ全体の削除は、現在のFilePath::containsの存在条件に依存するため未保証。"
+      ]
+    },
+    {
+      "id": "INPUT-001",
+      "title": "ファイル変化の分類条件",
+      "status": "characterized",
+      "scope": "現在はmtimeが保存値より新しい場合に内容を比較する。",
+      "sources": [
+        {
+          "path": "src/lib/project/RefreshInfoGenerator.cpp",
+          "symbol": "didFileChange"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/RefreshInfoGeneratorTestSuite.cpp",
+          "anchor": "indexed changed sourcefile that is toindex"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/architecture/evolution-plan.md"
+      ],
+      "limitations": [
+        "同一/逆行mtimeの内容変更を網羅検出しない。",
+        "同時編集、読込時スナップショット、削除競合は追加試験が必要。"
+      ]
+    },
+    {
+      "id": "STORAGE-001",
+      "title": "schema25の保存と参照整合性",
+      "status": "characterized",
+      "scope": "ノード、辺、位置、診断等の意味を保持し、比較時は破損/参照欠損を拒否する。",
+      "sources": [
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "s_storageVersion = 25"
+        },
+        {
+          "path": "src/lib/data/storage/Storage.cpp",
+          "symbol": "inject"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/SqliteIndexStorageTestSuite.cpp",
+          "anchor": "storage adds edge successfully"
+        },
+        {
+          "path": "src/test/StorageTestSuite.cpp",
+          "anchor": "storage clears referenced single file data"
+        },
+        {
+          "path": "tests/contracts/test_semantic_graph.py",
+          "anchor": "read_snapshot"
+        }
+      ],
+      "docs": [
+        "docs/architecture/storage-and-query.md"
+      ],
+      "limitations": [
+        "新旧スキーマ移行・クラッシュ復旧・ブックマーク互換性は別検証。",
+        "既存テストと比較器の検査は全DB操作の証明ではない。"
+      ]
+    },
+    {
+      "id": "DIAGNOSTIC-001",
+      "title": "解析診断と部分結果",
+      "status": "characterized",
+      "scope": "構文/意味診断を位置・翻訳単位・致命性・索引状態と共に観測する。",
+      "sources": [
+        {
+          "path": "src/lib/data/storage/type/StorageError.h",
+          "symbol": "translationUnit"
+        },
+        {
+          "path": "src/lib/data/parser/ParserClientImpl.cpp",
+          "symbol": "recordError"
+        }
+      ],
+      "verification": [
+        {
+          "path": "tests/python/test_regression.py",
+          "anchor": "test_syntax_error_is_persisted_in_index"
+        },
+        {
+          "path": "src/test/CxxEndToEndTestSuite.cpp",
+          "anchor": "records compiler errors"
+        }
+      ],
+      "docs": [
+        "docs/architecture/domain-model.md",
+        "docs/architecture/indexing-lifecycle.md"
+      ],
+      "limitations": [
+        "プロセス失敗と構文診断を統一する状態契約はGAP-005。",
+        "異なるコンパイラー版の診断文面一致は別プロファイルで判断する。"
+      ]
+    },
+    {
+      "id": "PROCESS-001",
+      "title": "外部プロセスのUnicode境界",
+      "status": "enforced",
+      "scope": "Linux上で実行ファイル、引数、作業ディレクトリのUnicodeと空白を保持する。",
+      "sources": [
+        {
+          "path": "src/lib_gui/utility/utilityApp.cpp",
+          "symbol": "executeProcess"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/UtilityTestSuite.cpp",
+          "anchor": "process preserves Unicode executable arguments and working directory"
+        },
+        {
+          "path": "tests/python/test_regression.py",
+          "anchor": "test_utf8_source_and_unicode_file_path"
+        }
+      ],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/pixi-development.md"
+      ],
+      "limitations": [
+        "Windows/macOS実行、全タイムアウト経路、子プロセス回収の保証ではない。"
+      ]
+    },
+    {
+      "id": "QUERY-001",
+      "title": "検索とナビゲーションの観測境界",
+      "status": "characterized",
+      "scope": "保存グラフと別に、検索・経路・位置からの選択・キャッシュを評価する。",
+      "sources": [
+        {
+          "path": "src/lib/data/storage/StorageAccess.h",
+          "symbol": "getGraphForActiveTokenIds"
+        },
+        {
+          "path": "src/lib/data/search/SearchIndex.cpp",
+          "symbol": "search"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/SearchIndexTestSuite.cpp",
+          "anchor": "search index query is case insensitive"
+        },
+        {
+          "path": "src/test/SearchIndexTestSuite.cpp",
+          "anchor": "search index rates higher on consecutive letters"
+        }
+      ],
+      "docs": [
+        "docs/architecture/storage-and-query.md",
+        "docs/architecture/evolution-plan.md"
+      ],
+      "limitations": [
+        "新規の問い合わせ差分ハーネス/GUI自動化は未実装。",
+        "既存検索テストの存在で全操作の同等性を主張しない。"
+      ]
+    },
+    {
+      "id": "LANGUAGE-001",
+      "title": "解析能力と版を分離して宣言する",
+      "status": "planned",
+      "scope": "実行環境・解析エンジン・対象言語版・対応能力を識別し、共通範囲比較と新能力試験を分ける。",
+      "sources": [
+        {
+          "path": "src/lib/app/LanguagePackage.h",
+          "symbol": "LanguagePackage"
+        },
+        {
+          "path": "src/lib/project/SourceGroup.h",
+          "symbol": "allowsPartialClearing"
+        }
+      ],
+      "verification": [],
+      "docs": [
+        "docs/architecture/language-compatibility.md",
+        "docs/adr/0004-language-capabilities.md",
+        "docs/contracts/language-profiles.json"
+      ],
+      "limitations": [
+        "機械可読プロファイルは本変更で追加するが、実行時の交渉APIは未実装。",
+        "新版Python/C++とRustの対応完了を示さない。"
+      ]
+    },
+    {
+      "id": "PUBLICATION-001",
+      "title": "索引公開と障害復旧",
+      "status": "planned",
+      "scope": "完了した索引の採用、旧索引の保護、取消・障害後の復旧を将来の独立した契約にする。",
+      "sources": [
+        {
+          "path": "src/lib/project/Project.cpp",
+          "symbol": "swapToTempStorageFile"
+        }
+      ],
+      "verification": [],
+      "docs": [
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/architecture/evolution-plan.md"
+      ],
+      "limitations": [
+        "現実装は旧DB削除後にrename。原子的な公開/クラッシュ耐性は保証しない。",
+        "TLA+のPublishは更新計画の戻り値でありDB公開ではない。"
+      ]
+    },
+    {
+      "id": "VERIFICATION-001",
+      "title": "検証器自身の誤成功を防ぐ",
+      "status": "enforced",
+      "scope": "モデル検証は非空の完了探索を要求し、故障モデルは指定した不変条件の反例のみを成功とする。",
+      "sources": [
+        {
+          "path": "script/verification/check_models.py",
+          "symbol": "evaluate_result"
+        }
+      ],
+      "verification": [
+        {
+          "path": "tests/contracts/test_models.py",
+          "anchor": "test_negative_control_does_not_accept_arbitrary_failure"
+        },
+        {
+          "path": "tests/contracts/test_models.py",
+          "anchor": "test_corrupt_cached_jar_is_rejected_before_execution"
+        }
+      ],
+      "docs": [
+        "docs/contracts/formal/README.md"
+      ],
+      "limitations": [
+        "有限モデルの探索が完了してもモデルと実装の対応はレビューと実装試験を要する。"
+      ]
+    }
+  ]
+}

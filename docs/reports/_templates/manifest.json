@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "NNN-topic",
+  "created_on": "YYYY-MM-DD",
+  "source_revision": {
+    "base_commit": "FULL_40_CHARACTER_COMMIT_SHA",
+    "mode": "working-tree",
+    "note": "基準コミットからの未コミット差分も含む。各単位の SHA-256 は読んだ内容を示す。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/path/to/file.cpp",
+      "symbol": "ClassName::functionName",
+      "sha256": "FULL_64_CHARACTER_SHA256",
+      "excerpt": "短い原文抜粋",
+      "contracts": ["CONTRACT-001"],
+      "finding_type": "observed",
+      "observation": "確認できたこと",
+      "uncertainty": "まだ確認していないこと",
+      "next_action": "次に実施する作業と受入条件"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/YYYY-MM-DD/NNN-topic/evidence/verification.md",
+      "description": "実行したコマンド、結果、対象版"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "local-agent"
+  }
+}

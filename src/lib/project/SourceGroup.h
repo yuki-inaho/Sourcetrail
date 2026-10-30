@@ -42,9 +42,15 @@ public:
 	SourceGroupType getType() const;
 	LanguageType getLanguage() const;
 	SourceGroupStatusType getStatus() const;
+
+	// SOURCE-GROUP-001: Use the same path identity as getAllSourceFilePaths()'s ordered set.
+	std::set<FilePath> getSourceFilePathsExcept(const std::set<FilePath>& excludedFilePaths) const;
+	bool containsSourceFilePath(const FilePath& sourceFilePath) const;
+
+	// Compatibility alias. Despite its historical name this subtracts the supplied paths,
+	// rather than selecting an intersection. New callers should use getSourceFilePathsExcept.
 	std::set<FilePath> filterToContainedSourceFilePath(
 		const std::set<FilePath>& staticSourceFilePaths) const;
-	bool containsSourceFilePath(const FilePath& sourceFilePath) const;
 
 protected:
 	virtual std::shared_ptr<SourceGroupSettings> getSourceGroupSettings() = 0;

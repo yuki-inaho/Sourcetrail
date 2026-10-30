@@ -1,0 +1,4 @@
+interface:
+  display_name: "契約と内部仕様の注釈レビュー"
+  short_description: "コードや仕様を少数単位で注釈し、根拠付きレポートと追跡可能な追加作業を残す"
+  default_prompt: "$annotate-contract-batch を使って、指定範囲を最大10件で調査し、根拠付き注釈とレビュー用レポートを作成してください。"

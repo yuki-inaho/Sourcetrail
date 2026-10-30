@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "003-integration-verification",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "1bc605e8bea8d75abd87121e704c90caa380e44b",
+    "mode": "working-tree",
+    "note": "基準コミットから変更した実装・テストを実行した作業ツリー。実装ファイルのハッシュはevidence/verification.jsonに記録。基準コミットが変更後の内容を含むという意味ではない。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/lib/project/RefreshPlan.cpp",
+      "symbol": "RefreshPlan::forUpdatedFiles",
+      "sha256": "a155cdaa85b9d72c4f16a8163932bd3ba9118b9137fb7e52411706af369bd3ea",
+      "excerpt": "RefreshPlan RefreshPlan::forUpdatedFiles(",
+      "contracts": [
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "更新計画を固定依存スナップショットの集合演算へ抽出し、有限入力32,768件とTLA+の詳細化を検査した。",
+      "uncertainty": "分類・並行性・公開・完了性は対象外。",
+      "next_action": "入力分類とスナップショット前提を次の契約単位で検証する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "src/lib/project/Project.cpp",
+      "symbol": "sourceGroup->filterToContainedFilePaths(clearedFiles)",
+      "sha256": "6cc60988e618f2c603b533c47b97887572234b42099c1d7c2c28ae8574a16bce",
+      "excerpt": "\t\t\tif (sourceGroup->filterToContainedFilePaths(clearedFiles).empty())",
+      "contracts": [
+        "SOURCE-GROUP-001"
+      ],
+      "finding_type": "observed",
+      "observation": "削除済みファイルを設定上の所有範囲で判定し、先行する非該当グループで打ち切らず全体更新へ昇格する。",
+      "uncertainty": "設定したディレクトリ全体の消失、GUI確認操作は未検証。",
+      "next_action": "残る削除ディレクトリとGUI取消の受入例を分離して追加する。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "script/verification/semantic_graph.py",
+      "symbol": "def read_snapshot",
+      "sha256": "5bf9c1f0cd90027af55be427a5a428f567d65855e7eef991241de9b298dcdbbc",
+      "excerpt": "def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:",
+      "contracts": [
+        "GRAPH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "数値ID等を正規化し、署名・関係・位置・診断等の差を残す。C++/Pythonの実索引で全体再構築との一致を確認した。",
+      "uncertainty": "同じ入力・設定・能力という前提は比較器だけで保証しない。",
+      "next_action": "新解析器の共通能力を固定し、同じ入力で新旧DB比較と新能力の期待値を併用する。"
+    },
+    {
+      "id": "ANN-004",
+      "path": "cmake/testing.cmake",
+      "symbol": "add_test(NAME verification-contracts",
+      "sha256": "b9e5a75bdafca41c21d35c8e1673dcbc3b7ca983b05a570f95274aaed78e90ed",
+      "excerpt": "add_test(NAME verification-contracts",
+      "contracts": [
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "実装試験と検証器試験をCTestへ登録し、pixi verifyで文書・モデルまで検査した。",
+      "uncertainty": "GitHub Actionsの結果はこのローカル記録とは別に確認する。",
+      "next_action": "同じコミットのCIを確認してからマージする。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/003-integration-verification/evidence/verification.json",
+      "description": "全スイートの件数・終了状態・実装ハッシュ・TLC結果"
+    },
+    {
+      "path": "docs/reports/2026-10-30/003-integration-verification/evidence/verify.log",
+      "description": "pixi verifyの実際の標準出力と標準エラー"
+    },
+    {
+      "path": "docs/reports/2026-10-30/003-integration-verification/evidence/ctest-results.xml",
+      "description": "CTestのJUnit結果"
+    },
+    {
+      "path": "docs/reports/2026-10-30/003-integration-verification/evidence/formal-summary.json",
+      "description": "固定formal環境によるTLC実行記録"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "note": "実装・検証は今回のassistant側で実施。ユーザー側ローカルエージェントの独立レビューは未実施。"
+  }
+}

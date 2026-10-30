@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "002-independent-review",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "1bc605e8bea8d75abd87121e704c90caa380e44b",
+    "mode": "working-tree",
+    "note": "基準コミットから進行中の変更を含む現在の作業ツリーを独立読解した。基準コミット自体の内容を示さない。Project.cpp は元バッチから buildIndex の変更があり、swapToTempStorageFile は同一。本マニフェストと evidence/source-review.json のハッシュが対象版。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "symbol": "RefreshInfoGenerator::didFileChange",
+      "sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "excerpt": "if (diskFileInfo.lastWriteTime > info.lastWriteTime)",
+      "contracts": [
+        "INPUT-001",
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "元 ANN-003 の mtime ゲートを確認。mtime が増加した場合も、保存内容がなければ直ちに true、あれば TextAccess の行配列を比較する。呼び出し元が分類を終えてから更新計画を呼ぶ。",
+      "uncertainty": "同時刻・逆行時刻変更、行末正規化、読込失敗・同時編集の実行試験は未実施。既存の代表試験は保存時刻を前日/翌日に設定する。",
+      "next_action": "時刻関係・内容差・保存内容有無・削除を固定した fixture で、直接の分類と最終更新集合を別々に観測する。現行挙動の特徴づけと検出方式の改善を別判定にする。",
+      "reviews_previous_unit": "001-contract-boundaries/ANN-003"
+    },
+    {
+      "id": "ANN-002",
+      "path": "src/lib/project/Project.cpp",
+      "symbol": "Project::swapToTempStorageFile",
+      "sha256": "6cc60988e618f2c603b533c47b97887572234b42099c1d7c2c28ae8574a16bce",
+      "excerpt": "FileSystem::rename(tempIndexDbFilePath, indexDbFilePath);",
+      "contracts": [
+        "PUBLICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "元 ANN-005 の remove→rename 順を確認。両 API の bool 戻り値を確認せず、std::exception だけを捕捉する。FileSystem::rename には例外を投げず false を返す分岐があり、起動時にも一時 DB 採用の分岐がある。",
+      "uncertainty": "false が返る場合に wrapper が true へ到達することは制御フローからの推論で、障害注入やクラッシュ復旧を実行再現していない。OS ごとのファイルロックや永続化は未検証。",
+      "next_action": "remove/rename の false と例外、削除後中断を区別して注入し、戻り値・採用 DB・旧/一時 DB 保持・再起動時の選択を観測する。採用失敗を成功報告せず復旧可能な版を保持することを受入条件にする。",
+      "reviews_previous_unit": "001-contract-boundaries/ANN-005"
+    },
+    {
+      "id": "ANN-003",
+      "path": "src/lib/data/storage/PersistentStorage.cpp",
+      "symbol": "PersistentStorage::getGraphForTrail",
+      "sha256": "55ac51d110596e68ba4aa242e51d52253844163674812a8ef15bdf253f978163",
+      "excerpt": "while (nodeIdsToProcess.size() && (!depth || currentDepth < depth))",
+      "contracts": [
+        "QUERY-001"
+      ],
+      "finding_type": "observed",
+      "observation": "元 ANN-009 の宣言から実装と呼び出し元へ確認を進めた。深さ 0 は無制限、origin/target で探索側を選び、垂直辺で向きを反転する。GraphController は directed=true を渡し、通常の include trail には問い合わせ後の除外処理もある。",
+      "uncertainty": "保存結果から問い合わせや GUI の同等性は推論しない。方向・深さ・型・非索引対象・親補完を組み合わせた実行結果とキャッシュ更新後の一致は未検証。",
+      "next_action": "小さな有向グラフ fixture の期待を意味キーで固定し、depth=0/1/2、origin/target、型マスク、nodeNonIndexed、通常/カスタム経路を別々に比較する。保存問い合わせと controller 後の観測を分ける。",
+      "reviews_previous_unit": "001-contract-boundaries/ANN-009"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/002-independent-review/evidence/source-review.json",
+      "description": "読解範囲、入力ファイル SHA-256、短い抜粋、基準 SHA と git status、元バッチとの差。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/002-independent-review/evidence/verification.md",
+      "description": "今回の担当が実行した確認と未実行の範囲。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/002-independent-review/evidence/verify-docs.log",
+      "description": "pixi run --locked verify-docs の実出力。"
+    }
+  ],
+  "performed_review": {
+    "status": "completed",
+    "reviewer": "assistant-side-independent-agent",
+    "evidence_path": "docs/reports/2026-10-30/002-independent-review/evidence/source-review.json",
+    "note": "初回レポートの結論を証拠として流用せず、指定した 3 関数単位と関連境界を実コードから再確認した。実行試験の完了は含まない。"
+  },
+  "review": {
+    "status": "pending",
+    "reviewer": "local-agent",
+    "note": "ユーザー側の将来のローカルエージェントレビューは未実施。assistant 側の別担当による本レビューとは区別する。"
+  }
+}

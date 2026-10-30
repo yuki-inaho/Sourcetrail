@@ -29,9 +29,17 @@ python = "3.8.*"
 [feature.python-parser.tasks]
 python-parser-ready = { cmd = "python --version", description = "Prepare the Python environment inspected by the legacy indexer" }
 
+[feature.formal.dependencies]
+python = "3.11.*"
+openjdk = "17.*"
+
+[feature.formal.tasks]
+verify-models = { cmd = "python script/verification/check_models.py", description = "Check bounded TLA+ refinement and the required negative control" }
+
 [environments]
 default = { features = [] }
 python-parser = { features = ["python-parser"], no-default-feature = true }
+formal = { features = ["formal"], no-default-feature = true }
 
 [activation.env]
 QT_QPA_PLATFORM = "offscreen"
@@ -44,4 +52,7 @@ test-cpp-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tes
 test-python-regression = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^python-regression$'", depends-on = ["build"] }
 test-python-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^python-e2e$'", depends-on = ["build"] }
 test-legacy = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^legacy$'", depends-on = ["build"] }
+test-contracts = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -L contract", depends-on = ["build"], description = "Check executable implementation and verification-tool contracts" }
+verify-docs = { cmd = "python script/verification/check_docs.py", description = "Validate contract traceability, source anchors, reports, and documentation links" }
+verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }], description = "Run all implementation tests, contract documentation checks, and bounded model checks" }
 test = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml", depends-on = ["build"], description = "Run the existing suite and both languages' regression and E2E tests" }

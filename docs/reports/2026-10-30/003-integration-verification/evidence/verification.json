@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-30",
+  "timezone": "Asia/Tokyo",
+  "baseline_commit": "1bc605e8bea8d75abd87121e704c90caa380e44b",
+  "source_state": "working-tree",
+  "command": "pixi run --locked verify",
+  "exit_code": 0,
+  "ctest": {
+    "suites": [
+      {
+        "name": "legacy",
+        "cases": 608,
+        "assertions": 1616
+      },
+      {
+        "name": "cpp-contracts",
+        "cases": 13,
+        "assertions": 65581
+      },
+      {
+        "name": "verification-contracts",
+        "cases": 86,
+        "assertions": null
+      },
+      {
+        "name": "cpp-regression",
+        "cases": 7,
+        "assertions": 54
+      },
+      {
+        "name": "cpp-e2e",
+        "cases": 3,
+        "assertions": 270
+      },
+      {
+        "name": "python-regression",
+        "cases": 4,
+        "assertions": null
+      },
+      {
+        "name": "python-e2e",
+        "cases": 4,
+        "assertions": null
+      }
+    ],
+    "total_cases": 725,
+    "failed_suites": 0,
+    "skipped_suites": 0,
+    "seconds": 69.21
+  },
+  "formal": {
+    "passed": true,
+    "scope": "bounded model safety/refinement; not a proof of C++ or whole-application equivalence",
+    "tlc": {
+      "release": "1.7.4",
+      "url": "https://github.com/tlaplus/tlaplus/releases/download/v1.7.4/tla2tools.jar",
+      "sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+    },
+    "model_sha256": {
+      "RefreshContract.tla": "c1eb45945571a9c3ce11adab4c1d1a9766da823ea261b668a97152652247b30f",
+      "RefreshPlan.cfg": "9be616219e57f1d32a29e0db0e725340b0555987b7d2e5c130e943794613b9ff",
+      "RefreshPlan.tla": "0ee786c2952fea4791408a60fe287310d801df5384f812e011451f79b773d1e7",
+      "RefreshPlanMutant.cfg": "4e5523963fdca144959c18009ff281ba354972206b0d1ed9739112d2dce9a17f",
+      "RefreshPlanSingleRelation.cfg": "d03e6a2c3d7f4175a7cf5a028b80c659966ad6fce6822c4f504dc0b7231d4e1c"
+    },
+    "results": [
+      {
+        "name": "refresh-mixed",
+        "passed": true,
+        "returncode": 0,
+        "states": {
+          "generated": 627264,
+          "distinct": 522720,
+          "pending": 0
+        },
+        "expected_violation": null,
+        "actual_violation": null
+      },
+      {
+        "name": "refresh-single-relation",
+        "passed": true,
+        "returncode": 0,
+        "states": {
+          "generated": 82944,
+          "distinct": 69120,
+          "pending": 0
+        },
+        "expected_violation": null,
+        "actual_violation": null
+      },
+      {
+        "name": "refresh-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "states": {
+          "generated": 25,
+          "distinct": 25,
+          "pending": 5
+        },
+        "expected_violation": "SharedDependenciesPreserved",
+        "actual_violation": "SharedDependenciesPreserved"
+      }
+    ]
+  },
+  "documentation_gate_at_execution": {
+    "passed": true,
+    "markdown_files": 22,
+    "contracts": 16,
+    "language_profiles": 6,
+    "reports": 2,
+    "note": "The integration report itself was added after this receipt and checked separately."
+  },
+  "implementation_sha256": {
+    ".github/workflows/pixi-tests.yml": "fa59da5be5638aa5c6edfbf9e47d140e83aacdfb68bf936ec8ff05cdc32c55d5",
+    "cmake/testing.cmake": "b9e5a75bdafca41c21d35c8e1673dcbc3b7ca983b05a570f95274aaed78e90ed",
+    "pixi.lock": "843cfbd4bde9a1a8440db5293267f96ccd5ac5a3eaa6c365b795a08e4abc51b3",
+    "pixi.toml": "338cf88b07a3ce59a0160478ed9ee0d38a4d28821879262929ba45d76ac893ba",
+    "script/verification/check_docs.py": "b67c4711458eae7ef9b32ed47371390642519b712049f005bd8cdfc56962e8c7",
+    "script/verification/check_models.py": "918c7f694a922f1c1aeb12f5c2dfb767d6254b85bad2d2c884fa61f02a14e153",
+    "script/verification/semantic_graph.py": "5bf9c1f0cd90027af55be427a5a428f567d65855e7eef991241de9b298dcdbbc",
+    "src/lib/CMakeLists.txt": "9a23b83724292fccd8cc36a82090d3a5f25f615d14defe978dbc2a277e990440",
+    "src/lib/project/Project.cpp": "6cc60988e618f2c603b533c47b97887572234b42099c1d7c2c28ae8574a16bce",
+    "src/lib/project/RefreshInfoGenerator.cpp": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+    "src/lib/project/RefreshPlan.cpp": "a155cdaa85b9d72c4f16a8163932bd3ba9118b9137fb7e52411706af369bd3ea",
+    "src/lib/project/RefreshPlan.h": "33dd8d36b2ca74197866116b3ccadb1a9c9df04f3906075b5cd766bb43be0bb1",
+    "src/lib/project/SourceGroup.cpp": "2d86b6e69eed1f03ab59d2a58a3d3e33f6c76bd39e68b8824ae62f6bff54310d",
+    "src/lib/project/SourceGroup.h": "6112e335d512e2af182f2bba1fa28e44a03ee50ca4e1fd5c82ae2b9f912c86cd",
+    "src/test/CMakeLists.txt": "80064727e57a512cdd10f881bb5abf91ce39a736fb01fa7c0dbfb3378fcc8b2a",
+    "src/test/RefreshPlanTestSuite.cpp": "7b7c0d15972e3ea6d6869c1cd94a1645123e8ea526cfced2bc10e6331a0378c7",
+    "src/test/SourceGroupContractTestSuite.cpp": "04169eabcb687be6e46844d98ad730221c948a30e4f631460602b49e387b0a10",
+    "tests/contracts/test_docs.py": "ec6901d7e8a59b30854a2142c7da0c0f32b5e57a57e51af577fddb6cf4c495fc",
+    "tests/contracts/test_index_equivalence.py": "a6a01594121f577d93a7365fe54f20da88db15d6e6abd349388879a4a332408c",
+    "tests/contracts/test_models.py": "77c68ec153cd613f76d7cc4e0335298f5df38b0bc06ee5cf290ce7d8575acd4e",
+    "tests/contracts/test_semantic_graph.py": "0eea1aaa8f6fa654e3eaa537789e4a4eba66cd09b8f17612cbee4dbddd008a30",
+    "tests/python/test_e2e.py": "4c8feb06fb57c7849f521f14b3c089f3a3a72115dcef1841884e9f8ca0ef78bc"
+  },
+  "evidence_sha256": {
+    "ctest-results.xml": "2c7b6053776b5ad0b8fc42da61665eedb383769e7f642ce759804a1b000b3c6f",
+    "formal-summary.json": "c742c598018910c7854eed975fd6a08836bfd62b3f9f4eeb0906a35b0f31986c",
+    "verify.log": "3b6617787c5022bcc178ed2d6c5b8d8390d49d2a357889ff2607607766cf4f79"
+  },
+  "scope_limits": [
+    "Linux x86_64, C++ and Python indexing; Java source package disabled.",
+    "No GUI automation, arbitrary-size proof, crash-recovery proof, or modern language/Rust implementation.",
+    "Image annotations and user-side local-agent review were not performed."
+  ],
+  "documentation_gate_after_report": {
+    "command": "pixi run --locked verify-docs",
+    "exit_code": 0,
+    "passed": true,
+    "markdown_files": 23,
+    "contracts": 16,
+    "language_profiles": 6,
+    "reports": 3,
+    "error_count": 0
+  }
+}

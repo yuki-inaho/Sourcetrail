@@ -31,11 +31,13 @@ add_files(
 	NetworkProtocolHelperTestSuite.cpp
 	PythonIndexerTestSuite.cpp
 	RefreshInfoGeneratorTestSuite.cpp
+	RefreshPlanTestSuite.cpp
 	SearchIndexTestSuite.cpp
 	SettingsMigratorTestSuite.cpp
 	SettingsTestSuite.cpp
 	SharedMemoryTestSuite.cpp
 	SourceGroupTestSuite.cpp
+	SourceGroupContractTestSuite.cpp
 	SourceLocationCollectionTestSuite.cpp
 	SqliteBookmarkStorageTestSuite.cpp
 	SqliteIndexStorageTestSuite.cpp
