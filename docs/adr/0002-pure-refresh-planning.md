@@ -45,3 +45,7 @@ Source Group の補集合を返す API の曖昧な名前と、通常の包含�
 集合結果の C++ 試験、既存の `RefreshInfoGenerator` 試験、実アプリの差分更新試験を維持し、TLA+ の有限モデルを追加する。形式モデルとの関係は [ADR-0003](0003-bounded-formal-verification.md) で定める。
 
 本判断は、mtime が全変更を検知すること、問い合わせスナップショットが並行変更から守られること、消去後の解析や公開が成功することを保証しない。これらは独立した契約と検証単位を必要とする。
+
+## 後続の具体化
+
+[ADR-0006](0006-portable-refresh-core.md) では、この入力・出力と問い合わせ順を保持したまま、集合演算を `src/lib_core/RefreshPlanner.h` の二段階の値処理へ移す。`RefreshPlan::forUpdatedFiles` は既存の `FilePath` とストレージ問い合わせのアダプターとして残る。本 ADR の計画式・パス同一性・固定スナップショットの前提を置き換える判断ではない。

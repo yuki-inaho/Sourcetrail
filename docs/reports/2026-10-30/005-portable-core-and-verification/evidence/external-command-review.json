@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-10-30T02:19:23.460823+00:00",
+  "reviewer": "assistant-side independent agent /root/toy_targets",
+  "scope": "External command extraction and its compatibility checks",
+  "base_revision": "993ab43eba5b3055a409a73f686021233a687523",
+  "files": [
+    {
+      "path": "src/lib_core/IndexerCommandTemplate.h",
+      "sha256": "f34dc3260405b36eb572e8084634c08ddad6f9b2ca51f96fd92bcf8b7971f0b3",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/src/lib_core/IndexerCommandTemplate.h",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib/data/indexer/ExternalIndexerCommandBuilder.h",
+      "sha256": "fb22757989744ec692ceda371cc01a9c65c175b25b78634e16f3b3072bdeb9fb",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/src/lib/data/indexer/ExternalIndexerCommandBuilder.h",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp",
+      "sha256": "c91a5d3fe5c2a842be0ba05e35196c42df6645b6484e0a1a8cc6d86310a53913",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib/data/indexer/IndexerCommandCustom.cpp",
+      "sha256": "2ce3e8b71e949940a84836f8064ad46ba31cfcafbc43fbb949e972d273d89be5",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/portable-refactor-checkpoint/src/lib/data/indexer/IndexerCommandCustom.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib/project/SourceGroupCustomCommand.cpp",
+      "sha256": "618b5fc9045bd3a98fe248435d1debef5b4d929c6b1446b23d2c8cef92e66c54",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/portable-refactor-checkpoint/src/lib/project/SourceGroupCustomCommand.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib_python/project/SourceGroupPythonEmpty.cpp",
+      "sha256": "4ae9e09940ccfc72bdf1b5705e18a0ced105af1b8b67f8cfae464d337868659a",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/portable-refactor-checkpoint/src/lib_python/project/SourceGroupPythonEmpty.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/test/ExternalIndexerCommandTestSuite.cpp",
+      "sha256": "7cdf869916ff25f9b32ffad4e3f30eb254b67686b31b231f00484887cad63172",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/src/test/ExternalIndexerCommandTestSuite.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "tests/core/indexer_command_template_test.cpp",
+      "sha256": "b2116ad62858e0e00364e0b0c7b52bb24eae0de417b08a5ffc5f306d8bc999e5",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/tests/core/indexer_command_template_test.cpp",
+      "review_method": "read-only source inspection"
+    },
+    {
+      "path": "src/lib_utility/utility/utilityString.cpp",
+      "sha256": "d61a7d8e77c01705ff96776926ec32dcd114e675cf2e69d161124b8185a017f5",
+      "snapshot_source": "/workspace/scratch/715c5c4089e4/Sourcetrail/src/lib_utility/utility/utilityString.cpp",
+      "review_method": "read-only source inspection"
+    }
+  ],
+  "checks": [
+    {
+      "property": "Replacement semantics",
+      "result": "preserved in inspected source",
+      "evidence": "IndexerCommandTemplate::replaceIndexerVariable uses the same find/replace/advance-by-replacement-length rule as utilityString.cpp::doReplace. Four expansion passes retain PROJECT, DATABASE_PATH, DATABASE_VERSION, SOURCE order, including same/earlier token non-recursion."
+    },
+    {
+      "property": "Raw serialization and late database retargeting",
+      "result": "preserved in inspected source",
+      "evidence": "IndexerCommandCustom::doSerialize still serializes raw m_command/m_arguments. getCommand/getArguments expand current context; setDatabaseFilePath stays late-bound. Test assertions cover both properties."
+    },
+    {
+      "property": "Type and execution policy",
+      "result": "preserved in inspected source",
+      "evidence": "Custom uses INDEXER_COMMAND_CUSTOM and configured runInParallel; Python uses INDEXER_COMMAND_PYTHON and true, preserving TaskExecuteCustomCommands discriminator behavior."
+    },
+    {
+      "property": "Source selection and ordering",
+      "result": "preserved in inspected source",
+      "evidence": "Both old loops and shared builder traverse sourceFiles std::set, selecting only membership in filesToIndex. No quoting or shell parsing was introduced."
+    },
+    {
+      "property": "Python arguments",
+      "result": "preserved in inspected source",
+      "evidence": "The construction of index, --source-file-path, --database-file-path, optional environment, verbose and shallow arguments remains in SourceGroupPythonEmpty in its original order."
+    },
+    {
+      "property": "Process portability boundary",
+      "result": "limited claim",
+      "evidence": "The extracted core supports UTF-8 std::string and std::wstring values without Qt or path I/O. This review does not establish execution behavior on Windows/macOS or Rust indexing support."
+    }
+  ],
+  "findings": [
+    {
+      "id": "COMMAND-REVIEW-001",
+      "initial_issue": "The first builder draft took ProjectSettings by reference, eagerly dereferencing the pointer even for an empty selected-source intersection; the old loop never did so in that case.",
+      "resolution": "The builder now takes const ProjectSettings* and dereferences it only within the selected-source branch. New Catch assertions cover nullptr with empty source set and disjoint selection.",
+      "verification": "Confirmed updated source and assertions by inspection. C++ build/test execution is owned by the root integration run, not claimed by this reviewer.",
+      "status": "resolved-in-source"
+    }
+  ],
+  "toy_verification_tool_checks": {
+    "pure_pytest": {
+      "command": ".pixi/envs/default/bin/python -m pytest -q tests/toy_projects/test_runner.py -k \"missing_executable or traceability_drift or cannot_overwrite or timeout_preserves\"",
+      "exit_code": 0,
+      "passed": 7,
+      "deselected": 15,
+      "log": "build/toy-projects/toy-unit-controls.log"
+    },
+    "real_snapshot_negative_controls": {
+      "count": 6,
+      "result": "all rejected as required",
+      "receipt": "build/toy-projects/toy-negative-controls.json"
+    },
+    "not_run_here": "The complete 22-case suite and all baseline metadata checks require the corrected real-CLI observations; root owns the final execution."
+  },
+  "user_local_agent_review": {
+    "status": "pending",
+    "note": "This is an assistant-side review. No review by the user's local agent is claimed."
+  }
+}

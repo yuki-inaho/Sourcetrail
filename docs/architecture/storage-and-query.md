@@ -45,6 +45,12 @@
 
 `clearFileElements` は指定ファイルの位置に属する要素を整理した後、ファイルノードを削除する。共有する記号・関係を残す必要があり、ファイル数だけを比較しても更新の正しさは検査できない。[PersistentStorage.cpp](../../src/lib/data/storage/PersistentStorage.cpp)、[StorageTestSuite.cpp](../../src/test/StorageTestSuite.cpp)
 
+人工的な C++ 対象の削除だけの更新で、共有する名前空間から生存メンバーへの三つの `EDGE_MEMBER` が失われる既存の差を確認した。旧 `removeElementsWithLocationInFiles` は、削除ファイルに現れる名前空間も消去候補へ入れ、その名前空間が他のファイルに残るかを調べる前に、出ていく辺を全て消していた。共有ヘッダーの保持を更新計画で正しく判断しても、保存層で所属の辺を消せば最終グラフは一致しない。[トイプロブレムの基準結果](../contracts/toy-problems.md#最初の基準実行で見つかった既存の差)
+
+`STORAGE-002` の修正では、出ていく辺を消去する段階に残った `EDGE_MEMBER` のうち、**両端のノードに消去対象ファイル集合の外側の出現がある場合**を保持する。子または親が消える場合には保持せず、複数ファイルの一括消去ではその全体の外側を調べる。`EDGE_MEMBER` 以外の辺の消去規則は変更しない。また、辺自体が消去対象ファイルの位置に現れる場合は、先の既存の消去段階で削除する。この限定を、全ての辺の共有を自動的に解決する規則と読み替えない。[SqliteIndexStorage.cpp](../../src/lib/data/storage/sqlite/SqliteIndexStorage.cpp)、[StorageCleanupContractTestSuite.cpp](../../src/test/StorageCleanupContractTestSuite.cpp)
+
+これは可搬コアへの構造変更とは別の振る舞い修正である。変更前に観測した欠落を保存し、修正後は三つの所属関係が回復して全体索引と一致することを受入条件とする。
+
 `SqliteIndexStorage::setMode` は READ／WRITE／CLEAR に応じて DB 索引を切り替え、書き込み補助の一時索引をクリアする。`PersistentStorage::buildCaches` はファイルパス、記号検索、所属順序、階層等を再構築する。`StorageCache` は一部のグラフ・統計・診断をさらにキャッシュする。DB が同じでも、更新後に古いキャッシュが残れば利用者から見た意味は異なる。
 
 ## 問い合わせ契約の候補と現行の観測点

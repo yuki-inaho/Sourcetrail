@@ -1,0 +1,29 @@
+{
+  "source": "baseline-observed real C++ initial and updated snapshots",
+  "results": [
+    {
+      "mutation": "missing-call",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "reversed-call",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "dropped-overload",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "missing-member",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "wrong-token-range",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "stale-symbol",
+      "result": "rejected as required"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+diff --git a/src/lib/data/storage/sqlite/SqliteIndexStorage.cpp b/src/lib/data/storage/sqlite/SqliteIndexStorage.cpp
+index 3f121d40..20038ae0 100644
+--- a/src/lib/data/storage/sqlite/SqliteIndexStorage.cpp
++++ b/src/lib/data/storage/sqlite/SqliteIndexStorage.cpp
+@@ -3,6 +3,7 @@
+ #include <sstream>
+ #include <unordered_map>
+ 
++#include "Edge.h"
+ #include "FileSystem.h"
+ #include "LocationType.h"
+ #include "SourceLocationCollection.h"
+@@ -501,6 +502,7 @@ void SqliteIndexStorage::removeElementsWithoutOccurrences(const std::vector<Id>&
+ void SqliteIndexStorage::removeElementsWithLocationInFiles(
+ 	const std::vector<Id>& fileIds, std::function<void(int)> updateStatusCallback)
+ {
++	const std::string fileIdList = utility::join(utility::toStrings(fileIds), ',');
+ 	if (updateStatusCallback != nullptr)
+ 	{
+ 		updateStatusCallback(1);
+@@ -533,7 +535,7 @@ void SqliteIndexStorage::removeElementsWithLocationInFiles(
+ 		"		occurrence.source_location_id = source_location.id"
+ 		"	) "
+ 		"	WHERE source_location.file_node_id IN (" +
+-		utility::join(utility::toStrings(fileIds), ',') +
++		fileIdList +
+ 		")"
+ 		"	GROUP BY (occurrence.element_id)");
+ 
+@@ -553,10 +555,25 @@ void SqliteIndexStorage::removeElementsWithLocationInFiles(
+ 		updateStatusCallback(30);
+ 	}
+ 
+-	// delete all edges originating from element_id_to_clear
++	// Membership belongs to the name hierarchy, not to every file that mentions its parent.
++	// A namespace occurrence in a removed file must not erase its surviving children's
++	// membership. Preserve only member edges whose two endpoints still occur in retained
++	// files; preserving every member edge would keep removed children alive below.
++	// Other relationship kinds retain the existing outgoing-edge cleanup semantics.
+ 	executeStatement(
+ 		"DELETE FROM element WHERE element.id IN (SELECT id FROM edge WHERE source_node_id IN "
+-		"(SELECT id FROM element_id_to_clear))");
++		"(SELECT id FROM element_id_to_clear) AND (type != " +
++		std::to_string(Edge::typeToInt(Edge::EDGE_MEMBER)) +
++		" OR NOT EXISTS (SELECT 1 FROM occurrence INNER JOIN source_location "
++		"ON occurrence.source_location_id = source_location.id "
++		"WHERE occurrence.element_id = edge.source_node_id "
++		"AND source_location.file_node_id NOT IN (" +
++		fileIdList +
++		")) OR NOT EXISTS (SELECT 1 FROM occurrence INNER JOIN source_location "
++		"ON occurrence.source_location_id = source_location.id "
++		"WHERE occurrence.element_id = edge.target_node_id "
++		"AND source_location.file_node_id NOT IN (" +
++		fileIdList + "))))");
+ 
+ 	if (updateStatusCallback != nullptr)
+ 	{
+@@ -588,8 +605,7 @@ void SqliteIndexStorage::removeElementsWithLocationInFiles(
+ 
+ 	// delete source locations from fileIds (this also deletes the respective occurrences)
+ 	executeStatement(
+-		"DELETE FROM source_location WHERE file_node_id IN (" +
+-		utility::join(utility::toStrings(fileIds), ',') + ");");
++		"DELETE FROM source_location WHERE file_node_id IN (" + fileIdList + ");");
+ 
+ 	if (updateStatusCallback != nullptr)
+ 	{

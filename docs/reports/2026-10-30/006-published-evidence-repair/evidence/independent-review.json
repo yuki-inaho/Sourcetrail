@@ -1,0 +1,29 @@
+{
+  "reviewer": "assistant-side independent integration_review agent",
+  "reviewed_commit": "6eb332cac35eb6f0f61e754a3317415f654fd807",
+  "mode": "read-only published Git tree audit",
+  "result": "known missing file only; no additional findings",
+  "observations": {
+    "markdown_files": 28,
+    "report_manifests": 5,
+    "toy_snapshots_hash_checked": 42,
+    "verification_source_hashes_checked": 48,
+    "contracts": 19,
+    "source_and_test_literal_references_checked": 85,
+    "missing_paths": [
+      "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/build-inputs.json"
+    ],
+    "build_inputs_file_checks": [
+      "patch hash matches committed correction-only.patch",
+      "production hash matches committed SqliteIndexStorage.cpp",
+      "recorded base commit exists"
+    ],
+    "other_checks": [
+      "fixture hashes match published blobs",
+      "C++ and Rust result text hashes match portability summary",
+      "no other ignored report receipts are missing"
+    ]
+  },
+  "recommendation": "Add the exact existing file and a narrow ignore exception, record the correction in batch006, and verify a staged/published tree export.",
+  "user_local_agent_review": "pending"
+}

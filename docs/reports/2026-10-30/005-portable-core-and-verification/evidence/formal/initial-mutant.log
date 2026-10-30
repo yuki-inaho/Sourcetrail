@@ -1,0 +1,93 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 7980906193815416736 with 1 worker on 8 cores with 910MB heap and 64MB offheap memory [pid: 104206] (Linux 6.18.55 amd64, Ubuntu 17.0.20 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /workspace/scratch/715c5c4089e4/Sourcetrail/docs/contracts/formal/RefreshPlan.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /workspace/scratch/715c5c4089e4/Sourcetrail/docs/contracts/formal/RefreshContract.tla
+Parsing file /tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module RefreshContract
+Semantic processing of module RefreshPlan
+Starting... (2026-10-29 20:27:50)
+Computing initial states...
+Computed 2 initial states...
+Computed 4 initial states...
+Computed 8 initial states...
+Computed 16 initial states...
+Computed 32 initial states...
+Computed 64 initial states...
+Computed 128 initial states...
+Computed 256 initial states...
+Computed 512 initial states...
+Computed 1024 initial states...
+Computed 2048 initial states...
+Computed 4096 initial states...
+Finished computing initial states: 4752 distinct states generated at 2026-10-29 20:27:50.
+Error: Invariant SharedDependenciesPreserved is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ phase = "initial"
+/\ clear = {}
+/\ retained = {}
+/\ index = {}
+/\ sources = {b}
+/\ affected = {}
+/\ includeEdges = {<<a, b>>}
+/\ importEdges = {}
+/\ unchanged = {}
+/\ changed = {a}
+
+State 2: <FindAffected line 41, col 5 to line 44, col 51 of module RefreshPlan>
+/\ phase = "affected"
+/\ clear = {}
+/\ retained = {}
+/\ index = {}
+/\ sources = {b}
+/\ affected = {a}
+/\ includeEdges = {<<a, b>>}
+/\ importEdges = {}
+/\ unchanged = {}
+/\ changed = {a}
+
+State 3: <RetainSources line 47, col 5 to line 50, col 51 of module RefreshPlan>
+/\ phase = "retained"
+/\ clear = {}
+/\ retained = {b}
+/\ index = {}
+/\ sources = {b}
+/\ affected = {a}
+/\ includeEdges = {<<a, b>>}
+/\ importEdges = {}
+/\ unchanged = {}
+/\ changed = {a}
+
+State 4: <PlanClear line 53, col 5 to line 59, col 54 of module RefreshPlan>
+/\ phase = "clear"
+/\ clear = {a, b}
+/\ retained = {b}
+/\ index = {}
+/\ sources = {b}
+/\ affected = {a}
+/\ includeEdges = {<<a, b>>}
+/\ importEdges = {}
+/\ unchanged = {}
+/\ changed = {a}
+
+State 5: <PlanIndex line 62, col 5 to line 65, col 54 of module RefreshPlan>
+/\ phase = "done"
+/\ clear = {a, b}
+/\ retained = {b}
+/\ index = {b}
+/\ sources = {b}
+/\ affected = {a}
+/\ includeEdges = {<<a, b>>}
+/\ importEdges = {}
+/\ unchanged = {}
+/\ changed = {a}
+
+19287 states generated, 19287 distinct states found, 4751 states left on queue.
+The depth of the complete state graph search is 5.
+The average outdegree of the complete state graph is 1 (minimum is 1, the maximum 1 and the 95th percentile is 1).
+Finished in 00s at (2026-10-29 20:27:51)

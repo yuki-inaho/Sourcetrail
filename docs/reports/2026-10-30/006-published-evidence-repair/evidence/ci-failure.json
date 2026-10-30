@@ -1,0 +1,12 @@
+{
+  "run_id": 41003049508,
+  "job_id": 123891626631,
+  "head_commit": "6eb332cac35eb6f0f61e754a3317415f654fd807",
+  "url": "https://github.com/yuki-inaho/Sourcetrail/actions/runs/41003049508",
+  "log_scope": "last 100 lines of decoded job log",
+  "ctest_suites": 10,
+  "ctest_passed": 10,
+  "failed_gate": "verify-docs",
+  "error": "broken local link: evidence/baseline-corrected/build-inputs.json",
+  "subsequent_formal_and_portability_gates": "not reached"
+}

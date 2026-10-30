@@ -32,7 +32,9 @@ flowchart TD
 
 ## 入力分類と純粋な計画を分ける
 
-今回抽出した [RefreshPlan](../../src/lib/project/RefreshPlan.h) の本体は、ファイルの存在確認、mtime、SQLite、UI を直接扱わず、集合演算を行う。入力集合と読み取り専用の依存問い合わせから `filesToClear` と `filesToIndex` を返す。実運用の問い合わせコールバックは `PersistentStorage` を読むため、同一スナップショットを読むという前提のもとで決定的な計画となる。今回、新しいスナップショットロックは追加していない。
+[RefreshPlan](../../src/lib/project/RefreshPlan.h) は、入力集合と読み取り専用の依存問い合わせから `filesToClear` と `filesToIndex` を返す既存アダプターである。集合演算の本体は [src/lib_core/RefreshPlanner.h](../../src/lib_core/RefreshPlanner.h) に移し、`FilePath`、コールバック、ファイルの存在確認、mtime、SQLite、UI への依存を持たない。実運用のアダプターは `PersistentStorage` を読むため、同一スナップショットを読むという前提のもとで決定的な計画となる。新しいスナップショットロックは追加していない。
+
+コアは二段階の値処理とする。まず `prepareUpdatedRefresh` が変更と依存元から当初の消去対象・保持するソースを求める。アダプターがその二集合の依存先を読むと、`finishUpdatedRefresh` が最終の集合を返す。依存問い合わせの順序は `referencing(変更)` → `referenced(保持ソース)` → `referenced(当初の消去対象)` のまま保つ。計画の前に全グラフを取得したり、コア内で新しい閉包を計算したりしない。[ADR-0006](../adr/0006-portable-refresh-core.md)
 
 | 記号 | 入力・中間結果の意味 |
 | --- | --- |
@@ -53,7 +55,7 @@ Clear = B ∪ (D − K − S₀)
 Index = { s ∈ S : s ∈ Clear または s ∉ U }
 ```
 
-共有ヘッダーを保持するため、保持するソースが引き続き必要とする依存先を、孤立した依存先と同じ扱いで消さない。ただし、そのファイル自体が `B` に含まれる場合は消去対象となる。「共有されているファイルは絶対に消さない」という契約ではない。[RefreshPlan.cpp](../../src/lib/project/RefreshPlan.cpp)
+共有ヘッダーを保持するため、保持するソースが引き続き必要とする依存先を、孤立した依存先と同じ扱いで消さない。ただし、そのファイル自体が `B` に含まれる場合は消去対象となる。「共有されているファイルは絶対に消さない」という契約ではない。[RefreshPlanner.h](../../src/lib_core/RefreshPlanner.h)
 
 この式が対象にするのは **更新計画** である。再解析が正しいグラフを生成すること、mtime 判定が全ての変更を拾うこと、DB 切り替えが障害に耐えることは別の契約になる。[ADR-0002](../adr/0002-pure-refresh-planning.md)、[ADR-0003](../adr/0003-bounded-formal-verification.md)
 
@@ -100,3 +102,5 @@ Python の Source Group は `allowsPartialClearing() == false` である。`Proj
 5. 公開や中断の仕組みを変更する場合は、別途障害・復旧の契約と試験を追加する。
 
 この順序により、純粋な集合処理の等価性と、アプリ全体の観測結果を混同しない。
+
+具体的な再現対象には [C++／Python のトイプロブレム](../contracts/toy-problems.md) を使う。初回、無変更、削除、編集を分け、更新後は別ルートの全体更新と比較する。変更前の実装に差が見つかった場合は、既存の不具合の修正と構造変更の同等性を分けて記録し、基準との差を消すために観測を弱めない。

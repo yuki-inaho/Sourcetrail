@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "profile": "refresh-sets-v1",
+  "status": "passed",
+  "versions": {
+    "python": "3.11.18 (main, Oct 26 2026, 11:35:17) [GCC 15.3.0]",
+    "rustc": "rustc 1.85.1 (4eb161250 2025-03-15)",
+    "cxx": "x86_64-conda-linux-gnu-c++ (conda-forge gcc 12.4.0-2) 12.4.0",
+    "linker_driver": "x86_64-conda-linux-gnu-cc (conda-forge gcc 12.4.0-2) 12.4.0"
+  },
+  "compile_command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/portability/bin/rustc",
+    "--edition=2021",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "linker=/workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/portability/bin/x86_64-conda-linux-gnu-cc",
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/tests/portability/refresh_reference.rs",
+    "-o",
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/portability/refresh-reference"
+  ],
+  "source_sha256": {
+    "src/lib_core/RefreshPlanner.h": "4c32def458952d47966880659ad369add2ea06aeeb4266b0c8fcfc2f75f3a539",
+    "tests/portability/refresh_driver.cpp": "77d0cbc810efdf54c0f6b544e4a9be51ee9e541ed07022e124d8137773a7352a",
+    "tests/portability/refresh_reference.rs": "2d753433eb4ca0361684d6163a04146a985745f3733707b1e667a56c1b71ebf3",
+    "tests/portability/refresh_vectors.json": "ec761c7ce16fcf3e4720f52e123173c596445327da466ac37c81d9f60b8c8b88",
+    "script/verification/check_portability.py": "dca07ac484b61d0968cb7d3d75736f3a881e9ce2a25d760c50133a00887b1fa6"
+  },
+  "fixed_cases": 10,
+  "fixed_case_ids": [
+    "empty",
+    "no-op",
+    "new-source",
+    "shared-and-private",
+    "changed-header",
+    "deleted-source",
+    "protect-static-source",
+    "dependency-cycle",
+    "affected-beats-shared",
+    "high-opaque-identity"
+  ],
+  "bounded_cases": 32768,
+  "bounded_domain": {
+    "identities": 3,
+    "directed_nonself_graphs": 64,
+    "source_subsets": 8,
+    "changed_subsets": 8,
+    "unchanged_subsets": 8,
+    "overlapping_changed_unchanged_included": true
+  },
+  "implementations": {
+    "cpp": {
+      "status": "passed",
+      "cases": 32778,
+      "mismatches": 0,
+      "binary_sha256": "7a37f2d6b6a97a8313ca6a1e6cde499ed62f200a6c76cbe6656c065c8b3530b8",
+      "result_sha256": "c18ff1dd414a61ad212f3cf75a7beb96f767c49c7c57e38f5337528a4f8b32d2"
+    },
+    "rust": {
+      "status": "passed",
+      "cases": 32778,
+      "mismatches": 0,
+      "binary_sha256": "a5c60e3ee7fe2b4d12063d491b4aa9d74507dbb51e5ba2418734ac5ee4c9090e",
+      "result_sha256": "c18ff1dd414a61ad212f3cf75a7beb96f767c49c7c57e38f5337528a4f8b32d2"
+    }
+  },
+  "negative_control": {
+    "status": "expected-mismatch",
+    "cases": 10,
+    "rejected_case_ids": [
+      "shared-and-private",
+      "protect-static-source"
+    ],
+    "required_rejected_case": "shared-and-private"
+  },
+  "duration_seconds": 0.889,
+  "scope": "C++ production value core / Rust reference policy; no Rust indexing or OS application proof"
+}

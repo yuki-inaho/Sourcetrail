@@ -1,0 +1,4 @@
+[1/4] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+[2/2] Linking CXX executable test/Sourcetrail_test

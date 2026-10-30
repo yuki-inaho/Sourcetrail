@@ -1,0 +1,129 @@
+✨ Pixi task (configure in default): cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON: (Configure the application with C++ and Python indexing)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Version: 0.0.0
+-- setting up the buildtype for versioning
+bash: ''
+-- 'Treat warnings as errors' policy is disabled
+-- Found LLVM 11.1.0
+-- Trying to find Clang compiler headers in '.' build config in directory '/workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/default/./lib/clang/11.1.0/include'.
+-- Found headers for '.' build config.
+CMake Warning (dev) at CMakeLists.txt:188 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Qt 5.15.8
+CMake Deprecation Warning at src/lib_core/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Building the Java indexer will be skipped. You can enable building this target by setting 'BUILD_JAVA_LANGUAGE_PACKAGE' to 'ON'.
+CMake Warning (dev) at CMakeLists.txt:558 (add_custom_command):
+  The following keywords are not supported when using
+  add_custom_command(TARGET): DEPENDS.
+
+  Policy CMP0175 is not set: add_custom_command() rejects invalid arguments.
+  Run "cmake --help-policy CMP0175" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:753 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:754 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- create symlink: /workspace/scratch/715c5c4089e4/Sourcetrail/bin/app/data -> /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/data
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+
+✨ Pixi task (python-parser-ready in python-parser): python --version: (Prepare the Python environment inspected by the legacy indexer)
+Python 3.8.20
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/3] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+
+✨ Pixi task (test in default): ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml: (Run the existing suite and both languages' regression and E2E tests)
+Internal ctest changing into directory: /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+Test project /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+      Start  1: toy-projects
+ 1/10 Test  #1: toy-projects .....................   Passed   25.67 sec
+      Start  2: legacy
+Process not started
+ /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/test/Sourcetrail_test
+[permission denied]
+ 2/10 Test  #2: legacy ...........................***Not Run   0.00 sec
+      Start  3: cpp-contracts
+Process not started
+ /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/test/Sourcetrail_test
+[permission denied]
+ 3/10 Test  #3: cpp-contracts ....................***Not Run   0.00 sec
+      Start  4: verification-contracts
+ 4/10 Test  #4: verification-contracts ...........   Passed    9.73 sec
+      Start  5: cpp-regression
+Process not started
+ /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/test/Sourcetrail_test
+[permission denied]
+ 5/10 Test  #5: cpp-regression ...................***Not Run   0.00 sec
+      Start  6: cpp-e2e
+Process not started
+ /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/test/Sourcetrail_test
+[permission denied]
+ 6/10 Test  #6: cpp-e2e ..........................***Not Run   0.00 sec
+      Start  7: python-regression
+ 7/10 Test  #7: python-regression ................   Passed    2.31 sec
+      Start  8: python-e2e
+ 8/10 Test  #8: python-e2e .......................   Passed   10.90 sec
+      Start  9: core-refresh-contracts
+ 9/10 Test  #9: core-refresh-contracts ...........   Passed    0.03 sec
+      Start 10: core-command-contracts
+10/10 Test #10: core-command-contracts ...........   Passed    0.00 sec
+
+60% tests passed, 4 tests failed out of 10
+
+Label Time Summary:
+contract       =  35.43 sec*proc (5 tests)
+cpp            =  25.70 sec*proc (6 tests)
+e2e            =  36.57 sec*proc (3 tests)
+legacy         =   0.00 sec*proc (1 test)
+portability    =   0.03 sec*proc (2 tests)
+python         =  48.61 sec*proc (4 tests)
+regression     =   2.31 sec*proc (3 tests)
+toy            =  25.67 sec*proc (1 test)
+
+Total Test time (real) =  48.66 sec
+
+The following tests FAILED:
+	  2 - legacy (BAD_COMMAND)                              legacy regression
+	  3 - cpp-contracts (BAD_COMMAND)                       contract cpp
+	  5 - cpp-regression (BAD_COMMAND)                      cpp regression
+	  6 - cpp-e2e (BAD_COMMAND)                             cpp e2e
+Errors while running CTest

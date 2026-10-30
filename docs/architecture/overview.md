@@ -1,6 +1,6 @@
 # 内部設計の入口 — Sourcetrail が保持する意味
 
-調査日: 2026-10-30。比較の出発点は `1bc605e8bea8d75abd87121e704c90caa380e44b`。この文書群は、その実装と本変更の更新計画抽出を対象とする。将来構成は「提案」、未検証の性質は「未検証」と明記する。
+調査日: 2026-10-30。初回の比較の出発点は `1bc605e8bea8d75abd87121e704c90caa380e44b`。続く人工的な対象の追加と可搬コアへの分離は、統合済みの `993ab43eba5b3055a409a73f686021233a687523` を出発点とする。各実行の対象版と結果は [作業レポート](../reports/README.md) で追跡する。将来構成は「提案」、未検証の性質は「未検証」と明記する。
 
 ## 目的と読み順
 
@@ -15,8 +15,10 @@ Sourcetrail の中心的な役割は、ソースコードから**名前・関係
 | SQLite と画面から見える問い合わせ | [保存・検索・表示の境界](storage-and-query.md) | `StorageAccess`, `schema 25`, `trail`, `bookmark` |
 | 新しい Python／C++／Rust の追加 | [言語互換性と拡張点](language-compatibility.md) | `capability`, `adapter`, `edition`, `C++20` |
 | 未確認事項・次の作業・終了条件 | [改善順序と未解決事項](evolution-plan.md) | `GAP-`, `段階`, `受入条件` |
-| 設計判断の理由 | [ADR 一覧](../adr/README.md) | `ADR-0001`〜`ADR-0004` |
+| 設計判断の理由 | [ADR 一覧](../adr/README.md) | `ADR-0001`〜`ADR-0006` |
 | 実行できる契約・モデル | [契約ディレクトリ](../contracts/) | `REFRESH-001`, `REFRESH-002`, `TLC` |
+| 人工的な対象の設計・期待・実行 | [トイプロブレム](../contracts/toy-problems.md) | `TOY-CXX-001`, `TOY-PYTHON-001`, `expected.json` |
+| 再利用・移植する値処理の境界 | [ADR-0006](../adr/0006-portable-refresh-core.md) | `src/lib_core`, `prepareUpdatedRefresh`, `IndexerCommandTemplate` |
 
 ## 現在の構成
 
@@ -38,6 +40,8 @@ flowchart TD
 | --- | --- | --- |
 | 起動・操作 | GUI／CLI の起動、言語モジュール登録、プロジェクト読み込み | [src/app/main.cpp](../../src/app/main.cpp), [CommandLineParser.cpp](../../src/lib/utility/commandline/CommandLineParser.cpp) |
 | プロジェクト | 設定、対象ファイル、更新方法、タスク構成、DB の採用 | [Project.cpp](../../src/lib/project/Project.cpp), [SourceGroup.h](../../src/lib/project/SourceGroup.h) |
+| 可搬な値処理 | 識別子集合による更新計画と、文字列によるコマンド変数展開 | [RefreshPlanner.h](../../src/lib_core/RefreshPlanner.h), [IndexerCommandTemplate.h](../../src/lib_core/IndexerCommandTemplate.h) |
+| 既存型への接続 | `FilePath` と依存問い合わせを値処理へ接続し、Qt の保存形式と実行時展開を保持する | [RefreshPlan.cpp](../../src/lib/project/RefreshPlan.cpp), [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp) |
 | 言語アダプター | ビルド設定から索引化コマンドを作り、言語固有の意味を抽出する | [SourceGroupFactory.cpp](../../src/lib/project/SourceGroupFactory.cpp), [LanguagePackageManager.cpp](../../src/lib/app/LanguagePackageManager.cpp) |
 | 共通記録形式 | 記号・参照・位置・診断を記録する | [ParserClient.h](../../src/lib/data/parser/ParserClient.h), [ParserClientImpl.cpp](../../src/lib/data/parser/ParserClientImpl.cpp) |
 | 集約と保存 | 中間結果の ID を再対応付けし、SQLite に統合する | [Storage.cpp](../../src/lib/data/storage/Storage.cpp), [PersistentStorage.cpp](../../src/lib/data/storage/PersistentStorage.cpp) |
@@ -45,6 +49,10 @@ flowchart TD
 | 表示・外部連携 | Qt の描画、操作履歴、IDE との通信 | [lib_gui](../../src/lib_gui/), [NetworkProtocolHelper.cpp](../../src/lib/component/controller/helper/NetworkProtocolHelper.cpp) |
 
 `StorageAccess` には読み取り問い合わせだけでなくブックマークの変更も含まれる。現在の型名を、そのまま将来の分離境界とみなしてはいけない。
+
+`src/lib_core` は標準ライブラリーだけを使い、ファイルを列挙せず、ストレージを読まず、プロセスを起動しない。既存のアダプターが必要な値を渡すため、コアの単独試験とアプリケーションは同じ実装を使える。この依存分離による可搬性と、アプリケーション全体の OS 対応や Rust 索引器の有無は区別する。[ADR-0006](../adr/0006-portable-refresh-core.md)
+
+人工対象の設計と元実装の観測は [004](../reports/2026-10-30/004-toy-project-design-and-baseline/report.md)、発見した所属辺欠落の修正、十四段階のリファクタリング比較、C++／Rust の値単位の検証は [005](../reports/2026-10-30/005-portable-core-and-verification/report.md) にまとめる。
 
 ## 利用者の操作から必要な契約を探す
 

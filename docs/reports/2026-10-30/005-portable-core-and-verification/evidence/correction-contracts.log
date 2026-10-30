@@ -1,0 +1,12 @@
+Internal ctest changing into directory: /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+Test project /workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi
+    Start 3: cpp-contracts
+1/1 Test #3: cpp-contracts ....................   Passed    0.88 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+contract    =   0.88 sec*proc (1 test)
+cpp         =   0.88 sec*proc (1 test)
+
+Total Test time (real) =   0.88 sec

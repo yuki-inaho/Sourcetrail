@@ -10,6 +10,8 @@
 | 索引化と更新の処理順・責務 | [索引化のライフサイクル](architecture/indexing-lifecycle.md) |
 | 保存形式、検索、グラフ、位置、ブックマーク | [保存と問い合わせ](architecture/storage-and-query.md) |
 | 同じ意味を保ったことをどう判断するか | [契約と観測プロファイル](contracts/README.md)、[機械可読の契約台帳](contracts/catalog.json) |
+| 人工的な小さい対象を何のために設計したか | [トイプロブレムの仕様と検査方法](contracts/toy-problems.md)、[実行対象・期待値](../tests/toy_projects/README.md) |
+| 再利用・可搬性・Rustへの移植をどう確かめるか | [値処理とアダプターの分離](adr/0006-portable-refresh-core.md)、[C++／Rust共通の値入力](../tests/portability/refresh_vectors.json) |
 | TLA+で何を検証し、何を検証しないか | [形式仕様と実行手順](contracts/formal/README.md) |
 | なぜその境界・方式にしたか | [ADR一覧](adr/README.md) |
 | 新しいPython／C++／Rustをどう追加するか | [言語対応の境界と改善計画](architecture/language-compatibility.md)、[対応能力プロファイル](contracts/language-profiles.json) |
@@ -26,12 +28,14 @@ pixi install --locked --all
 pixi run --locked verify
 ```
 
-`verify` はアプリケーションのビルドと既存／回帰／E2E／契約テスト、文書の参照整合性、TLA+の有限モデル検査を実行する。Javaは独立した `formal` 環境に固定する。TLCは公式リリースの固定ハッシュを確認して取得する。
+`verify` はアプリケーションのビルドと既存／回帰／E2E／トイ対象／契約テスト、文書の参照整合性、TLA+の有限モデル検査、独立したC++コアとRust参照実装の適合試験を実行する。Javaは `formal`、C++／Rustの値契約は `portability` の独立環境に固定する。TLCは公式リリースの固定ハッシュを確認して取得する。
 
 ```sh
 pixi run --locked test-contracts
+pixi run --locked test-toys
 pixi run --locked verify-docs
 pixi run -e formal --locked verify-models
+pixi run -e portability --locked verify-portability
 ```
 
 各コマンドの成功は対象範囲での証拠である。モデル検査でアプリケーション全体を証明した、新版言語の対応が完了した、画像を注釈した、という意味にはならない。

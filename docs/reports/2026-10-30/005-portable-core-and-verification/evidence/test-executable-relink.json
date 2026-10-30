@@ -1,0 +1,10 @@
+{
+  "artifact": "build/pixi/test/Sourcetrail_test",
+  "mode_before": "0o644",
+  "sha256_before": "f43b435d7f512069ff34f8aa87c343da81ad26536c36a7592d4489c696f8aaf9",
+  "observed_failure": "CTest could not start Catch executable: permission denied; toy/Python/core suites passed",
+  "action": "remove generated executable only and relink from existing verified object files",
+  "mode_after": "0o755",
+  "sha256_after": "f43b435d7f512069ff34f8aa87c343da81ad26536c36a7592d4489c696f8aaf9",
+  "relink_exit_code": 0
+}

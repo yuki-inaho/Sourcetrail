@@ -3,7 +3,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-#include "utilityString.h"
+#include "IndexerCommandTemplate.h"
 
 IndexerCommandType IndexerCommandCustom::getStaticIndexerCommandType()
 {
@@ -18,14 +18,15 @@ IndexerCommandCustom::IndexerCommandCustom(
 	const std::wstring& databaseVersion,
 	const FilePath& sourceFilePath,
 	bool runInParallel)
-	: IndexerCommand(sourceFilePath)
-	, m_type(getStaticIndexerCommandType())
-	, m_command(command)
-	, m_arguments(arguments)
-	, m_projectFilePath(projectFilePath)
-	, m_databaseFilePath(databaseFilePath)
-	, m_databaseVersion(databaseVersion)
-	, m_runInParallel(runInParallel)
+	: IndexerCommandCustom(
+		  getStaticIndexerCommandType(),
+		  command,
+		  arguments,
+		  projectFilePath,
+		  databaseFilePath,
+		  databaseVersion,
+		  sourceFilePath,
+		  runInParallel)
 {
 }
 
@@ -78,12 +79,13 @@ std::wstring IndexerCommandCustom::getCommand() const
 
 std::vector<std::wstring> IndexerCommandCustom::getArguments() const
 {
-	std::vector<std::wstring> args;
-	for (const std::wstring& argument: m_arguments)
-	{
-		args.push_back(replaceVariables(argument));
-	}
-	return args;
+	return sourcetrail::core::expandIndexerArguments(
+		m_arguments,
+		sourcetrail::core::IndexerCommandContext<std::wstring> {
+			m_projectFilePath.wstr(),
+			m_databaseFilePath.wstr(),
+			m_databaseVersion,
+			getSourceFilePath().wstr()});
 }
 
 bool IndexerCommandCustom::getRunInParallel() const
@@ -115,9 +117,11 @@ QJsonObject IndexerCommandCustom::doSerialize() const
 
 std::wstring IndexerCommandCustom::replaceVariables(std::wstring s) const
 {
-	s = utility::replace(s, L"%{PROJECT_FILE_PATH}", m_projectFilePath.wstr());
-	s = utility::replace(s, L"%{DATABASE_FILE_PATH}", m_databaseFilePath.wstr());
-	s = utility::replace(s, L"%{DATABASE_VERSION}", m_databaseVersion);
-	s = utility::replace(s, L"%{SOURCE_FILE_PATH}", getSourceFilePath().wstr());
-	return s;
+	return sourcetrail::core::expandIndexerTemplate(
+		std::move(s),
+		sourcetrail::core::IndexerCommandContext<std::wstring> {
+			m_projectFilePath.wstr(),
+			m_databaseFilePath.wstr(),
+			m_databaseVersion,
+			getSourceFilePath().wstr()});
 }

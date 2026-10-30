@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "toy_id": "TOY-PYTHON-001",
+  "language": "python",
+  "language_profile": "python-jedi017-full",
+  "snapshot_profile": "schema25-exact-v1",
+  "adrs": [
+    "ADR-0001",
+    "ADR-0002",
+    "ADR-0003",
+    "ADR-0004",
+    "ADR-0005"
+  ],
+  "contracts": [
+    "GRAPH-001",
+    "NAME-001",
+    "RELATION-001",
+    "LOCATION-001",
+    "REFRESH-001",
+    "SOURCE-GROUP-001",
+    "PROCESS-001"
+  ],
+  "deleted_files": [
+    "second/obsolete.py"
+  ],
+  "expectations": {
+    "initial": {
+      "indexed_files": [
+        "first/keeper.py",
+        "second/library.py",
+        "second/main.py",
+        "second/obsolete.py"
+      ],
+      "symbols": [
+        {
+          "name": "library.helper",
+          "kind": 4096
+        },
+        {
+          "name": "library.Parent",
+          "kind": 128
+        },
+        {
+          "name": "main.Child",
+          "kind": 128
+        },
+        {
+          "name": "library.Parent.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.Child.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.entry",
+          "kind": 4096
+        },
+        {
+          "name": "keeper.keep",
+          "kind": 4096
+        },
+        {
+          "name": "obsolete.obsolete_symbol",
+          "kind": 4096
+        }
+      ],
+      "edges": [
+        {
+          "kind": 16,
+          "source": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "target": {
+            "name": "library.Parent",
+            "kind": 128
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.Child.run",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.Parent.run",
+            "kind": 4096
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.entry",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.helper",
+            "kind": 4096
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "library.helper",
+            "kind": 4096
+          },
+          "file": "second/library.py",
+          "range": [
+            6,
+            5,
+            6,
+            10
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "file": "second/main.py",
+          "range": [
+            4,
+            7,
+            4,
+            11
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": []
+    },
+    "deleted": {
+      "indexed_files": [
+        "first/keeper.py",
+        "second/library.py",
+        "second/main.py"
+      ],
+      "symbols": [
+        {
+          "name": "library.helper",
+          "kind": 4096
+        },
+        {
+          "name": "library.Parent",
+          "kind": 128
+        },
+        {
+          "name": "main.Child",
+          "kind": 128
+        },
+        {
+          "name": "library.Parent.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.Child.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.entry",
+          "kind": 4096
+        },
+        {
+          "name": "keeper.keep",
+          "kind": 4096
+        }
+      ],
+      "edges": [
+        {
+          "kind": 16,
+          "source": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "target": {
+            "name": "library.Parent",
+            "kind": 128
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.Child.run",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.Parent.run",
+            "kind": 4096
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.entry",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.helper",
+            "kind": 4096
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "library.helper",
+            "kind": 4096
+          },
+          "file": "second/library.py",
+          "range": [
+            6,
+            5,
+            6,
+            10
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "file": "second/main.py",
+          "range": [
+            4,
+            7,
+            4,
+            11
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": [
+        "obsolete",
+        "obsolete.obsolete_symbol"
+      ]
+    },
+    "updated": {
+      "indexed_files": [
+        "first/keeper.py",
+        "second/library.py",
+        "second/main.py"
+      ],
+      "symbols": [
+        {
+          "name": "library.replacement",
+          "kind": 4096
+        },
+        {
+          "name": "library.Parent",
+          "kind": 128
+        },
+        {
+          "name": "main.Child",
+          "kind": 128
+        },
+        {
+          "name": "library.Parent.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.Child.run",
+          "kind": 4096
+        },
+        {
+          "name": "main.entry",
+          "kind": 4096
+        },
+        {
+          "name": "keeper.keep",
+          "kind": 4096
+        }
+      ],
+      "edges": [
+        {
+          "kind": 16,
+          "source": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "target": {
+            "name": "library.Parent",
+            "kind": 128
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.Child.run",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.Parent.run",
+            "kind": 4096
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "main.entry",
+            "kind": 4096
+          },
+          "target": {
+            "name": "library.replacement",
+            "kind": 4096
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "library.replacement",
+            "kind": 4096
+          },
+          "file": "second/library.py",
+          "range": [
+            6,
+            5,
+            6,
+            15
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "main.Child",
+            "kind": 128
+          },
+          "file": "second/main.py",
+          "range": [
+            4,
+            7,
+            4,
+            11
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": [
+        "obsolete",
+        "obsolete.obsolete_symbol",
+        "library.helper"
+      ]
+    }
+  }
+}

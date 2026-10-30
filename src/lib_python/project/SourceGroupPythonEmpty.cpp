@@ -1,13 +1,12 @@
 #include "SourceGroupPythonEmpty.h"
 
 #include "ApplicationSettings.h"
+#include "ExternalIndexerCommandBuilder.h"
 #include "FileManager.h"
-#include "IndexerCommandCustom.h"
-#include "ProjectSettings.h"
+#include "FilePathFilter.h"
 #include "RefreshInfo.h"
 #include "ResourcePaths.h"
 #include "SourceGroupSettingsPythonEmpty.h"
-#include "SqliteIndexStorage.h"
 #include "utility.h"
 
 SourceGroupPythonEmpty::SourceGroupPythonEmpty(std::shared_ptr<SourceGroupSettingsPythonEmpty> settings)
@@ -73,24 +72,11 @@ std::vector<std::shared_ptr<IndexerCommand>> SourceGroupPythonEmpty::getIndexerC
 		args.push_back(L"--shallow");
 	}
 
-	std::vector<std::shared_ptr<IndexerCommand>> indexerCommands;
-	for (const FilePath& sourceFilePath: getAllSourceFilePaths())
-	{
-		if (info.filesToIndex.find(sourceFilePath) != info.filesToIndex.end())
-		{
-			indexerCommands.push_back(std::make_shared<IndexerCommandCustom>(
-				INDEXER_COMMAND_PYTHON,
-				ResourcePaths::getPythonIndexerFilePath().wstr(),
-				args,
-				m_settings->getProjectSettings()->getProjectFilePath(),
-				m_settings->getProjectSettings()->getTempDBFilePath(),
-				std::to_wstring(SqliteIndexStorage::getStorageVersion()),
-				sourceFilePath,
-				true));
-		}
-	}
-
-	return indexerCommands;
+	return createExternalIndexerCommands(
+		{INDEXER_COMMAND_PYTHON, ResourcePaths::getPythonIndexerFilePath().wstr(), args, true},
+		m_settings->getProjectSettings(),
+		getAllSourceFilePaths(),
+		info.filesToIndex);
 }
 
 std::shared_ptr<SourceGroupSettings> SourceGroupPythonEmpty::getSourceGroupSettings()

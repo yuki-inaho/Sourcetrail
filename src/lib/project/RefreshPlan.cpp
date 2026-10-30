@@ -1,5 +1,9 @@
 #include "RefreshPlan.h"
 
+#include <utility>
+
+#include "RefreshPlanner.h"
+
 RefreshPlan RefreshPlan::forUpdatedFiles(
 	const FilePaths& allSourceFiles,
 	const FilePaths& unchangedIndexedFiles,
@@ -7,35 +11,18 @@ RefreshPlan RefreshPlan::forUpdatedFiles(
 	const DependencyQuery& referenced,
 	const DependencyQuery& referencing)
 {
-	RefreshPlan plan;
-	plan.filesToClear = changedFiles;
+	// Keep the storage query sequence explicit: C++ argument evaluation order must not
+	// choose which snapshot observation occurs first. The portable core sees values only.
 	const FilePaths dependentFiles = referencing(changedFiles);
-	plan.filesToClear.insert(dependentFiles.begin(), dependentFiles.end());
-
-	FilePaths staticSourceFiles = allSourceFiles;
-	for (const FilePath& path: plan.filesToClear)
-	{
-		staticSourceFiles.erase(path);
-	}
-
-	const FilePaths staticReferencedFiles = referenced(staticSourceFiles);
-	const FilePaths dynamicReferencedFiles = referenced(plan.filesToClear);
-	for (const FilePath& path: dynamicReferencedFiles)
-	{
-		if (staticReferencedFiles.find(path) == staticReferencedFiles.end() &&
-			staticSourceFiles.find(path) == staticSourceFiles.end())
-		{
-			plan.filesToClear.insert(path);
-		}
-	}
-
-	for (const FilePath& path: allSourceFiles)
-	{
-		if (plan.filesToClear.find(path) != plan.filesToClear.end() ||
-			unchangedIndexedFiles.find(path) == unchangedIndexedFiles.end())
-		{
-			plan.filesToIndex.insert(path);
-		}
-	}
-	return plan;
+	const auto selection = sourcetrail::core::prepareUpdatedRefresh(
+		allSourceFiles, changedFiles, dependentFiles);
+	const FilePaths staticReferencedFiles = referenced(selection.staticSourceFiles);
+	const FilePaths dynamicReferencedFiles = referenced(selection.initialFilesToClear);
+	auto result = sourcetrail::core::finishUpdatedRefresh(
+		allSourceFiles,
+		unchangedIndexedFiles,
+		selection,
+		staticReferencedFiles,
+		dynamicReferencedFiles);
+	return RefreshPlan {std::move(result.filesToClear), std::move(result.filesToIndex)};
 }

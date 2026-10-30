@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "005-portable-core-and-verification",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "993ab43eba5b3055a409a73f686021233a687523",
+    "mode": "working-tree",
+    "note": "基準コミットからの最終実装・試験ファイルを読解。修正のみの中間ビルドはevidence/baseline-corrected/build-inputs.jsonとパッチ、最終ビルドはverification.jsonのソースハッシュで識別する。未コミットファイルが基準コミットに含まれるという意味ではない。日付はUTC。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/lib_core/RefreshPlanner.h",
+      "symbol": "prepareUpdatedRefresh",
+      "sha256": "4c32def458952d47966880659ad369add2ea06aeeb4266b0c8fcfc2f75f3a539",
+      "excerpt": "RefreshSelection<Key> prepareUpdatedRefresh(",
+      "contracts": [
+        "REFRESH-001",
+        "REFRESH-002",
+        "PORTABILITY-001"
+      ],
+      "finding_type": "observed",
+      "observation": "取得済み集合だけを受け取る二段階の値処理へ分離。独立ビルドと整数識別子の有限オラクルを実行した。",
+      "uncertainty": "依存スナップショットの同期とパスの同一性はアダプターの前提。",
+      "next_action": "移植先でも同じ値入力を使い、依存取得の正しさを別途確認する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "src/lib/project/RefreshPlan.cpp",
+      "symbol": "RefreshPlan::forUpdatedFiles",
+      "sha256": "efdcca4b0325952dee9ae88c448a26c3f80d55570d8693632396026bd4bf90b5",
+      "excerpt": "const FilePaths dependentFiles = referencing(changedFiles);",
+      "contracts": [
+        "REFRESH-001",
+        "REFRESH-002"
+      ],
+      "finding_type": "observed",
+      "observation": "既存APIと依存元・保持側依存先・変更側依存先の問い合わせ順を維持。既存32768入力と実索引比較を再実行した。",
+      "uncertainty": "DBスナップショットを固定する同期機構は追加していない。",
+      "next_action": "並行処理を変更する際に、固定スナップショットの実装前提を検証する。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "src/lib_core/IndexerCommandTemplate.h",
+      "symbol": "expandIndexerTemplate",
+      "sha256": "f34dc3260405b36eb572e8084634c08ddad6f9b2ca51f96fd92bcf8b7971f0b3",
+      "excerpt": "String expandIndexerTemplate(String text, const IndexerCommandContext<String>& context)",
+      "contracts": [
+        "COMMAND-001"
+      ],
+      "finding_type": "observed",
+      "observation": "順序付き展開を標準C++へ抽出。UTF-8とwide文字列、空・不明・再導入変数を検査した。",
+      "uncertainty": "wide文字列のABIとOS起動処理の共通化は対象外。",
+      "next_action": "新アダプターでも引数配列を保ち、プロセスの起動・終了を別途試験する。"
+    },
+    {
+      "id": "ANN-004",
+      "path": "src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp",
+      "symbol": "createExternalIndexerCommands",
+      "sha256": "c91a5d3fe5c2a842be0ba05e35196c42df6645b6484e0a1a8cc6d86310a53913",
+      "excerpt": "std::vector<std::shared_ptr<IndexerCommand>> createExternalIndexerCommands(",
+      "contracts": [
+        "COMMAND-001"
+      ],
+      "finding_type": "observed",
+      "observation": "PythonとCustomの選択・順序・型・DB文脈・並列指定を共通化した。空の選択での参照差も修正した。",
+      "uncertainty": "解析器の発見・能力交渉・エラー処理は追加していない。",
+      "next_action": "新解析器のフラグと能力プロファイルを定め、この境界で適合確認する。"
+    },
+    {
+      "id": "ANN-005",
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "Membership belongs to the name hierarchy",
+      "sha256": "31b9c1b5828eac9001db34eedbd1736627732fd4ec0a055e0a236658a7712c9e",
+      "excerpt": "// Membership belongs to the name hierarchy, not to every file that mentions its parent.",
+      "contracts": [
+        "STORAGE-002",
+        "RELATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "両端が生存するMEMBER辺を保持し、旧失敗から3辺だけを回復。6ケースの実SQLite試験とトイが成功した。",
+      "uncertainty": "辺自身の消去出現・他種の辺は従来規則。出現のない中間親は未検証。",
+      "next_action": "追加の規則変更は新しい最小反例と独立期待値から始める。"
+    },
+    {
+      "id": "ANN-006",
+      "path": "script/verification/check_portability.py",
+      "symbol": "def verify",
+      "sha256": "dca07ac484b61d0968cb7d3d75736f3a881e9ce2a25d760c50133a00887b1fa6",
+      "excerpt": "def verify(cpp_driver: Path, output: Path) -> dict:",
+      "contracts": [
+        "PORTABILITY-001",
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "C++とRustが32778入力で独立期待値と一致。共有保護を省く変異版を検出し、33件の検証器試験も成功した。",
+      "uncertainty": "有限範囲の参照移植でありRustソース解析器ではない。",
+      "next_action": "本体へ採用する際は所有権・プロセス・DB接続の契約を追加する。"
+    },
+    {
+      "id": "ANN-007",
+      "path": "tests/toy_projects/runner.py",
+      "symbol": "def compare_baseline",
+      "sha256": "97383cdd1af176606ff1d1d3c10c831e094edc1286b3a3dd9f4b04d21ed9e616",
+      "excerpt": "def compare_baseline(result: dict, output: Path, baseline_summary: Path) -> int:",
+      "contracts": [
+        "GRAPH-001",
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "全14段階の変更前後一致を実行。不正基準で古い成功を残す問題を修正し、30件のトイ試験が成功した。",
+      "uncertainty": "必要な事実の網羅性と能力選定は別途レビューが必要。",
+      "next_action": "新能力は別IDで追加し、過去の入力と観測を上書きしない。"
+    },
+    {
+      "id": "ANN-008",
+      "path": "cmake/testing.cmake",
+      "symbol": "add_test(NAME toy-projects",
+      "sha256": "4a79f545b1e79db7a31928c75674fbdd227d6e1584cda1f0f5820057cd6ca043",
+      "excerpt": "add_test(NAME toy-projects",
+      "contracts": [
+        "GRAPH-001",
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "両解析パッケージ有効時にトイを登録。10スイート、797 Catch/pytestケースと2単独プログラムが成功した。",
+      "uncertainty": "未実装の言語や別OSの成功は含まない。",
+      "next_action": "追加言語でも条件付きゲートと必須入力欠落の明示的失敗を保つ。"
+    },
+    {
+      "id": "ANN-009",
+      "path": "CMakeLists.txt",
+      "symbol": "PRIVATE Sourcetrail_core",
+      "sha256": "cb3cbfb5ea2e3d9c0212445148fa62e55e4670198189cd841d743bb738617d3a",
+      "excerpt": "PRIVATE Sourcetrail_core",
+      "contracts": [
+        "PORTABILITY-001"
+      ],
+      "finding_type": "observed",
+      "observation": "PRIVATE接続でLLVM11解析器のC++14と本体C++17を分離。生成コンパイルコマンドでも確認した。",
+      "uncertainty": "別OS・別コンパイラーの全ビルドは未実施。",
+      "next_action": "対象OS追加時に固定環境、同じ値契約、実CLIトイをその環境で実行する。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/verification.json",
+      "description": "全ゲートの件数・終了状態・コードハッシュ・コンパイル標準"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/verify.log",
+      "description": "再リンク後の統合ゲートの実出力"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/ctest-results.xml",
+      "description": "10スイートのJUnitと各プログラムの実出力"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/standalone-core-results.xml",
+      "description": "独立Pixi環境の2コア試験"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/formal-summary.json",
+      "description": "TLCの正例・指定反例・状態数"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/portability-summary.json",
+      "description": "C++/Rustの版・ハッシュ・32778入力・負例"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/summary.json",
+      "description": "修正だけの成功基準14観測"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/baseline-corrected/intentional-delta.json",
+      "description": "旧結果から3本のMEMBER辺だけが変わった検査"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/summary.json",
+      "description": "最終構造変更後の14観測と基準との一致"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/external-command-review.json",
+      "description": "別担当の外部コマンド境界レビュー"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/integration-review.json",
+      "description": "独立統合レビューの指摘と解消"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/initial-verify-failed.log",
+      "description": "生成物の実行権限で4スイートが起動できなかった初回実行"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/test-executable-relink.json",
+      "description": "再リンク前後の同一ハッシュと0644から0755への実行権限修復"
+    },
+    {
+      "path": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/final-docs-check.log",
+      "description": "レポート完成後の文書検査。28Markdown・19契約・6プロファイル・5レポート、エラー0。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "note": "assistant側の独立レビューと全指摘の解消はevidenceに記録。ユーザー側ローカルエージェントのレビューは未実施。"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "004-toy-project-design-and-baseline",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "993ab43eba5b3055a409a73f686021233a687523",
+    "mode": "working-tree",
+    "note": "新規トイ対象・手書き期待値の最終スナップショットを注釈。基準索引はこのコミットに対応すると呼び出し側が指定した既存実行ファイルで構造変更前に取得。入力と実行ファイルのハッシュは原記録のまま保持し、基準コミットに新規トイが存在すると主張しない。現在のrunnerには後続の拒否検査追加があるため、基準実行時のrunner全文ハッシュを遡及して補わない。日付はUTC。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "tests/toy_projects/fixtures/cxx/expected.json",
+      "symbol": "TOY-CXX-001",
+      "sha256": "30bffb31b73288c3bfdbf75c91e608788111f9bb595318939f7d681b61ceb3d1",
+      "excerpt": "\"toy_id\": \"TOY-CXX-001\"",
+      "contracts": [
+        "GRAPH-001",
+        "NAME-001",
+        "RELATION-001",
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "C++17の共有ヘッダー・二つのオーバーロード・所属辺・呼び出し・位置・削除と改名を必要な事実として手書きした。",
+      "uncertainty": "選んだ事実の網羅性とC++仕様全体の対応は保証しない。",
+      "next_action": "残る構文・構成を新しいトイIDで追加し、既存期待値を候補結果から自動生成しない。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "tests/toy_projects/fixtures/python/expected.json",
+      "symbol": "TOY-PYTHON-001",
+      "sha256": "5415b6c587365a94036a0b9b2fb09672b2619e6919124d59e128bff62dfc7111",
+      "excerpt": "\"toy_id\": \"TOY-PYTHON-001\"",
+      "contracts": [
+        "GRAPH-001",
+        "RELATION-001",
+        "SOURCE-GROUP-001"
+      ],
+      "finding_type": "observed",
+      "observation": "二つのSource Groupと後続グループの削除、import経由の呼び出し・継承・修飾名・位置を固定した。",
+      "uncertainty": "凍結された完全解析プロファイルのみ。メソッドの4096という保存種別は現行アダプターのソースで確認した規約。",
+      "next_action": "modern Python/Rustを追加するときは対応能力を宣言し、共通概念の写像と新構文の期待値を分ける。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "tests/toy_projects/fixtures/cxx/initial/include/api.h",
+      "symbol": "int answer(int value);",
+      "sha256": "197a1b13eb9793a4d2618003d4f7c72b364bffc0fee4635341e8f7e7444d3be5",
+      "excerpt": "int answer(int value);",
+      "contracts": [
+        "NAME-001",
+        "REFRESH-002"
+      ],
+      "finding_type": "observed",
+      "observation": "小さい共有ヘッダーに署名の異なる二つのanswerとentryを置き、宣言・定義・参照を複数の翻訳単位にまたがらせた。",
+      "uncertainty": "このヘッダーだけで全プリプロセッサー条件やビルド構成は網羅しない。",
+      "next_action": "マクロ・複数構成のトイを追加するときも既存例の最小性を保つ。"
+    },
+    {
+      "id": "ANN-004",
+      "path": "tests/toy_projects/fixtures/python/project.srctrlprj",
+      "symbol": "source_group_zzz",
+      "sha256": "987cf33a3205260abfd275abe13610a9acc4929deb8b48bcba3042d29fd949d5",
+      "excerpt": "<source_group_zzz>",
+      "contracts": [
+        "SOURCE-GROUP-001"
+      ],
+      "finding_type": "observed",
+      "observation": "先行する無関係なグループと後続の編集対象グループを明示し、削除だけで全体更新へ昇格することをCLIログで確認する。",
+      "uncertainty": "GUI確認や設定ディレクトリ全体の削除は対象外。",
+      "next_action": "全ディレクトリ消失やGUI取消は別の受入例と実行証跡を用意する。"
+    },
+    {
+      "id": "ANN-005",
+      "path": "script/verification/semantic_graph.py",
+      "symbol": "def read_snapshot",
+      "sha256": "5bf9c1f0cd90027af55be427a5a428f567d65855e7eef991241de9b298dcdbbc",
+      "excerpt": "def read_snapshot(database: Path, project_root: Path) -> dict[str, Any]:",
+      "contracts": [
+        "GRAPH-001",
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "schema25-exact-v1で数値ID・配置根だけを正規化し、署名・辺・位置・出現・内容・診断を残す全体観測を実行した。",
+      "uncertainty": "索引一致は索引対象の実行意味・GUI・検索順位・性能を証明しない。",
+      "next_action": "異なる解析器を比較する前に同じ対応能力・入力・設定であることを記録する。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/004-toy-project-design-and-baseline/evidence/baseline-observed/summary.json",
+      "description": "失敗した旧基準を含む全14段階の実測概要。スナップショットの相対パスとハッシュを保持。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/004-toy-project-design-and-baseline/evidence/baseline-observed/cxx/deleted--deleted-clean.diff",
+      "description": "削除差分更新と全体再構築の厳密な差。MEMBER3辺が欠落。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/004-toy-project-design-and-baseline/evidence/storage-cleanup-cause.json",
+      "description": "旧初期DBの読み取り専用調査。消去候補と生存する両端を持つ辺。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/004-toy-project-design-and-baseline/evidence/toy-negative-controls.json",
+      "description": "実スナップショットに6種類の故障を入れ、必要な事実の検査が拒否した結果。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/004-toy-project-design-and-baseline/evidence/toy-unit-controls.log",
+      "description": "この基準作業時点の純粋な実行器検査7成功、残り15は選択外。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "note": "assistant側の設計・実行と負例確認を記録。ユーザー側ローカルエージェントの独立レビューは未実施。"
+  }
+}

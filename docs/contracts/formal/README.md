@@ -50,6 +50,12 @@ python script/verification/check_models.py --offline
 [RefreshPlan::forUpdatedFiles](../../../src/lib/project/RefreshPlan.cpp) は、分類済みの集合と読み取り専用の依存関係問い合わせを受け取り、`filesToClear` と `filesToIndex` を返す。
 [RefreshInfoGenerator](../../../src/lib/project/RefreshInfoGenerator.cpp) がファイルシステム・DB・有効なソースグループを調べ、その入力を組み立てる。
 
+[ADR-0006](../../adr/0006-portable-refresh-core.md) により、集合演算の本体は
+[RefreshPlanner.h](../../../src/lib_core/RefreshPlanner.h) へ分離した。アダプターが依存元を問い合わせ、
+`prepareUpdatedRefresh` が `A` と `K` を返す。アダプターは `R(K)`、`R(A)` をこの順に取得し、
+`finishUpdatedRefresh` が `C` と `I` を返す。値のコアにはDBを読むコールバックを渡さず、
+従来の問い合わせ順序と別々のinclude／import閉包はアダプター側に保持する。モデルの集合契約は変更しない。
+
 | モデル | 実装・前提 |
 | --- | --- |
 | `Files` | 今回扱う有限のファイル識別子。パス文字列・大小文字・シンボリックリンクは抽象化する |
