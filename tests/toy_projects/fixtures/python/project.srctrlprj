@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+  <version>8</version>
+  <source_groups>
+    <source_group_aaa>
+      <name>TOY-PYTHON-001 earlier unrelated group</name>
+      <status>enabled</status>
+      <type>Python Source Group</type>
+      <source_paths><source_path>first</source_path></source_paths>
+      <source_extensions><source_extension>.py</source_extension></source_extensions>
+    </source_group_aaa>
+    <source_group_zzz>
+      <name>TOY-PYTHON-001 later edited group</name>
+      <status>enabled</status>
+      <type>Python Source Group</type>
+      <source_paths><source_path>second</source_path></source_paths>
+      <source_extensions><source_extension>.py</source_extension></source_extensions>
+    </source_group_zzz>
+  </source_groups>
+</config>

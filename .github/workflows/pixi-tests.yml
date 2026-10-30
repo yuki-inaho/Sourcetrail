@@ -6,6 +6,7 @@ on:
       - master
       - chore/pixi-python-cpp-tests
       - refactor/semantic-contracts
+      - refactor/portable-toy-contracts
   pull_request:
   workflow_dispatch:
 
@@ -48,5 +49,11 @@ jobs:
             build/pixi/Testing/Temporary/LastTestsFailed.log
             build/formal/summary.json
             build/formal/*.log
+            build/core/core-results.xml
+            build/portability/summary.json
+            build/toy-projects/current/summary.json
+            build/toy-projects/current/**/*.snapshot.json
+            build/toy-projects/current/**/*.log
+            build/toy-projects/current/**/*.diff
           if-no-files-found: ignore
           retention-days: 14

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "reviewer": "assistant-side independent integration review agent",
+  "base_commit": "993ab43eba5b3055a409a73f686021233a687523",
+  "mode": "working-tree",
+  "production_blockers": [],
+  "source_sha256": {
+    "CMakeLists.txt": "cb3cbfb5ea2e3d9c0212445148fa62e55e4670198189cd841d743bb738617d3a",
+    "cmake/testing.cmake": "4a79f545b1e79db7a31928c75674fbdd227d6e1584cda1f0f5820057cd6ca043",
+    "src/lib_core/CMakeLists.txt": "dae59ccb8e5a5fb342c90853b64ea499a2846632a103454b53e9704caf9f6423",
+    "src/lib_core/RefreshPlanner.h": "4c32def458952d47966880659ad369add2ea06aeeb4266b0c8fcfc2f75f3a539",
+    "src/lib_core/IndexerCommandTemplate.h": "f34dc3260405b36eb572e8084634c08ddad6f9b2ca51f96fd92bcf8b7971f0b3",
+    "src/lib/project/RefreshPlan.cpp": "efdcca4b0325952dee9ae88c448a26c3f80d55570d8693632396026bd4bf90b5",
+    "src/lib/data/indexer/IndexerCommandCustom.cpp": "2ce3e8b71e949940a84836f8064ad46ba31cfcafbc43fbb949e972d273d89be5",
+    "src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp": "c91a5d3fe5c2a842be0ba05e35196c42df6645b6484e0a1a8cc6d86310a53913",
+    "src/lib/project/SourceGroupCustomCommand.cpp": "618b5fc9045bd3a98fe248435d1debef5b4d929c6b1446b23d2c8cef92e66c54",
+    "src/lib_python/project/SourceGroupPythonEmpty.cpp": "4ae9e09940ccfc72bdf1b5705e18a0ced105af1b8b67f8cfae464d337868659a",
+    "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp": "31b9c1b5828eac9001db34eedbd1736627732fd4ec0a055e0a236658a7712c9e",
+    "src/test/StorageCleanupContractTestSuite.cpp": "00338593561ef4dc58672d86569eea827b497222dde0fbf49ba171da244e4262",
+    "script/verification/check_portability.py": "dca07ac484b61d0968cb7d3d75736f3a881e9ce2a25d760c50133a00887b1fa6",
+    "tests/portability/refresh_driver.cpp": "77d0cbc810efdf54c0f6b544e4a9be51ee9e541ed07022e124d8137773a7352a",
+    "tests/portability/refresh_reference.rs": "2d753433eb4ca0361684d6163a04146a985745f3733707b1e667a56c1b71ebf3",
+    "tests/portability/refresh_vectors.json": "ec761c7ce16fcf3e4720f52e123173c596445327da466ac37c81d9f60b8c8b88",
+    "tests/contracts/test_portability.py": "6c23516b7f39cae41eba1361c597d5fb53bb00877c7bb30adf0420624c06f14a",
+    "tests/toy_projects/runner.py": "d9f5ba422a9e92bd292559a6db7a0eb5abea0ca274bf72189e85d71fa6d3005a",
+    "tests/toy_projects/test_runner.py": "83cd1f4165827aca0ddd80c4fb16d7c2458fa52511cfe7b679db792d70448804"
+  },
+  "checks": [
+    {
+      "kind": "source-review",
+      "result": "passed",
+      "observation": "RefreshPlan adapter preserves referencing(changed), referenced(static), referenced(initialClear) order; core performs value-only set operations and does not inspect paths."
+    },
+    {
+      "kind": "source-review",
+      "result": "passed",
+      "observation": "External command ordered nonrecursive passes, raw serialization, late database retargeting, language discriminator, parallel flag, source selection order and empty selection null-project behavior remain preserved."
+    },
+    {
+      "kind": "generated-build-configuration",
+      "result": "passed",
+      "observation": "build/pixi/compile_commands.json: IndexerCxx.cpp remains -std=gnu++14, RefreshPlan.cpp and standalone core test use -std=gnu++17; core usage requirement is PRIVATE."
+    },
+    {
+      "kind": "source-review",
+      "result": "passed",
+      "observation": "Cleanup correction preserves only MEMBER edges with both endpoints having an occurrence outside all cleared files. Earlier explicit edge-occurrence deletion and nonmember semantics remain unchanged; six SQLite cases match stated scope."
+    },
+    {
+      "kind": "receipt-hash-verification",
+      "result": "passed",
+      "observation": "Original and correction-only baseline snapshots: all 28 declared snapshot hashes match. Original C++ failed with two recorded failures; corrected C++ and both Python runs pass without failure."
+    },
+    {
+      "kind": "test-execution",
+      "command": "pixi run --locked python -m pytest -q tests/contracts/test_portability.py",
+      "exit_code": 0,
+      "cases_passed": 33
+    },
+    {
+      "kind": "source-review",
+      "result": "passed",
+      "observation": "Portability validator checks count, ASCII, unsigned masks, bounded generation count, independent Boolean closure oracle and expected mutant rejection; Rust reference is not claimed to be source indexing."
+    },
+    {
+      "kind": "test-execution",
+      "command": "pixi run --locked python -m pytest -q tests/toy_projects/test_runner.py -k 'not real_toy_project and not expected_facts_reject and not unusable_receipts'",
+      "exit_code": 0,
+      "cases_passed": 15,
+      "cases_deselected": 15,
+      "observation": "Includes all five malformed-container cases, two stale-success rerun cases, strict Boolean schema rejection, baseline readonly protection, timeout logging and traceability/missing-binary controls."
+    },
+    {
+      "kind": "reproduction-recheck",
+      "result": "passed",
+      "observation": "Original languages=[] baseline now raises ToyFailure: Baseline languages must be an object."
+    }
+  ],
+  "findings": [
+    {
+      "id": "REVIEW-001",
+      "severity": "medium",
+      "status": "resolved-and-independently-rechecked",
+      "path": "tests/toy_projects/runner.py",
+      "observation": "A baseline whose languages field is [] raises uncaught AttributeError. main does not invalidate an existing summary before work, so an abnormal failure can leave a prior passed receipt in a reused output directory.",
+      "reproduction": "Using correction-only metadata with languages replaced by []: compare_baseline(...) raises AttributeError: 'list' object has no attribute 'get'.",
+      "impact": "The process fails rather than falsely passing CI, but durable summary evidence can be stale.",
+      "recommendation": "Validate baseline container types as ToyFailure and invalidate stale success before execution; add malformed-shape/stale-receipt tests.",
+      "resolution": "Baseline containers now require objects and schema_version requires an exact integer. main writes a failed receipt before hashing or process work, after rejecting baseline/output aliasing. The original malformed-languages reproduction is rejected as ToyFailure. Focused tests verify both handled malformed input and an unexpected exception invalidate prior success."
+    }
+  ],
+  "limits": [
+    "Read-only review; no app build or full app test run by this reviewer.",
+    "Root owns final refactor-versus-corrected-baseline comparison and full verification.",
+    "General hierarchy nodes without own occurrences, other relationship provenance, all OS portability and modern-language indexing remain outside demonstrated scope."
+  ],
+  "user_local_agent_review": "pending",
+  "post_fix_source_sha256": {
+    "tests/toy_projects/runner.py": "97383cdd1af176606ff1d1d3c10c831e094edc1286b3a3dd9f4b04d21ed9e616",
+    "tests/toy_projects/test_runner.py": "acd32fa663aa8aaa2f7dabbeee3ae06acbdba08fddc419eb070ed230b1eefee3"
+  },
+  "open_review_findings": 0
+}

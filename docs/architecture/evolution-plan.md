@@ -7,13 +7,15 @@
 | 段階 | 目的 | 成果／次の受入条件 |
 | --- | --- | --- |
 | 0: 基準の固定 | 既存挙動を再現する | pixi の依存固定、C++／Python の実アプリ試験、比較の観測範囲を記録 |
-| 1: 意味と責務の分離 | 整理の単位を小さくする | 本変更で更新計画を `RefreshPlan` に抽出。入力分類・実行・公開は別責務として残す |
+| 1: 意味と責務の分離 | 整理の単位を小さくする | `RefreshPlan` の抽出に続き、集合計画とコマンド変数展開を標準ライブラリーだけの `src/lib_core` へ分離。既存型・I/O はアダプターに残し、人工対象で実索引の観測を比較する |
 | 2: アダプターの境界 | 解析エンジンを更新可能にする | 版・構文・能力・位置規約・実行失敗の契約を、実装と適合試験へ接続 |
 | 3: 既存言語の更新 | 既存能力の保持と新能力の追加 | Python と C++ を別変更で更新し、共通範囲比較と新機能の期待値を両方通す |
 | 4: Rust の導入 | 共通の探索操作を新言語へ広げる | Cargo 文脈、記号の写像、更新・診断・位置の最小能力を実装し適合試験を通す |
 | 5: 公開・問い合わせの整理 | 操作全体と障害耐性を保つ | DB 公開、キャッシュ、検索・経路・UI、ブックマークを独立した契約単位にする |
 
 段階 2 以降の実装は、この文書があるだけでは完了しない。本変更の試験・形式モデルの成功から、新版 Python／C++ や Rust の対応完了を推論してはいけない。
+
+段階 1 の具体的な境界は [ADR-0006](../adr/0006-portable-refresh-core.md)、変更前後に使用する入力と期待は [トイプロブレム](../contracts/toy-problems.md) を参照する。標準ライブラリーだけのコアを別環境からコンパイルできることと、解析エンジン・GUI・配布の移植が終わったことは別である。
 
 ## 調査範囲の一覧
 
@@ -22,7 +24,8 @@
 | 領域 | 根拠の入口 | 今回の扱い | 次に必要な観測 |
 | --- | --- | --- | --- |
 | プロジェクト設定・Source Group | [ProjectSettings.cpp](../../src/lib/settings/ProjectSettings.cpp), [SourceGroup.cpp](../../src/lib/project/SourceGroup.cpp) | ソース確認、設定・列挙境界を記述 | 保存／再読込／移動／除外／重複 |
-| 更新計画 | [RefreshPlan.cpp](../../src/lib/project/RefreshPlan.cpp) | 抽出・契約・有限モデル | 入力分類の保証は別単位 |
+| 更新計画 | [RefreshPlanner.h](../../src/lib_core/RefreshPlanner.h), [RefreshPlan.cpp](../../src/lib/project/RefreshPlan.cpp) | 値処理と依存問い合わせアダプターを分離、単独試験・契約・有限モデル | 入力分類と同一依存スナップショットの保証は別単位 |
+| 外部コマンド構築 | [IndexerCommandTemplate.h](../../src/lib_core/IndexerCommandTemplate.h), [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp) | 変数展開を分離、引数境界・展開順・遅延 DB 切り替えを保持 | 実行失敗・取消・版交渉の再設計は別単位 |
 | 更新時刻・ファイル内容 | [RefreshInfoGenerator.cpp](../../src/lib/project/RefreshInfoGenerator.cpp) | 条件を明記 | 同時刻・逆行時刻・削除・編集競合 |
 | C++ 解析 | [lib_cxx](../../src/lib_cxx/) | 基準試験と拡張点整理 | 新規構文・異なるビルド構成 |
 | Python 解析 | [lib_python](../../src/lib_python/), [外部処理](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp) | 基準試験、後処理・環境分離を記述 | 新版構文、import、曖昧性 |
@@ -30,6 +33,7 @@
 | Rust | [言語拡張設計](language-compatibility.md) | 提案 | アダプター選定・実装・受入試験 |
 | 中間表現・統合 | [Storage.cpp](../../src/lib/data/storage/Storage.cpp), [IntermediateStorage.cpp](../../src/lib/data/storage/IntermediateStorage.cpp) | ID 対応と付加情報を確認 | 注入順の変更、欠損・例外 |
 | 永続化・スキーマ | [SqliteIndexStorage.cpp](../../src/lib/data/storage/sqlite/SqliteIndexStorage.cpp) | 全テーブルの意味を整理 | スキーマ移行、破損入力 |
+| ファイル削除時の所属関係 | [StorageCleanupContractTestSuite.cpp](../../src/test/StorageCleanupContractTestSuite.cpp), [トイプロブレム](../contracts/toy-problems.md) | 既存の所属辺欠落を検出し、両端が残る所属辺を保持する限定修正 | 他の関係種類・巨大入力の一般保証は含めない |
 | 公開・取消・復旧 | [Project.cpp](../../src/lib/project/Project.cpp), [TaskFinishParsing.cpp](../../src/lib/data/TaskFinishParsing.cpp) | 非原子的な公開箇所を記録 | 障害注入と復旧手順 |
 | ワーカー・IPC | [interprocess](../../src/lib/data/indexer/interprocess/) | 拡張時の経路を確認 | 中断、ワーカー終了、版不一致 |
 | 検索・グラフ・コード | [StorageAccess.h](../../src/lib/data/storage/StorageAccess.h) | 問い合わせ表を作成 | 意味単位の問い合わせ適合試験 |
@@ -104,6 +108,8 @@
 専用実装は存在しない。Cargo 文脈と意味モデルの選択、trait／impl と共通関係の写像、マクロ位置を先に決める。
 
 受入条件は、小さな workspace を対象に定義・参照・呼び出し・依存・診断・位置を記録し、検索と変更／削除後の更新まで一貫して動くこと。最初から全 Rust 機能への対応を宣言しない。[language-compatibility.md](language-compatibility.md)
+
+`src/lib_core` の値処理は、Rust 等へ移す際の小さな検証単位を提供する。Rust で同じ計画を計算できることを確認しても、この GAP の Rust ソース索引化が完了したとはしない。[ADR-0006](../adr/0006-portable-refresh-core.md)
 
 ### GAP-008: 検索・UI の観測契約
 

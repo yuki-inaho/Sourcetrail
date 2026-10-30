@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-x86_64-conda-linux-gnu-c++"
+	tests="10"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="b6e5f938579f"
+	time="65"
+	timestamp="2026-10-29T21:28:42"
+	>
+	<testcase name="toy-projects" classname="toy-projects" time="25.9209" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;e2e;python;toy"/>
+		</properties>
+		<system-out>..............................                                           [100%]
+30 passed in 25.66s
+</system-out>
+	</testcase>
+	<testcase name="legacy" classname="legacy" time="3.80086" status="run">
+		<properties>
+			<property name="cmake_labels" value="legacy;regression"/>
+		</properties>
+		<system-out>no settings
+===============================================================================
+All tests passed (1616 assertions in 608 test cases)
+
+</system-out>
+	</testcase>
+	<testcase name="cpp-contracts" classname="cpp-contracts" time="0.837816" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp"/>
+		</properties>
+		<system-out>no settings
+===============================================================================
+All tests passed (65669 assertions in 22 test cases)
+
+</system-out>
+	</testcase>
+	<testcase name="verification-contracts" classname="verification-contracts" time="9.72775" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;python"/>
+		</properties>
+		<system-out>........................................................................ [ 60%]
+...............................................                          [100%]
+119 passed in 9.56s
+</system-out>
+	</testcase>
+	<testcase name="cpp-regression" classname="cpp-regression" time="0.125684" status="run">
+		<properties>
+			<property name="cmake_labels" value="cpp;regression"/>
+		</properties>
+		<system-out>no settings
+===============================================================================
+All tests passed (54 assertions in 7 test cases)
+
+</system-out>
+	</testcase>
+	<testcase name="cpp-e2e" classname="cpp-e2e" time="11.4983" status="run">
+		<properties>
+			<property name="cmake_labels" value="cpp;e2e"/>
+		</properties>
+		<system-out>no settings
+===============================================================================
+All tests passed (270 assertions in 3 test cases)
+
+</system-out>
+	</testcase>
+	<testcase name="python-regression" classname="python-regression" time="2.26223" status="run">
+		<properties>
+			<property name="cmake_labels" value="python;regression"/>
+		</properties>
+		<system-out>============================= test session starts ==============================
+platform linux -- Python 3.11.17, pytest-8.4.2, pluggy-1.7.0
+rootdir: /workspace/scratch/715c5c4089e4/Sourcetrail/tests/python
+configfile: pytest.ini
+collected 8 items / 4 deselected / 4 selected
+
+tests/python/test_regression.py ....                                     [100%]
+
+======================= 4 passed, 4 deselected in 2.10s ========================
+</system-out>
+	</testcase>
+	<testcase name="python-e2e" classname="python-e2e" time="10.8277" status="run">
+		<properties>
+			<property name="cmake_labels" value="e2e;python"/>
+		</properties>
+		<system-out>============================= test session starts ==============================
+platform linux -- Python 3.11.17, pytest-8.4.2, pluggy-1.7.0
+rootdir: /workspace/scratch/715c5c4089e4/Sourcetrail/tests/python
+configfile: pytest.ini
+collected 8 items / 4 deselected / 4 selected
+
+tests/python/test_e2e.py ....                                            [100%]
+
+======================= 4 passed, 4 deselected in 10.68s =======================
+</system-out>
+	</testcase>
+	<testcase name="core-refresh-contracts" classname="core-refresh-contracts" time="0.0242251" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>Refresh core: named examples, opaque identity, and 32768 bounded input snapshots passed.
+</system-out>
+	</testcase>
+	<testcase name="core-command-contracts" classname="core-command-contracts" time="0.00174767" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>COMMAND-001: 5 independent command-template scenarios passed
+</system-out>
+	</testcase>
+</testsuite>

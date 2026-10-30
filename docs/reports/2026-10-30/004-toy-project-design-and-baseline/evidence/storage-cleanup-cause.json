@@ -1,0 +1,78 @@
+{
+  "baseline_database": "build/toy-projects/baseline-observed/cxx/initial.srctrldb",
+  "database_sha256": "71921dc7d06dcf2a1c9de3c28c306ec0b49706c7d358a939e2225a813b6e0dcf",
+  "deleted_file": {
+    "id": 93,
+    "path": "/tmp/sourcetrail-toy-dfmypg5d/incremental 日本語 with spaces/src/obsolete.cpp"
+  },
+  "cleanup_candidates": [
+    {
+      "element_id": 3,
+      "serialized_name": "::\tmtoy\ts\tp"
+    },
+    {
+      "element_id": 94,
+      "serialized_name": "::\tmobsolete_symbol\tsint\tp()"
+    },
+    {
+      "element_id": 95,
+      "serialized_name": null
+    },
+    {
+      "element_id": 96,
+      "serialized_name": null
+    },
+    {
+      "element_id": 97,
+      "serialized_name": null
+    },
+    {
+      "element_id": 98,
+      "serialized_name": null
+    }
+  ],
+  "outgoing_edges_deleted_by_legacy_query": [
+    {
+      "id": 10,
+      "type": 1,
+      "source": "::\tmtoy\ts\tp",
+      "target": "::\tmtoy\ts\tp\tnanswer\tsint\tp(int)",
+      "source_has_retained_occurrence": 1,
+      "target_has_retained_occurrence": 1
+    },
+    {
+      "id": 12,
+      "type": 1,
+      "source": "::\tmtoy\ts\tp",
+      "target": "::\tmtoy\ts\tp\tnanswer\tsdouble\tp(double)",
+      "source_has_retained_occurrence": 1,
+      "target_has_retained_occurrence": 1
+    },
+    {
+      "id": 14,
+      "type": 1,
+      "source": "::\tmtoy\ts\tp",
+      "target": "::\tmtoy\ts\tp\tnentry\tsint\tp()",
+      "source_has_retained_occurrence": 1,
+      "target_has_retained_occurrence": 1
+    },
+    {
+      "id": 96,
+      "type": 2,
+      "source": "::\tmobsolete_symbol\tsint\tp()",
+      "target": "::\tmint\ts\tp",
+      "source_has_retained_occurrence": 0,
+      "target_has_retained_occurrence": 0
+    },
+    {
+      "id": 97,
+      "type": 8,
+      "source": "::\tmobsolete_symbol\tsint\tp()",
+      "target": "::\tmtoy\ts\tp\tnanswer\tsint\tp(int)",
+      "source_has_retained_occurrence": 0,
+      "target_has_retained_occurrence": 1
+    }
+  ],
+  "read_only": true,
+  "interpretation": "Legacy outgoing-edge deletion removes three MEMBER edges whose endpoints both have occurrences in retained files."
+}

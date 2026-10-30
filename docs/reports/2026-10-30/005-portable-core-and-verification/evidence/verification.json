@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "base_commit": "993ab43eba5b3055a409a73f686021233a687523",
+  "source_mode": "working-tree",
+  "command": "SOURCETRAIL_TOY_BASELINE=build/toy-projects/baseline-corrected/summary.json pixi run --locked verify",
+  "exit_code": 0,
+  "ctest_suites": [
+    {
+      "name": "toy-projects",
+      "status": "passed",
+      "cases": 30,
+      "assertions": null,
+      "seconds": 25.9209
+    },
+    {
+      "name": "legacy",
+      "status": "passed",
+      "cases": 608,
+      "assertions": 1616,
+      "seconds": 3.80086
+    },
+    {
+      "name": "cpp-contracts",
+      "status": "passed",
+      "cases": 22,
+      "assertions": 65669,
+      "seconds": 0.837816
+    },
+    {
+      "name": "verification-contracts",
+      "status": "passed",
+      "cases": 119,
+      "assertions": null,
+      "seconds": 9.72775
+    },
+    {
+      "name": "cpp-regression",
+      "status": "passed",
+      "cases": 7,
+      "assertions": 54,
+      "seconds": 0.125684
+    },
+    {
+      "name": "cpp-e2e",
+      "status": "passed",
+      "cases": 3,
+      "assertions": 270,
+      "seconds": 11.4983
+    },
+    {
+      "name": "python-regression",
+      "status": "passed",
+      "cases": 4,
+      "assertions": null,
+      "seconds": 2.26223
+    },
+    {
+      "name": "python-e2e",
+      "status": "passed",
+      "cases": 4,
+      "assertions": null,
+      "seconds": 10.8277
+    },
+    {
+      "name": "core-refresh-contracts",
+      "status": "passed",
+      "cases": null,
+      "assertions": null,
+      "seconds": 0.0242251
+    },
+    {
+      "name": "core-command-contracts",
+      "status": "passed",
+      "cases": null,
+      "assertions": null,
+      "seconds": 0.00174767
+    }
+  ],
+  "catch_and_pytest_cases": 797,
+  "standalone_core_programs": 2,
+  "skip_count": 0,
+  "toy_snapshot_comparisons": 14,
+  "toy_within_run_comparisons": 8,
+  "candidate_binary_sha256": "51b9e74eb9d344ea136b89c17aaf0eb59eaa801f984a1974a94004f1b76889d7",
+  "candidate_binary_source_revision": "working tree identified by source_sha256; no unobserved commit claim",
+  "source_sha256": {
+    ".github/workflows/pixi-tests.yml": "56d8918932685c7eaf2360dcbddfe58f6ffe4da3dba1b2cf64d7b094dc4065a8",
+    "CMakeLists.txt": "cb3cbfb5ea2e3d9c0212445148fa62e55e4670198189cd841d743bb738617d3a",
+    "cmake/testing.cmake": "4a79f545b1e79db7a31928c75674fbdd227d6e1584cda1f0f5820057cd6ca043",
+    "pixi.lock": "bf9521fb3e8fce5b24d985c3ede0ff739cb9dcb44ee10f7cd3786696c2a156e3",
+    "pixi.toml": "89fd4cbb85ef8694b98dbee95e2cfb0fd21100ef1bbf44bc4b15607943ffcd09",
+    "script/verification/check_portability.py": "dca07ac484b61d0968cb7d3d75736f3a881e9ce2a25d760c50133a00887b1fa6",
+    "src/lib/CMakeLists.txt": "435f2a7919c3374ae9f09ddf716342b523fcf86c77c4f04b2eefbd246312a408",
+    "src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp": "c91a5d3fe5c2a842be0ba05e35196c42df6645b6484e0a1a8cc6d86310a53913",
+    "src/lib/data/indexer/ExternalIndexerCommandBuilder.h": "fb22757989744ec692ceda371cc01a9c65c175b25b78634e16f3b3072bdeb9fb",
+    "src/lib/data/indexer/IndexerCommandCustom.cpp": "2ce3e8b71e949940a84836f8064ad46ba31cfcafbc43fbb949e972d273d89be5",
+    "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp": "31b9c1b5828eac9001db34eedbd1736627732fd4ec0a055e0a236658a7712c9e",
+    "src/lib/project/RefreshPlan.cpp": "efdcca4b0325952dee9ae88c448a26c3f80d55570d8693632396026bd4bf90b5",
+    "src/lib/project/RefreshPlan.h": "98fe4c9db0c6d563344d1cc8266574cda48fc3c16deedac8c62a619d23b43daa",
+    "src/lib/project/SourceGroupCustomCommand.cpp": "9846061ee735b2c9c3555fbceaeee584c3657a7b67dae24da7cbe32c580c6ad6",
+    "src/lib_core/CMakeLists.txt": "dae59ccb8e5a5fb342c90853b64ea499a2846632a103454b53e9704caf9f6423",
+    "src/lib_core/IndexerCommandTemplate.h": "f34dc3260405b36eb572e8084634c08ddad6f9b2ca51f96fd92bcf8b7971f0b3",
+    "src/lib_core/RefreshPlanner.h": "4c32def458952d47966880659ad369add2ea06aeeb4266b0c8fcfc2f75f3a539",
+    "src/lib_python/project/SourceGroupPythonEmpty.cpp": "9771d5e99ab9f9c6791cc797c9b57b860188195cab477baa6e6faaf4237ba0df",
+    "src/test/CMakeLists.txt": "3e104025653dabf6237c255127dd521eba3e221bdb2de46684cb035eda2a6a2b",
+    "src/test/ExternalIndexerCommandTestSuite.cpp": "7cdf869916ff25f9b32ffad4e3f30eb254b67686b31b231f00484887cad63172",
+    "src/test/StorageCleanupContractTestSuite.cpp": "00338593561ef4dc58672d86569eea827b497222dde0fbf49ba171da244e4262",
+    "tests/contracts/test_portability.py": "6c23516b7f39cae41eba1361c597d5fb53bb00877c7bb30adf0420624c06f14a",
+    "tests/core/indexer_command_template_test.cpp": "b2116ad62858e0e00364e0b0c7b52bb24eae0de417b08a5ffc5f306d8bc999e5",
+    "tests/core/refresh_planner_test.cpp": "961a6f50c84bde1f422928280b089b358c8bbb28eb023d604262ed887c104019",
+    "tests/portability/refresh_driver.cpp": "77d0cbc810efdf54c0f6b544e4a9be51ee9e541ed07022e124d8137773a7352a",
+    "tests/portability/refresh_reference.rs": "2d753433eb4ca0361684d6163a04146a985745f3733707b1e667a56c1b71ebf3",
+    "tests/portability/refresh_vectors.json": "ec761c7ce16fcf3e4720f52e123173c596445327da466ac37c81d9f60b8c8b88",
+    "tests/toy_projects/README.md": "1a5ec61ea895f0cde310a95736425c9db328ba4230eac2dfdff32b6014e2a4b3",
+    "tests/toy_projects/fixtures/cxx/expected.json": "30bffb31b73288c3bfdbf75c91e608788111f9bb595318939f7d681b61ceb3d1",
+    "tests/toy_projects/fixtures/cxx/initial/include/api.h": "197a1b13eb9793a4d2618003d4f7c72b364bffc0fee4635341e8f7e7444d3be5",
+    "tests/toy_projects/fixtures/cxx/initial/src/library.cpp": "461cb572dc91325b5385c8a549e83423f9aa35283c350de6b2144b1b2d4a8d59",
+    "tests/toy_projects/fixtures/cxx/initial/src/main.cpp": "bd09b755b908747a945ae4ddfd2a0ee52d5c65db4353465d2552cdf492fb2ff9",
+    "tests/toy_projects/fixtures/cxx/initial/src/obsolete.cpp": "46b7ae19064f5c3ed724ef7af42a715cd66257dd30bf649814d840c8bd6d2f2d",
+    "tests/toy_projects/fixtures/cxx/project.srctrlprj": "3610cdecd460ae821e5c1682662aab7ce0970111e20653ec394a3dd56af8d9d2",
+    "tests/toy_projects/fixtures/cxx/updated/include/api.h": "5ae9eac3c76c851b578b3c60f4d5453001232a82d1c77abdb70a88e1ccfb9b98",
+    "tests/toy_projects/fixtures/cxx/updated/src/library.cpp": "749c844ac25e8e5dbd5aea9f6c63a7f79476a8c5d5d2481a6518ee72a61ff1e9",
+    "tests/toy_projects/fixtures/cxx/updated/src/main.cpp": "e34c3a3a0b83950cbe9191d10372a362df182ceef7c7515950c2daa5fab34a93",
+    "tests/toy_projects/fixtures/python/expected.json": "5415b6c587365a94036a0b9b2fb09672b2619e6919124d59e128bff62dfc7111",
+    "tests/toy_projects/fixtures/python/initial/first/keeper.py": "386fcb3ef8d511446b23b1c508b30d78d84e2489016e9f7bcf7e8bf94f022e5f",
+    "tests/toy_projects/fixtures/python/initial/second/library.py": "f3b24b75e03fcb7293880852fc4b6b489477bce64f35a1073b31926d6f820f61",
+    "tests/toy_projects/fixtures/python/initial/second/main.py": "67e1bb83d9250e2e7c6769d21251d4ec21cf7a87c4ecc0ecddb2ab3548ccfee8",
+    "tests/toy_projects/fixtures/python/initial/second/obsolete.py": "2287efca897c733fab3c2bc877ae62d18ff2395f41cf7ad6bc7538978be520f7",
+    "tests/toy_projects/fixtures/python/project.srctrlprj": "987cf33a3205260abfd275abe13610a9acc4929deb8b48bcba3042d29fd949d5",
+    "tests/toy_projects/fixtures/python/updated/first/keeper.py": "386fcb3ef8d511446b23b1c508b30d78d84e2489016e9f7bcf7e8bf94f022e5f",
+    "tests/toy_projects/fixtures/python/updated/second/library.py": "14002a3cbf91a9c2c088e643316475717f0b5ca3464b62b25b38fb050a4d5077",
+    "tests/toy_projects/fixtures/python/updated/second/main.py": "b607e81e99eaa699311f6fe6690cda3032989aab1cca738cd889751716ab498a",
+    "tests/toy_projects/runner.py": "97383cdd1af176606ff1d1d3c10c831e094edc1286b3a3dd9f4b04d21ed9e616",
+    "tests/toy_projects/test_runner.py": "5cd41479f1c275bc77538972072da7f6bbc1d19defee3305f4d6ca01a04afc90"
+  },
+  "compile_standards": {
+    "src/lib_cxx/data/indexer/IndexerCxx.cpp": [
+      "gnu++14"
+    ],
+    "src/lib/project/RefreshPlan.cpp": [
+      "gnu++17"
+    ],
+    "tests/core/refresh_planner_test.cpp": [
+      "gnu++17"
+    ]
+  },
+  "formal_summary": "formal-summary.json",
+  "portability_summary": "portability-summary.json",
+  "review_status": "assistant-side independent review complete, user-local review pending",
+  "limitations": [
+    "Finite inputs, fixed language profiles and Linux execution only.",
+    "Original baseline runner source hash was not captured; later recordings include it.",
+    "The first integration attempt could not execute the generated Catch binary (0644); relinked to0755 and the full gate passed."
+  ],
+  "final_documentation_check": {
+    "exit_code": 0,
+    "markdown_files": 28,
+    "contracts": 19,
+    "language_profiles": 6,
+    "reports": 5,
+    "error_count": 0,
+    "receipt": "final-docs-check.log"
+  }
+}

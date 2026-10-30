@@ -23,7 +23,8 @@
         "RELATION-001",
         "LOCATION-001",
         "REFRESH-001",
-        "DIAGNOSTIC-001"
+        "DIAGNOSTIC-001",
+        "STORAGE-002"
       ],
       "capabilities": [
         "overload-call-resolution",
@@ -41,7 +42,9 @@
       "evidence": [
         "src/test/CxxRegressionTestSuite.cpp",
         "src/test/CxxEndToEndTestSuite.cpp",
-        "tests/contracts/test_index_equivalence.py"
+        "tests/contracts/test_index_equivalence.py",
+        "tests/toy_projects/fixtures/cxx/expected.json",
+        "tests/toy_projects/test_runner.py"
       ]
     },
     {
@@ -67,7 +70,8 @@
         "RELATION-001",
         "LOCATION-001",
         "REFRESH-001",
-        "DIAGNOSTIC-001"
+        "DIAGNOSTIC-001",
+        "COMMAND-001"
       ],
       "capabilities": [
         "definitions",
@@ -86,7 +90,9 @@
       ],
       "evidence": [
         "tests/python/test_regression.py",
-        "tests/python/test_e2e.py"
+        "tests/python/test_e2e.py",
+        "tests/toy_projects/fixtures/python/expected.json",
+        "tests/toy_projects/test_runner.py"
       ]
     },
     {

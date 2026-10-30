@@ -32,6 +32,8 @@ TLA+ のモデル検査に成功しても、C++ のコードが自動的に証�
 
 モデルの入力集合を `RefreshPlan::forUpdatedFiles` の入力へ、最終集合を `filesToClear`／`filesToIndex` へ対応させる。C++ 側の有限列挙・性質試験と、実際のストレージを通る既存試験でその境界を検査する。[RefreshPlan.h](../../src/lib/project/RefreshPlan.h)
 
+[ADR-0006](0006-portable-refresh-core.md) の後続実装では、そのアダプター内部から、依存問い合わせ結果を値として受け取る `prepareUpdatedRefresh`／`finishUpdatedRefresh` を呼ぶ。モデルが要求する最終集合は変えず、標準 C++ だけの単独試験と Rust の参照移植を追加する。Rust と C++ の一致には独立した期待値も併用し、モデル検査の成功と同じ種類の証明であるとは扱わない。
+
 これは C++ からモデルへの自動変換や、C++ の全実行に対する機械証明ではない。モデルとコードの対応表は人が保守する。計画式・依存取得・入力分類を変更するときは、関連するモデル・契約・試験も再確認する。
 
 ## 検証しないもの

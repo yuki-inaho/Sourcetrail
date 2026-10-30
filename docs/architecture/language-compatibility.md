@@ -24,6 +24,8 @@
 
 根拠: [pixi.toml](../../pixi.toml)、[download_python_indexer.sh](../../script/download_python_indexer.sh)、[SourceGroupPythonEmpty.cpp](../../src/lib_python/project/SourceGroupPythonEmpty.cpp)、[SourceGroupSettingsWithCppStandard.cpp](../../src/lib/settings/source_group/component/cxx/SourceGroupSettingsWithCppStandard.cpp)。
 
+現在の宣言能力を確認する再利用可能な入力として、[人工的な C++／Python 対象](../contracts/toy-problems.md) を追加する。独立した期待値に加え、無変更・削除・編集後の更新と全体更新、およびリファクタリング前後の保存観測を比較する。新しい解析器へ同じ入力を渡すことはできるが、旧版が理解しない構文の受入試験は別途追加する。
+
 現行の C++ 標準選択肢には `c++2a`／`gnu++2a` と C++17 以前がある。選択肢に存在することは、その規格の全ての意味を記録できる保証ではない。Clang 自体も機能別の対応状況を公開しているため、更新は規格名だけでなく、機能と期待する索引結果で判定する。[Clang C++ status](https://clang.llvm.org/cxx_status.html)
 
 ## 提案するアダプターの契約
@@ -65,6 +67,8 @@ Python の `ast` は版ごとに構造が変わり得る。`ast.parse(feature_ve
 現在は Clang の C++ API を使う。公式資料は LibClang の安定した高水準 C インターフェースと、AST に深くアクセスする LibTooling を区別している。安定性だけを理由に切り替えると抽出できる意味を失う可能性があるため、必要な情報を保てるかを比較して選ぶ。[Clang Tooling](https://clang.llvm.org/docs/Tooling.html)
 
 ## Rust を追加する作業
+
+アプリケーションの内部処理を Rust へ移すことと、Rust のソースを解析対象にすることは区別する。[ADR-0006](../adr/0006-portable-refresh-core.md) の値処理コアは、識別子集合による更新計画やコマンド変数展開を、Qt・Boost・SQLite から独立した検証単位にする。これは内部処理の移植に使える境界であり、以下の言語解析の責務を実装したものではない。
 
 Rust ではソースファイルだけでなく、crate、edition、features、cfg、target、依存、build script や procedural macro の生成物が解析文脈に関わる。`cargo metadata --format-version 1` はワークスペースと依存の入口になるが、それだけで全ての意味解析結果が得られるわけではない。[Cargo metadata](https://doc.rust-lang.org/cargo/commands/cargo-metadata.html)
 

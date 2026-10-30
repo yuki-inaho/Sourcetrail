@@ -1,0 +1,481 @@
+{
+  "schema_version": 1,
+  "toy_id": "TOY-CXX-001",
+  "language": "cxx",
+  "language_profile": "cxx-clang11-core",
+  "snapshot_profile": "schema25-exact-v1",
+  "adrs": [
+    "ADR-0001",
+    "ADR-0002",
+    "ADR-0003",
+    "ADR-0004",
+    "ADR-0005"
+  ],
+  "contracts": [
+    "GRAPH-001",
+    "NAME-001",
+    "RELATION-001",
+    "LOCATION-001",
+    "REFRESH-001",
+    "REFRESH-002",
+    "PROCESS-001"
+  ],
+  "deleted_files": [
+    "src/obsolete.cpp"
+  ],
+  "expectations": {
+    "initial": {
+      "indexed_files": [
+        "include/api.h",
+        "src/library.cpp",
+        "src/main.cpp",
+        "src/obsolete.cpp"
+      ],
+      "symbols": [
+        {
+          "name": "toy::answer",
+          "kind": 4096,
+          "postfix": "(int)"
+        },
+        {
+          "name": "toy::answer",
+          "kind": 4096,
+          "postfix": "(double)"
+        },
+        {
+          "name": "toy::entry",
+          "kind": 4096,
+          "postfix": "()"
+        },
+        {
+          "name": "obsolete_symbol",
+          "kind": 4096,
+          "postfix": "()"
+        }
+      ],
+      "edges": [
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/library.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/main.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "obsolete_symbol",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          },
+          "file": "include/api.h",
+          "range": [
+            3,
+            5,
+            3,
+            10
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          },
+          "file": "include/api.h",
+          "range": [
+            4,
+            8,
+            4,
+            13
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": []
+    },
+    "deleted": {
+      "indexed_files": [
+        "include/api.h",
+        "src/library.cpp",
+        "src/main.cpp"
+      ],
+      "symbols": [
+        {
+          "name": "toy::answer",
+          "kind": 4096,
+          "postfix": "(int)"
+        },
+        {
+          "name": "toy::answer",
+          "kind": 4096,
+          "postfix": "(double)"
+        },
+        {
+          "name": "toy::entry",
+          "kind": 4096,
+          "postfix": "()"
+        }
+      ],
+      "edges": [
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/library.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/main.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(int)"
+          },
+          "file": "include/api.h",
+          "range": [
+            3,
+            5,
+            3,
+            10
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "toy::answer",
+            "kind": 4096,
+            "postfix": "(double)"
+          },
+          "file": "include/api.h",
+          "range": [
+            4,
+            8,
+            4,
+            13
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": [
+        "obsolete_symbol"
+      ]
+    },
+    "updated": {
+      "indexed_files": [
+        "include/api.h",
+        "src/library.cpp",
+        "src/main.cpp"
+      ],
+      "symbols": [
+        {
+          "name": "toy::replacement",
+          "kind": 4096,
+          "postfix": "(int)"
+        },
+        {
+          "name": "toy::replacement",
+          "kind": 4096,
+          "postfix": "(double)"
+        },
+        {
+          "name": "toy::entry",
+          "kind": 4096,
+          "postfix": "()"
+        }
+      ],
+      "edges": [
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 8,
+          "source": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          },
+          "target": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/library.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 256,
+          "source": {
+            "name": "${PROJECT_ROOT}/src/main.cpp",
+            "kind": 262144
+          },
+          "target": {
+            "name": "${PROJECT_ROOT}/include/api.h",
+            "kind": 262144
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(int)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(double)"
+          }
+        },
+        {
+          "kind": 1,
+          "source": {
+            "name": "toy",
+            "kind": 16
+          },
+          "target": {
+            "name": "toy::entry",
+            "kind": 4096,
+            "postfix": "()"
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "symbol": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(int)"
+          },
+          "file": "include/api.h",
+          "range": [
+            3,
+            5,
+            3,
+            15
+          ],
+          "kind": 0
+        },
+        {
+          "symbol": {
+            "name": "toy::replacement",
+            "kind": 4096,
+            "postfix": "(double)"
+          },
+          "file": "include/api.h",
+          "range": [
+            4,
+            8,
+            4,
+            18
+          ],
+          "kind": 0
+        }
+      ],
+      "forbidden_names": [
+        "obsolete_symbol",
+        "toy::answer"
+      ]
+    }
+  }
+}

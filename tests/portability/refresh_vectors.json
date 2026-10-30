@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "profile": "refresh-sets-v1",
+  "identity_bits": 64,
+  "input_order": ["sources", "unchanged", "changed", "referencing_changed", "referenced_static", "referenced_affected"],
+  "output_order": ["affected", "retained", "clear", "index"],
+  "cases": [
+    {
+      "id": "empty",
+      "reason": "No files or dependency facts produce no work.",
+      "input": {"sources": [], "unchanged": [], "changed": [], "referencing_changed": [], "referenced_static": [], "referenced_affected": []},
+      "expected": {"affected": [], "retained": [], "clear": [], "index": []}
+    },
+    {
+      "id": "no-op",
+      "reason": "An unchanged indexed source and its dependency survive.",
+      "input": {"sources": [0], "unchanged": [0], "changed": [], "referencing_changed": [], "referenced_static": [1], "referenced_affected": []},
+      "expected": {"affected": [], "retained": [0], "clear": [], "index": []}
+    },
+    {
+      "id": "new-source",
+      "reason": "A source absent from unchanged is indexed without clearing existing facts.",
+      "input": {"sources": [0, 1], "unchanged": [0], "changed": [], "referencing_changed": [], "referenced_static": [], "referenced_affected": []},
+      "expected": {"affected": [], "retained": [0, 1], "clear": [], "index": [1]}
+    },
+    {
+      "id": "shared-and-private",
+      "reason": "Source 0 changes; source 1 also uses dependency 2, while dependency 3 is private to source 0.",
+      "input": {"sources": [0, 1], "unchanged": [1], "changed": [0], "referencing_changed": [], "referenced_static": [2], "referenced_affected": [2, 3]},
+      "expected": {"affected": [0], "retained": [1], "clear": [0, 3], "index": [0]}
+    },
+    {
+      "id": "changed-header",
+      "reason": "Changing header 2 invalidates both source files that reference it.",
+      "input": {"sources": [0, 1], "unchanged": [0, 1], "changed": [2], "referencing_changed": [0, 1], "referenced_static": [], "referenced_affected": [2]},
+      "expected": {"affected": [0, 1, 2], "retained": [], "clear": [0, 1, 2], "index": [0, 1]}
+    },
+    {
+      "id": "deleted-source",
+      "reason": "Removed source 1 and its private dependency 2 are cleared, but source 1 is not indexed.",
+      "input": {"sources": [0], "unchanged": [0], "changed": [1], "referencing_changed": [], "referenced_static": [], "referenced_affected": [2]},
+      "expected": {"affected": [1], "retained": [0], "clear": [1, 2], "index": []}
+    },
+    {
+      "id": "protect-static-source",
+      "reason": "A source in the retained set is protected even when it is referenced by an affected source.",
+      "input": {"sources": [0, 1], "unchanged": [1], "changed": [0], "referencing_changed": [], "referenced_static": [], "referenced_affected": [1]},
+      "expected": {"affected": [0], "retained": [1], "clear": [0], "index": [0]}
+    },
+    {
+      "id": "dependency-cycle",
+      "reason": "A two-node dependency cycle can return its seed in both closure results.",
+      "input": {"sources": [0], "unchanged": [], "changed": [1], "referencing_changed": [0, 1], "referenced_static": [], "referenced_affected": [0, 1]},
+      "expected": {"affected": [0, 1], "retained": [], "clear": [0, 1], "index": [0]}
+    },
+    {
+      "id": "affected-beats-shared",
+      "reason": "Separate closures: source 1 includes file 2, which imports changed source 0. File 2 is affected, while source 1 stays static; shared protection does not undo initial clearing.",
+      "input": {"sources": [0, 1], "unchanged": [1], "changed": [0], "referencing_changed": [2], "referenced_static": [2], "referenced_affected": [0]},
+      "expected": {"affected": [0, 2], "retained": [1], "clear": [0, 2], "index": [0]}
+    },
+    {
+      "id": "high-opaque-identity",
+      "reason": "Bit 63 is an ordinary identity; transport must preserve an unsigned 64-bit mask.",
+      "input": {"sources": [0, 63], "unchanged": [0], "changed": [63], "referencing_changed": [], "referenced_static": [], "referenced_affected": []},
+      "expected": {"affected": [63], "retained": [0], "clear": [63], "index": [63]}
+    }
+  ]
+}

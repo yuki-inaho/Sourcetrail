@@ -24,11 +24,16 @@
         {
           "path": "tests/python/test_e2e.py",
           "anchor": "snapshot_diff"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "test_real_toy_project_phases_and_clean_rebuild_equivalence"
         }
       ],
       "docs": [
         "docs/contracts/README.md",
-        "docs/adr/0001-semantic-observations.md"
+        "docs/adr/0001-semantic-observations.md",
+        "docs/contracts/toy-problems.md"
       ],
       "limitations": [
         "索引対象プログラムの実行意味、GUI操作、性能は保証しない。",
@@ -58,11 +63,16 @@
         {
           "path": "tests/contracts/test_semantic_graph.py",
           "anchor": "read_snapshot"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "test_real_toy_project_phases_and_clean_rebuild_equivalence"
         }
       ],
       "docs": [
         "docs/architecture/domain-model.md",
-        "docs/adr/0001-semantic-observations.md"
+        "docs/adr/0001-semantic-observations.md",
+        "docs/contracts/toy-problems.md"
       ],
       "limitations": [
         "将来の言語・構成別グローバルID規約は別ADRが必要。",
@@ -96,11 +106,16 @@
         {
           "path": "tests/contracts/test_semantic_graph.py",
           "anchor": "read_snapshot"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "test_real_toy_project_phases_and_clean_rebuild_equivalence"
         }
       ],
       "docs": [
         "docs/architecture/domain-model.md",
-        "docs/architecture/storage-and-query.md"
+        "docs/architecture/storage-and-query.md",
+        "docs/contracts/toy-problems.md"
       ],
       "limitations": [
         "意味が異なる言語間の全グラフ同型は要求しない。",
@@ -134,10 +149,15 @@
         {
           "path": "tests/contracts/test_semantic_graph.py",
           "anchor": "read_snapshot"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "test_real_toy_project_phases_and_clean_rebuild_equivalence"
         }
       ],
       "docs": [
-        "docs/architecture/domain-model.md"
+        "docs/architecture/domain-model.md",
+        "docs/contracts/toy-problems.md"
       ],
       "limitations": [
         "UTF-8バイト/文字/UTF-16列の言語横断規約はGAP-003。",
@@ -157,6 +177,10 @@
         {
           "path": "src/lib/project/RefreshInfoGenerator.cpp",
           "symbol": "getRefreshInfoForUpdatedFiles"
+        },
+        {
+          "path": "src/lib_core/RefreshPlanner.h",
+          "symbol": "finishUpdatedRefresh"
         }
       ],
       "verification": [
@@ -171,12 +195,21 @@
         {
           "path": "docs/contracts/formal/RefreshPlan.tla",
           "anchor": "Refinement"
+        },
+        {
+          "path": "tests/core/refresh_planner_test.cpp",
+          "anchor": "32768"
+        },
+        {
+          "path": "script/verification/check_portability.py",
+          "anchor": "refresh-sets-v1"
         }
       ],
       "docs": [
         "docs/architecture/indexing-lifecycle.md",
         "docs/contracts/formal/README.md",
-        "docs/adr/0002-pure-refresh-planning.md"
+        "docs/adr/0002-pure-refresh-planning.md",
+        "docs/adr/0006-portable-refresh-core.md"
       ],
       "limitations": [
         "形式検査は3ファイルの有限モデル。C++全体の定理証明ではない。",
@@ -196,6 +229,10 @@
         {
           "path": "src/lib/data/storage/PersistentStorage.cpp",
           "symbol": "getReferenced"
+        },
+        {
+          "path": "src/lib_core/RefreshPlanner.h",
+          "symbol": "finishUpdatedRefresh"
         }
       ],
       "verification": [
@@ -210,11 +247,20 @@
         {
           "path": "script/verification/check_models.py",
           "anchor": "refresh-negative-control"
+        },
+        {
+          "path": "tests/core/refresh_planner_test.cpp",
+          "anchor": "32768"
+        },
+        {
+          "path": "script/verification/check_portability.py",
+          "anchor": "refresh-sets-v1"
         }
       ],
       "docs": [
         "docs/architecture/indexing-lifecycle.md",
-        "docs/contracts/formal/README.md"
+        "docs/contracts/formal/README.md",
+        "docs/adr/0006-portable-refresh-core.md"
       ],
       "limitations": [
         "依存自体が変更済み/影響対象なら消去される。",
@@ -515,6 +561,10 @@
         {
           "path": "tests/contracts/test_models.py",
           "anchor": "test_corrupt_cached_jar_is_rejected_before_execution"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "test_expected_facts_reject_damaged_real_observation"
         }
       ],
       "docs": [
@@ -522,6 +572,119 @@
       ],
       "limitations": [
         "有限モデルの探索が完了してもモデルと実装の対応はレビューと実装試験を要する。"
+      ]
+    },
+    {
+      "id": "STORAGE-002",
+      "title": "生存する記号間の階層メンバー関係を保持する",
+      "status": "enforced",
+      "scope": "ファイル消去で候補に入った親の位置なしMEMBER辺について、両端に消去集合外の出現が残る場合は保持する。",
+      "sources": [
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "Membership belongs to the name hierarchy"
+        }
+      ],
+      "verification": [
+        {
+          "path": "src/test/StorageCleanupContractTestSuite.cpp",
+          "anchor": "storage cleanup preserves membership between surviving symbols"
+        },
+        {
+          "path": "tests/toy_projects/test_runner.py",
+          "anchor": "missing-member"
+        }
+      ],
+      "docs": [
+        "docs/contracts/toy-problems.md",
+        "docs/architecture/storage-and-query.md"
+      ],
+      "limitations": [
+        "旧版の削除専用トイで失われていた3辺を修正する意図した振る舞い変更である。",
+        "辺自身が消去対象に出現する場合の先行消去と、MEMBER以外の辺の消去規則は変更しない。",
+        "自分の出現がない中間親を含む一般階層の保持・全関係の出所追跡は今回の契約外。"
+      ]
+    },
+    {
+      "id": "COMMAND-001",
+      "title": "外部解析コマンドのテンプレートと引数境界を保持する",
+      "status": "enforced",
+      "scope": "Python/Custom共通のソース選択・コマンド構築、PROJECT→DATABASE→VERSION→SOURCEの順序付き展開、実行時のDB差し替えと生テンプレートの直列化。",
+      "sources": [
+        {
+          "path": "src/lib_core/IndexerCommandTemplate.h",
+          "symbol": "expandIndexerTemplate"
+        },
+        {
+          "path": "src/lib/data/indexer/ExternalIndexerCommandBuilder.cpp",
+          "symbol": "createExternalIndexerCommands"
+        },
+        {
+          "path": "src/lib/data/indexer/IndexerCommandCustom.cpp",
+          "symbol": "doSerialize"
+        }
+      ],
+      "verification": [
+        {
+          "path": "tests/core/indexer_command_template_test.cpp",
+          "anchor": "later introduced variables"
+        },
+        {
+          "path": "src/test/ExternalIndexerCommandTestSuite.cpp",
+          "anchor": "external command preserves raw templates and late database retargeting"
+        },
+        {
+          "path": "tests/python/test_e2e.py",
+          "anchor": "shallow"
+        }
+      ],
+      "docs": [
+        "docs/adr/0006-portable-refresh-core.md",
+        "docs/architecture/language-compatibility.md"
+      ],
+      "limitations": [
+        "テンプレート展開はシェルの引用・解析を行わない。OS別のプロセス起動は従来アダプターの責務。",
+        "std::wstringのABIやコード単位幅の共通化を保証しない。UTF-8文字列のコア入力も別に試験する。",
+        "既知変数の同一・以前の展開は再帰させず、不明変数は保持する既存仕様。"
+      ]
+    },
+    {
+      "id": "PORTABILITY-001",
+      "title": "依存のない更新コアを値契約で別言語へ移植できる",
+      "status": "enforced",
+      "scope": "標準C++のみのコアを独立ビルドし、refresh-sets-v1のテスト用値をC++とRust参照実装へ与えて独立した期待値と照合する。",
+      "sources": [
+        {
+          "path": "src/lib_core/RefreshPlanner.h",
+          "symbol": "prepareUpdatedRefresh"
+        },
+        {
+          "path": "src/lib_core/CMakeLists.txt",
+          "symbol": "Sourcetrail_core"
+        },
+        {
+          "path": "tests/portability/refresh_reference.rs",
+          "symbol": "BTreeSet"
+        }
+      ],
+      "verification": [
+        {
+          "path": "script/verification/check_portability.py",
+          "anchor": "refresh-sets-v1"
+        },
+        {
+          "path": "tests/portability/refresh_vectors.json",
+          "anchor": "refresh-sets-v1"
+        }
+      ],
+      "docs": [
+        "docs/adr/0006-portable-refresh-core.md",
+        "docs/contracts/toy-problems.md"
+      ],
+      "limitations": [
+        "Rust側は契約の参照移植であり、本体のRust置換やRustソース解析器ではない。",
+        "有限値と指定ツールチェーンでの適合確認であり、任意サイズ・全OSの証明ではない。",
+        "64ビット集合表現はテストの搬送形式。C++本体のKeyの種類・ファイル数上限を定める公開ABIではない。"
       ]
     }
   ]

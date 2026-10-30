@@ -1,0 +1,60 @@
+Command: ['/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail', 'index', '/tmp/sourcetrail-toy-dfmypg5d/incremental 日本語 with spaces/toy.srctrlprj']
+Exit: 0
+stdout:
+21:13:27 | LogManager.cpp:35 setLoggingEnabled() | INFO: Enabled logging for Sourcetrail 64 bit, version 0.0.0
+21:13:27 | SharedMemoryGarbageCollector.cpp:59 run() | INFO: start shared memory garbage collection
+21:13:27 | ApplicationSettingsPrefiller.cpp:31 prefillJavaRuntimePath() | INFO: Prefilling Java path
+21:13:27 | INFO: send MessageStatus Starting Sourcetrail 64 bit, version 0.0.0
+Starting Sourcetrail 64 bit, version 0.0.0
+21:13:27 | ApplicationSettingsPrefiller.cpp:84 prefillMavenExecutablePath() | INFO: Prefilling Maven path
+21:13:27 | INFO: send MessageStatus Load settings: /tmp/sourcetrail-toy-dfmypg5d/incremental 日本語 with spaces/isolated-home/.config/sourcetrail/ApplicationSettings.xml
+Load settings: /tmp/sourcetrail-toy-dfmypg5d/incremental �,� with spaces/isolated-home/.config/sourcetrail/ApplicationSettings.xml
+21:13:27 | INFO: send MessageStatus Enabled console and file logging.
+Enabled console and file logging.
+21:13:27 | INFO: send MessageStatus Ran Java runtime path detection, no path found.
+Ran Java runtime path detection, no path found.
+21:13:27 | INFO: send MessageStatus Ran Maven executable path detection, no path found.
+Ran Maven executable path detection, no path found.
+21:13:27 | INFO: send MessageLoadProject /tmp/sourcetrail-toy-dfmypg5d/incremental 日本語 with spaces/toy.srctrlprj, settingsChanged: false, refreshMode: 1
+21:13:27 | INFO: send MessageStatus Loading Project: /tmp/sourcetrail-toy-dfmypg5d/incremental 日本語 with spaces/toy.srctrlprj - loading
+Loading Project: /tmp/sourcetrail-toy-dfmypg5d/incremental �,� with spaces/toy.srctrlprj
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "edge_source_node_id_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "edge_target_node_id_index"
+21:13:27 | SqliteDatabaseIndex.cpp:19 createOnDatabase() | INFO: Creating database index "node_serialized_name_index"
+21:13:27 | SqliteDatabaseIndex.cpp:19 createOnDatabase() | INFO: Creating database index "source_location_file_node_id_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "error_all_data_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "file_path_index"
+21:13:27 | SqliteDatabaseIndex.cpp:19 createOnDatabase() | INFO: Creating database index "occurrence_element_id_index"
+21:13:27 | SqliteDatabaseIndex.cpp:19 createOnDatabase() | INFO: Creating database index "occurrence_source_location_id_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "element_component_foreign_key_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "edge_source_foreign_key_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "edge_target_foreign_key_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "source_location_foreign_key_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "occurrence_element_foreign_key_index"
+21:13:27 | SqliteDatabaseIndex.cpp:33 removeFromDatabase() | INFO: Removing database index "occurrence_source_location_foreign_key_index"
+21:13:27 | INFO: send MessageStatus Finished Loading
+Finished Loading
+21:13:27 | INFO: send MessageIndexingFinished 
+21:13:27 | INFO: send MessageStatus Nothing to refresh, all files are up-to-date.
+Nothing to refresh, all files are up-to-date.
+21:13:27 | INFO: send MessageQuitApplication 
+21:13:27 | Application.cpp:475 logStorageStats() | INFO: 
+Graph:
+	12 Nodes
+	15 Edges
+
+Code:
+	4 Files
+	18 Lines of Code
+
+Errors:
+	0 Errors
+	0 Fatal Errors
+
+Quitting
+21:13:27 | INFO: send MessageQuitApplication 
+Quitting
+21:13:27 | SharedMemoryGarbageCollector.cpp:77 stop() | INFO: stop shared memory garbage collection
+21:13:28 | SharedMemoryGarbageCollector.cpp:132 stop() | INFO: delete garbage collector memory: grbg_cllctr_64
+
+stderr:

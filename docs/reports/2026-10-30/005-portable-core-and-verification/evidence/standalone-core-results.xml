@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-x86_64-conda-linux-gnu-c++"
+	tests="2"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="b6e5f938579f"
+	time="0"
+	timestamp="2026-10-29T21:30:26"
+	>
+	<testcase name="core-refresh-contracts" classname="core-refresh-contracts" time="0.024289" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>Refresh core: named examples, opaque identity, and 32768 bounded input snapshots passed.
+</system-out>
+	</testcase>
+	<testcase name="core-command-contracts" classname="core-command-contracts" time="0.00164021" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>COMMAND-001: 5 independent command-template scenarios passed
+</system-out>
+	</testcase>
+</testsuite>

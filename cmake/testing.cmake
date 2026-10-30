@@ -3,6 +3,20 @@ if(NOT BUILD_TESTING)
     return()
 endif()
 
+find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
+
+if(BUILD_CXX_LANGUAGE_PACKAGE AND BUILD_PYTHON_LANGUAGE_PACKAGE)
+    add_test(NAME toy-projects
+        COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/toy_projects"
+    )
+    set_tests_properties(toy-projects PROPERTIES
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;SOURCETRAIL_BINARY=$<TARGET_FILE:${APP_PROJECT_NAME}>;SOURCETRAIL_TOY_OUTPUT=${CMAKE_BINARY_DIR}/../toy-projects/current"
+        LABELS "cpp;python;contract;e2e;toy"
+        TIMEOUT 600
+    )
+endif()
+
 add_test(NAME legacy COMMAND ${TEST_PROJECT_NAME} "~[regression]~[e2e]~[contract]" --warn NoTests)
 set_tests_properties(legacy PROPERTIES
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/test"
@@ -19,7 +33,6 @@ set_tests_properties(cpp-contracts PROPERTIES
     TIMEOUT 600
 )
 
-find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
 set(VERIFICATION_CONTRACT_ARGS)
 if(NOT BUILD_CXX_LANGUAGE_PACKAGE)
     list(APPEND VERIFICATION_CONTRACT_ARGS

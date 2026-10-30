@@ -1,0 +1,43 @@
+{
+  "baseline": "/workspace/scratch/715c5c4089e4/Sourcetrail/build/toy-projects/baseline-corrected/summary.json",
+  "baseline_sha256": "ae7df79f57e276c2e81eac1cbc2bb229d4167801d45ad10f35a89f18c7043d7c",
+  "checks": [
+    {
+      "language": "cxx",
+      "snapshot_readbacks": 7
+    },
+    {
+      "language": "python",
+      "snapshot_readbacks": 7
+    },
+    {
+      "mutation": "version",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "profile",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "missing-language",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "missing-phase",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "checksum",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "failed",
+      "result": "rejected as required"
+    },
+    {
+      "mutation": "failed-equality",
+      "result": "rejected as required"
+    }
+  ],
+  "operation": "Read-back of saved correction-only receipts and metadata negative controls; no new indexing"
+}

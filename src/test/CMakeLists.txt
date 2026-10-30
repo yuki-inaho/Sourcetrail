@@ -15,6 +15,7 @@ add_files(
 	CxxRegressionTestSuite.cpp
 	CxxEndToEndTestSuite.cpp
 	CxxTypeNameTestSuite.cpp
+	ExternalIndexerCommandTestSuite.cpp
 	FileManagerTestSuite.cpp
 	FilePathFilterTestSuite.cpp
 	FilePathTestSuite.cpp
@@ -42,6 +43,7 @@ add_files(
 	SqliteBookmarkStorageTestSuite.cpp
 	SqliteIndexStorageTestSuite.cpp
 	StorageTestSuite.cpp
+	StorageCleanupContractTestSuite.cpp
 	TaskSchedulerTestSuite.cpp
 	TextAccessTestSuite.cpp
 	UtilityGradleTestSuite.cpp

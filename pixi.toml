@@ -36,10 +36,26 @@ openjdk = "17.*"
 [feature.formal.tasks]
 verify-models = { cmd = "python script/verification/check_models.py", description = "Check bounded TLA+ refinement and the required negative control" }
 
+[feature.portability.dependencies]
+python = "3.11.*"
+cmake = ">=3.27,<4"
+ninja = "1.*"
+gcc_linux-64 = "12.*"
+gxx_linux-64 = "12.*"
+sysroot_linux-64 = "2.17.*"
+rust = "1.85.*"
+
+[feature.portability.tasks]
+configure-core = { cmd = "cmake -S src/lib_core -B build/core -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON", description = "Configure the reusable core without Qt, Boost, LLVM or SQLite" }
+build-core = { cmd = "cmake --build build/core --parallel 2", depends-on = ["configure-core"] }
+test-core = { cmd = "ctest --test-dir build/core --output-on-failure --no-tests=error --output-junit core-results.xml", depends-on = ["build-core"] }
+verify-portability = { cmd = "python script/verification/check_portability.py", depends-on = ["test-core"], description = "Check a Rust reference port and C++ core against shared independent refresh vectors" }
+
 [environments]
 default = { features = [] }
 python-parser = { features = ["python-parser"], no-default-feature = true }
 formal = { features = ["formal"], no-default-feature = true }
+portability = { features = ["portability"], no-default-feature = true }
 
 [activation.env]
 QT_QPA_PLATFORM = "offscreen"
@@ -53,6 +69,7 @@ test-python-regression = { cmd = "ctest --test-dir build/pixi --output-on-failur
 test-python-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^python-e2e$'", depends-on = ["build"] }
 test-legacy = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^legacy$'", depends-on = ["build"] }
 test-contracts = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -L contract", depends-on = ["build"], description = "Check executable implementation and verification-tool contracts" }
+test-toys = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^toy-projects$'", depends-on = ["build"], description = "Run checked-in synthetic C++ and Python projects with independent semantic expectations" }
 verify-docs = { cmd = "python script/verification/check_docs.py", description = "Validate contract traceability, source anchors, reports, and documentation links" }
-verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }], description = "Run all implementation tests, contract documentation checks, and bounded model checks" }
+verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }, { task = "verify-portability", environment = "portability" }], description = "Run implementation and toy tests, documentation, bounded models, and portable core conformance" }
 test = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml", depends-on = ["build"], description = "Run the existing suite and both languages' regression and E2E tests" }

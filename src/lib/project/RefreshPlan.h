@@ -6,8 +6,9 @@
 
 #include "FilePath.h"
 
-// Language-independent set planning. File discovery, change detection, storage writes,
-// and the indexed/non-indexed partition remain in RefreshInfoGenerator.
+// FilePath/storage-query adapter for the value-only sourcetrail::core refresh planner.
+// File discovery, change detection, storage writes, and the indexed/non-indexed partition
+// remain in RefreshInfoGenerator. Keep this API for existing application callers.
 struct RefreshPlan
 {
 	using FilePaths = std::set<FilePath>;

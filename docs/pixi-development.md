@@ -6,7 +6,7 @@ run locally and in `.github/workflows/pixi-tests.yml`.
 
 The [internal documentation index](README.md) connects architecture, ADRs,
 executable contracts, bounded TLA+ models, and review reports. To run the complete
-verification gate, including the separate Java environment:
+verification gate, including the separate Java and portable C++/Rust environments:
 
 ```sh
 pixi install --locked --all
@@ -21,6 +21,15 @@ required negative control. This environment fixes OpenJDK 17 and downloads the
 official TLC 1.7.4 JAR with a pinned SHA-256. See the
 [model scope and limits](contracts/formal/README.md); these checks do not prove
 the entire application or advertise support for new language versions.
+
+`pixi run --locked test-toys` runs the checked-in synthetic C++ and Python projects
+with authored expected facts, seven observations per language, and exact graph
+comparisons. See [toy design, rationale and limits](contracts/toy-problems.md).
+`pixi run -e portability --locked verify-portability` builds the standard-library
+core without Qt, Boost or LLVM, then checks the production C++ planner and a Rust
+reference port against ten explicit vectors and 32,768 independently computed
+cases. The separate environment pins Rust 1.85.1 in `pixi.lock`; it adds no Rust
+dependency to the application build and does not provide a Rust source indexer.
 
 ## Set up and build
 
@@ -86,8 +95,11 @@ Every named test task depends on the build, so it also works from a fresh checko
 
 | Task | Coverage |
 | --- | --- |
-| `pixi run --locked test` | All seven CTest suites, including both contract suites |
+| `pixi run --locked test` | All ten CTest suites, including toy and standalone core contracts |
 | `pixi run --locked test-contracts` | C++ refresh/source-group contracts and Python graph/verification contracts |
+| `pixi run --locked test-toys` | Real C++/Python toy projects, authored facts, update/clean equivalence, negative controls |
+| `pixi run -e portability --locked test-core` | Independent standard C++ core build and contracts |
+| `pixi run -e portability --locked verify-portability` | Core build plus C++/Rust value-contract conformance and required mutant detection |
 | `pixi run --locked test-legacy` | Existing Catch tests, excluding the newly tagged suites |
 | `pixi run --locked test-cpp-regression` | Production C++ parser, symbol graph, source locations, and diagnostics |
 | `pixi run --locked test-cpp-e2e` | Actual application, compilation database, persisted C++ index, and refresh |
