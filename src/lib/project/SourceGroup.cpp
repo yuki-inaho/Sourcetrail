@@ -48,13 +48,12 @@ bool SourceGroup::allowsShallowIndexing() const
 	return false;
 }
 
-std::set<FilePath> SourceGroup::filterToContainedSourceFilePath(
-	const std::set<FilePath>& sourceFilePaths) const
+std::set<FilePath> SourceGroup::getSourceFilePathsExcept(const std::set<FilePath>& excludedFilePaths) const
 {
 	std::set<FilePath> filteredSourceFilePaths;
 	for (const FilePath& sourceFilePath: getAllSourceFilePaths())
 	{
-		if (sourceFilePaths.find(sourceFilePath) == sourceFilePaths.end())
+		if (excludedFilePaths.find(sourceFilePath) == excludedFilePaths.end())
 		{
 			filteredSourceFilePaths.insert(sourceFilePath);
 		}
@@ -62,9 +61,16 @@ std::set<FilePath> SourceGroup::filterToContainedSourceFilePath(
 	return filteredSourceFilePaths;
 }
 
+std::set<FilePath> SourceGroup::filterToContainedSourceFilePath(
+	const std::set<FilePath>& staticSourceFilePaths) const
+{
+	return getSourceFilePathsExcept(staticSourceFilePaths);
+}
+
 bool SourceGroup::containsSourceFilePath(const FilePath& sourceFilePath) const
 {
-	return !filterToContainedSourceFilePath({sourceFilePath}).empty();
+	const std::set<FilePath> sourceFilePaths = getAllSourceFilePaths();
+	return sourceFilePaths.find(sourceFilePath) != sourceFilePaths.end();
 }
 
 std::set<FilePath> SourceGroup::filterToContainedFilePaths(

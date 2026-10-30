@@ -89,6 +89,8 @@ std::vector<FileInfo> FileSystem::getFileInfosFromPaths(
 					boost::filesystem::path p = boost::filesystem::read_symlink(*it);
 					if (p.filename() == p.string() && p.filename() == it->path().filename())
 					{
+						// Otherwise increment() follows the loop and ends directory traversal.
+						it.no_push();
 						continue;
 					}
 
@@ -162,6 +164,7 @@ std::set<FilePath> FileSystem::getSymLinkedDirectories(const std::vector<FilePat
 					boost::filesystem::path p = boost::filesystem::read_symlink(*it);
 					if (p.filename() == p.string() && p.filename() == it->path().filename())
 					{
+						it.no_push();
 						continue;
 					}
 

@@ -4,6 +4,7 @@ add_files(
 	helper/TestFileRegister.cpp
 	helper/TestFileRegister.h
 	helper/TestStorage.h
+	helper/CxxTestGraph.h
 
 	test_main.cpp
 
@@ -11,6 +12,8 @@ add_files(
 	ConfigManagerTestSuite.cpp
 	CxxIncludeProcessingTestSuite.cpp
 	CxxParserTestSuite.cpp
+	CxxRegressionTestSuite.cpp
+	CxxEndToEndTestSuite.cpp
 	CxxTypeNameTestSuite.cpp
 	FileManagerTestSuite.cpp
 	FilePathFilterTestSuite.cpp
@@ -28,11 +31,13 @@ add_files(
 	NetworkProtocolHelperTestSuite.cpp
 	PythonIndexerTestSuite.cpp
 	RefreshInfoGeneratorTestSuite.cpp
+	RefreshPlanTestSuite.cpp
 	SearchIndexTestSuite.cpp
 	SettingsMigratorTestSuite.cpp
 	SettingsTestSuite.cpp
 	SharedMemoryTestSuite.cpp
 	SourceGroupTestSuite.cpp
+	SourceGroupContractTestSuite.cpp
 	SourceLocationCollectionTestSuite.cpp
 	SqliteBookmarkStorageTestSuite.cpp
 	SqliteIndexStorageTestSuite.cpp

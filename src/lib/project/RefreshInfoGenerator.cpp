@@ -4,6 +4,7 @@
 #include "FileSystem.h"
 #include "PersistentStorage.h"
 #include "RefreshInfo.h"
+#include "RefreshPlan.h"
 #include "SourceGroup.h"
 #include "SourceGroupStatusType.h"
 #include "TextAccess.h"
@@ -71,67 +72,18 @@ RefreshInfo RefreshInfoGenerator::getRefreshInfoForUpdatedFiles(
 		}
 	}
 
-	const std::set<FilePath> allSourceFilePathsFromSourcegroups = getAllSourceFilePaths(sourceGroups);
+	const RefreshPlan plan = RefreshPlan::forUpdatedFiles(
+		getAllSourceFilePaths(sourceGroups),
+		unchangedIndexedFilePaths,
+		changedFilePaths,
+		[&storage](const RefreshPlan::FilePaths& paths) { return storage->getReferenced(paths); },
+		[&storage](const RefreshPlan::FilePaths& paths) { return storage->getReferencing(paths); });
 
-	// 2) Figure out which files need to be cleared
-	// 2.1) Add all changed files
-	std::set<FilePath> filesToClear = changedFilePaths;
-
-	// 2.2) Add files that are reference the changed files
-	utility::append(filesToClear, storage->getReferencing(changedFilePaths));
-
-	// 2.3) Handle files that are referenced by the files that will be cleared. These will be
-	// re-indexed on the fly. However, we do not
-	//		need to clear files that are also referenced by unchanged source files, because
-	//otherwise we will lose these connections.
-	// 2.3.1) Get all source file paths that will not be cleared.
-	// - Initially this list contains all source file paths the project would index right now.
-	// - Then we remove all source files that will be cleared
-	// - NOTE: Source files that are new to the project will part of this list, but won't result in
-	// any referenced
-	//   paths because they are not part of the DB. Source files that are new to the project but are
-	//   already in the DB will be removed from this list if they have changed or reference changed
-	//   files.
-	std::set<FilePath> staticSourceFiles = allSourceFilePathsFromSourcegroups;
-	for (const FilePath& path: filesToClear)
-	{
-		staticSourceFiles.erase(path);
-	}
-
-	// 2.3.2) Get sets of referenced files
-	const std::set<FilePath> staticReferencedFilePaths = storage->getReferenced(staticSourceFiles);
-	const std::set<FilePath> dynamicReferencedFilePaths = storage->getReferenced(filesToClear);
-
-	// 2.3.3) Add "dynamicReferencedFilePaths" to "filesToClear" that are not referenced by static
-	// paths, because these files may not be
-	//        referenced anymore. If they still are, they will be re-added when encountered during
-	//        re-indexing.
-	for (const FilePath& path: dynamicReferencedFilePaths)
-	{
-		if (staticReferencedFilePaths.find(path) == staticReferencedFilePaths.end() &&
-			staticSourceFiles.find(path) == staticSourceFiles.end())
-		{
-			filesToClear.insert(path);
-		}
-	}
-
-	// 3) Figure out which files need to be indexed
-	std::set<FilePath> filesToIndex;
-	for (const FilePath& path: allSourceFilePathsFromSourcegroups)
-	{
-		if (filesToClear.find(path) != filesToClear.end() ||	// file will be cleared
-			unchangedIndexedFilePaths.find(path) ==
-				unchangedIndexedFilePaths.end())	// file has been changed or added
-		{
-			filesToIndex.insert(path);
-		}
-	}
-
-	// 4) Store and return this information
+	// The IO adapter retains the storage-specific indexed/non-indexed partition.
 	RefreshInfo info;
 	info.mode = REFRESH_UPDATED_FILES;
-	info.filesToIndex = filesToIndex;
-	for (const FilePath fileToClear: filesToClear)
+	info.filesToIndex = plan.filesToIndex;
+	for (const FilePath& fileToClear: plan.filesToClear)
 	{
 		if (storage->getFilePathIndexed(fileToClear))
 		{
@@ -190,8 +142,7 @@ RefreshInfo RefreshInfoGenerator::getRefreshInfoForIncompleteFiles(
 			if (sourceGroup->getStatus() == SOURCE_GROUP_STATUS_ENABLED)
 			{
 				utility::append(
-					info.filesToIndex,
-					sourceGroup->filterToContainedSourceFilePath(staticSourceFilePaths));
+					info.filesToIndex, sourceGroup->getSourceFilePathsExcept(staticSourceFilePaths));
 			}
 		}
 	}

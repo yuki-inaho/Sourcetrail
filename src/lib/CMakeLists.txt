@@ -324,6 +324,8 @@ add_files(
 	project/RefreshInfo.h
 	project/RefreshInfoGenerator.h
 	project/RefreshInfoGenerator.cpp
+	project/RefreshPlan.h
+	project/RefreshPlan.cpp
 	project/SourceGroup.cpp
 	project/SourceGroup.h
 	project/SourceGroupCustomCommand.cpp

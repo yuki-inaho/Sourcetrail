@@ -1,0 +1,58 @@
+[workspace]
+name = "sourcetrail"
+description = "Reproducible Sourcetrail development and indexing tests"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+requires-pixi = ">=0.83.0"
+
+[dependencies]
+python = "3.11.*"
+pytest = "8.*"
+cmake = ">=3.27,<4"
+ninja = "1.*"
+git = "2.*"
+gcc_linux-64 = "12.*"
+gxx_linux-64 = "12.*"
+sysroot_linux-64 = "2.17.*"
+boost-cpp = ">=1.74,<1.83"
+qt-main = "5.15.*"
+libgl-devel = "1.*"
+llvmdev = "11.1.*"
+clangdev = "11.1.*"
+wget = "1.*"
+unzip = "6.*"
+
+[feature.python-parser.dependencies]
+# The bundled Jedi/parso release understands Python 3.8 environments.
+python = "3.8.*"
+
+[feature.python-parser.tasks]
+python-parser-ready = { cmd = "python --version", description = "Prepare the Python environment inspected by the legacy indexer" }
+
+[feature.formal.dependencies]
+python = "3.11.*"
+openjdk = "17.*"
+
+[feature.formal.tasks]
+verify-models = { cmd = "python script/verification/check_models.py", description = "Check bounded TLA+ refinement and the required negative control" }
+
+[environments]
+default = { features = [] }
+python-parser = { features = ["python-parser"], no-default-feature = true }
+formal = { features = ["formal"], no-default-feature = true }
+
+[activation.env]
+QT_QPA_PLATFORM = "offscreen"
+
+[tasks]
+configure = { cmd = "cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON", description = "Configure the application with C++ and Python indexing" }
+build = { cmd = "cmake --build build/pixi --parallel 2", depends-on = ["configure", { task = "python-parser-ready", environment = "python-parser" }], description = "Build Sourcetrail, its indexers, and the C++ test executable" }
+test-cpp-regression = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^cpp-regression$'", depends-on = ["build"] }
+test-cpp-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^cpp-e2e$'", depends-on = ["build"] }
+test-python-regression = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^python-regression$'", depends-on = ["build"] }
+test-python-e2e = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^python-e2e$'", depends-on = ["build"] }
+test-legacy = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^legacy$'", depends-on = ["build"] }
+test-contracts = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -L contract", depends-on = ["build"], description = "Check executable implementation and verification-tool contracts" }
+verify-docs = { cmd = "python script/verification/check_docs.py", description = "Validate contract traceability, source anchors, reports, and documentation links" }
+verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }], description = "Run all implementation tests, contract documentation checks, and bounded model checks" }
+test = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml", depends-on = ["build"], description = "Run the existing suite and both languages' regression and E2E tests" }

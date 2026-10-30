@@ -1,0 +1,2 @@
+✨ Pixi task (verify-docs in default): python script/verification/check_docs.py: (Validate contract traceability, source anchors, reports, and documentation links)
+{"passed": true, "markdown_files": 22, "contracts": 16, "language_profiles": 6, "reports": 2, "error_count": 0}

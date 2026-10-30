@@ -34,7 +34,12 @@ std::string utility::getDocumentationLink()
 std::wstring utility::searchPath(const std::wstring& bin, bool& ok)
 {
 	ok = false;
+#ifdef _WIN32
 	std::wstring r = boost::process::search_path(bin).generic_wstring();
+#else
+	std::wstring r = utility::decodeFromUtf8(
+		boost::process::search_path(utility::encodeToUtf8(bin)).generic_string());
+#endif
 	if (!r.empty())
 	{
 		ok = true;
@@ -92,11 +97,28 @@ utility::ProcessOutput utility::executeProcess(
 			env["PATH"].append(entry);
 		}
 
+#ifdef _WIN32
+		const std::wstring executable = searchPath(command);
+		const std::vector<std::wstring>& processArguments = arguments;
+		const std::wstring processDirectory = workingDirectory.wstr();
+#else
+		// POSIX expects UTF-8 bytes. Boost.Process's locale-based wide conversion
+		// rejects non-ASCII paths and arguments in an otherwise valid UTF-8 project.
+		const std::string executable = utility::encodeToUtf8(searchPath(command));
+		std::vector<std::string> processArguments;
+		processArguments.reserve(arguments.size());
+		for (const std::wstring& argument: arguments)
+		{
+			processArguments.push_back(utility::encodeToUtf8(argument));
+		}
+		const std::string processDirectory = workingDirectory.str();
+#endif
+
 		if (workingDirectory.empty())
 		{
 			process = std::make_shared<boost::process::child>(
-				searchPath(command),
-				boost::process::args(arguments),
+				executable,
+				boost::process::args(processArguments),
 				env,
 				boost::process::std_in.close(),
 				(boost::process::std_out & boost::process::std_err) > ap);
@@ -104,9 +126,9 @@ utility::ProcessOutput utility::executeProcess(
 		else
 		{
 			process = std::make_shared<boost::process::child>(
-				searchPath(command),
-				boost::process::args(arguments),
-				boost::process::start_dir(workingDirectory.wstr()),
+				executable,
+				boost::process::args(processArguments),
+				boost::process::start_dir(processDirectory),
 				env,
 				boost::process::std_in.close(),
 				(boost::process::std_out & boost::process::std_err) > ap);

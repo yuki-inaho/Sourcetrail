@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "captured_at_utc": "2026-10-30T01:43:01.142112+00:00",
+  "reviewer_role": "assistant-side independent review agent; not the user-side local agent",
+  "source_revision": {
+    "base_commit": "1bc605e8bea8d75abd87121e704c90caa380e44b",
+    "mode": "working-tree"
+  },
+  "status_command": "git status --short --branch",
+  "git_status": "## refactor/semantic-contracts\n M .github/workflows/pixi-tests.yml\n M README.md\n M cmake/testing.cmake\n M docs/pixi-development.md\n M pixi.lock\n M pixi.toml\n M src/lib/CMakeLists.txt\n M src/lib/project/Project.cpp\n M src/lib/project/RefreshInfoGenerator.cpp\n M src/lib/project/SourceGroup.cpp\n M src/lib/project/SourceGroup.h\n M src/test/CMakeLists.txt\n M tests/python/test_e2e.py\n?? .agents/\n?? docs/README.md\n?? docs/adr/\n?? docs/architecture/\n?? docs/contracts/\n?? docs/reports/\n?? script/verification/\n?? src/lib/project/RefreshPlan.cpp\n?? src/lib/project/RefreshPlan.h\n?? src/test/RefreshPlanTestSuite.cpp\n?? src/test/SourceGroupContractTestSuite.cpp\n?? tests/contracts/\n",
+  "note": "対象ファイルの編集完了を作業統括から確認後に記録。全ファイルの SHA-256 は部分読解の入力版を識別し、全行をレビューしたことを意味しない。",
+  "files": [
+    {
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "read_scope": "getRefreshInfoForUpdatedFiles と didFileChange の本体",
+      "excerpts": [
+        "bool RefreshInfoGenerator::didFileChange(",
+        "if (diskFileInfo.lastWriteTime > info.lastWriteTime)",
+        "if (!storage->hasContentForFile(info.path))",
+        "const RefreshPlan plan = RefreshPlan::forUpdatedFiles("
+      ]
+    },
+    {
+      "path": "src/lib/project/Project.cpp",
+      "sha256": "6cc60988e618f2c603b533c47b97887572234b42099c1d7c2c28ae8574a16bce",
+      "read_scope": "load の一時 DB 分岐、swapToTempStorage と swapToTempStorageFile。buildIndex は差分のみ確認",
+      "excerpts": [
+        "bool Project::swapToTempStorageFile(",
+        "FileSystem::remove(indexDbFilePath);",
+        "FileSystem::rename(tempIndexDbFilePath, indexDbFilePath);",
+        "FileSystem::rename(tempDbPath, dbPath);"
+      ]
+    },
+    {
+      "path": "src/lib/data/storage/PersistentStorage.cpp",
+      "sha256": "55ac51d110596e68ba4aa242e51d52253844163674812a8ef15bdf253f978163",
+      "read_scope": "getGraphForTrail 全体、getFileContent/hasContentForFile、addNodesWithParentsAndEdgesToGraph",
+      "excerpts": [
+        "std::shared_ptr<Graph> PersistentStorage::getGraphForTrail(",
+        "while (nodeIdsToProcess.size() && (!depth || currentDepth < depth))",
+        "bool isForward = forward == !(Edge::intToType(edge.type) & Edge::LAYOUT_VERTICAL);",
+        "if (nodeTypes != 0)",
+        "void PersistentStorage::addNodesWithParentsAndEdgesToGraph("
+      ]
+    },
+    {
+      "path": "src/lib/utility/file/FileSystem.cpp",
+      "sha256": "4ff601be333aed760a15205a932da79d8e1ad2452a980057ce8215a391365827",
+      "read_scope": "getFileInfoForPath、getLastWriteTime、remove、rename",
+      "excerpts": [
+        "const bool ret = boost::filesystem::remove(path.getPath(), ec);",
+        "if (!from.recheckExists() || to.recheckExists())"
+      ]
+    },
+    {
+      "path": "src/lib/utility/text/TextAccess.cpp",
+      "sha256": "c89f072cccc7d951f95bd8b9ee153f2b314abaaa4e4d0181c7fe39507a3da00d",
+      "read_scope": "safeGetline、createFromFile、getAllLines、readFile",
+      "excerpts": [
+        "case '\\r':",
+        "result.push_back(line + '\\n');"
+      ]
+    },
+    {
+      "path": "src/test/RefreshInfoGeneratorTestSuite.cpp",
+      "sha256": "06999a5cae7976237b72099a2c6fc7abba50afe498aa852724a7ef011194758a",
+      "read_scope": "時刻付き fixture helper、getRefreshInfo、indexed changed sourcefile that is toindex",
+      "excerpts": [
+        "QDateTime::currentDateTime().addDays(-1)",
+        "QDateTime::currentDateTime().addDays(1)",
+        "TEST_CASE(\"indexed changed sourcefile that is toindex\")"
+      ]
+    },
+    {
+      "path": "src/lib/data/storage/StorageAccess.h",
+      "sha256": "850110a183867bc2099f00535e24785dca446d1356fb075c14720f3d060e18f1",
+      "read_scope": "getGraphForTrail 宣言と近接する問い合わせ宣言",
+      "excerpts": [
+        "virtual std::shared_ptr<Graph> getGraphForTrail("
+      ]
+    },
+    {
+      "path": "src/lib/component/controller/GraphController.cpp",
+      "sha256": "f0ef4356c0533f65bd3ad173d1fa9c74d33ea062efcd98174e056de22ac21478",
+      "read_scope": "handleMessage(MessageActivateTrail*) 本体",
+      "excerpts": [
+        "void GraphController::handleMessage(MessageActivateTrail* message)",
+        "if (!message->custom && message->edgeTypes & Edge::EDGE_INCLUDE)",
+        "!message->custom || (message->originId && message->targetId)"
+      ]
+    },
+    {
+      "path": "src/lib/utility/messaging/type/activation/MessageActivateTrail.h",
+      "sha256": "21698d13fe3d69a87615e4afd0b374d44eb7c3b8e3d12e1475c7d800d66cd90f",
+      "read_scope": "通常/カスタム constructor と入力メンバー",
+      "excerpts": [
+        ", nodeTypes(0)",
+        ", custom(false)",
+        ", custom(true)"
+      ]
+    },
+    {
+      "path": "src/lib_gui/qt/view/QtGraphView.cpp",
+      "sha256": "65ffa000e84356f9d289be1ced5e4e4978c520fb57b036f45a9b7a078518bb0d",
+      "read_scope": "getMessageActivateTrail",
+      "excerpts": [
+        "Id originId = forward ? tokenId : 0;",
+        "Id targetId = forward ? 0 : tokenId;"
+      ]
+    },
+    {
+      "path": "src/lib_gui/qt/view/QtCustomTrailView.cpp",
+      "sha256": "916001d31c4f001f92715d2fe8ab4554457daa236368bc1f4f69f374aeb96e9c",
+      "read_scope": "nodeTypes/edgeTypes 検査と MessageActivateTrail 作成",
+      "excerpts": [
+        "if (!nodeTypes)",
+        "if (!edgeTypes)",
+        "m_slider->value() == m_slider->maximum() ? 0 : m_slider->value()"
+      ]
+    },
+    {
+      "path": "src/lib/data/graph/Edge.h",
+      "sha256": "fc4afe02174882da22074ad60f103f5af83ebbca5e0116de9c7abb9087822564",
+      "read_scope": "EdgeType と LAYOUT_VERTICAL",
+      "excerpts": [
+        "static const TypeMask LAYOUT_VERTICAL = EDGE_INHERITANCE | EDGE_OVERRIDE |"
+      ]
+    }
+  ],
+  "context_inputs": [
+    {
+      "path": ".agents/skills/annotate-contract-batch/SKILL.md",
+      "sha256": "3a9988f55e311bc981f3319dae1b0b905e9be56a56e25b454a59941dc4900dc0"
+    },
+    {
+      "path": ".agents/skills/annotate-contract-batch/references/report-format.md",
+      "sha256": "6213a459a35eb31fd979a27a941f723cb6bab3267818c4c83aead2e82d97bb2e"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "f19e363821db4cf2c1d27f0e398e6d09ad6a1af4db404dbbcb3def5c7aa0ecda"
+    },
+    {
+      "path": "docs/contracts/catalog.json",
+      "sha256": "7f20749bfffedba5783ad01f5360ea47f7c41d939295adf7e5d1ea94dc9863d8"
+    },
+    {
+      "path": "docs/adr/0001-semantic-observations.md",
+      "sha256": "acb16cc571f0e0c6007140b52afd44deeeb002d5fcc8eea39b68bcbd05d0a87f"
+    },
+    {
+      "path": "docs/adr/0002-pure-refresh-planning.md",
+      "sha256": "2d0454d1a5da8972a601477f3ed71d4dfb58067632818f04c58e568c4eb1b6b9"
+    },
+    {
+      "path": "docs/adr/0003-bounded-formal-verification.md",
+      "sha256": "8a940fa55d2f9dee4c22acdb5fc6c663b43ea3ef55fe881c3d977d430143bf35"
+    },
+    {
+      "path": "docs/reports/README.md",
+      "sha256": "2c90500335092216d59a48a9663d61153abf3a35353b8b313bfa28b716916aea"
+    },
+    {
+      "path": "docs/reports/2026-10-30/001-contract-boundaries/manifest.json",
+      "sha256": "53c669c0aa15f8202e7d679ac8cae6710df6ca6075c442d1b7c6499acdb01021"
+    },
+    {
+      "path": "docs/reports/2026-10-30/001-contract-boundaries/report.md",
+      "sha256": "4378d31608637872af97b4721e592d0a4c26bfab692d45eda9657e53f2b2a1ff"
+    },
+    {
+      "path": "script/verification/check_docs.py",
+      "sha256": "b67c4711458eae7ef9b32ed47371390642519b712049f005bd8cdfc56962e8c7"
+    },
+    {
+      "path": "pixi.toml",
+      "sha256": "338cf88b07a3ce59a0160478ed9ee0d38a4d28821879262929ba45d76ac893ba"
+    }
+  ],
+  "comparison_to_previous_batch": [
+    {
+      "previous_unit": "ANN-003",
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "previous_sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "reviewed_sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "whole_file_matches": true
+    },
+    {
+      "previous_unit": "ANN-005",
+      "path": "src/lib/project/Project.cpp",
+      "previous_sha256": "def83c65fe0330d51e016acff186d7a60da0b3855a21e98a0ecf9ad71ed947fd",
+      "reviewed_sha256": "6cc60988e618f2c603b533c47b97887572234b42099c1d7c2c28ae8574a16bce",
+      "whole_file_matches": false
+    },
+    {
+      "previous_unit": "ANN-009",
+      "path": "src/lib/data/storage/StorageAccess.h",
+      "previous_sha256": "850110a183867bc2099f00535e24785dca446d1356fb075c14720f3d060e18f1",
+      "reviewed_sha256": "850110a183867bc2099f00535e24785dca446d1356fb075c14720f3d060e18f1",
+      "whole_file_matches": true
+    }
+  ],
+  "non_executed": [
+    "C++ behavior tests",
+    "fault injection",
+    "TLC models",
+    "full builds",
+    "real GUI",
+    "image annotation",
+    "user-side local-agent review"
+  ]
+}

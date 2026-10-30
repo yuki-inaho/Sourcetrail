@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "001-contract-boundaries",
+  "created_on": "2026-10-30",
+  "source_revision": {
+    "base_commit": "1bc605e8bea8d75abd87121e704c90caa380e44b",
+    "mode": "working-tree",
+    "note": "基準コミットからの契約整備・リファクタリング中のソースを読んだ。新規ファイルと修正後の内容は基準コミットそのものには含まれず、各単位の SHA-256 が読んだスナップショットを示す。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/lib/project/RefreshPlan.cpp",
+      "symbol": "RefreshPlan::forUpdatedFiles",
+      "sha256": "a155cdaa85b9d72c4f16a8163932bd3ba9118b9137fb7e52411706af369bd3ea",
+      "excerpt": "plan.filesToClear = changedFiles;",
+      "contracts": [
+        "REFRESH-001",
+        "REFRESH-002"
+      ],
+      "finding_type": "observed",
+      "observation": "更新計画は分類済みの集合と読み取り専用の依存問い合わせから、消去・索引化の集合を返す。ファイル発見や保存操作は関数の外にある。",
+      "uncertainty": "問い合わせが同じスナップショットを見ることは呼び出し側の前提であり、新しいロックは追加していない。",
+      "next_action": "入力分類と並行更新の境界を別契約として確認する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "src/lib/data/storage/PersistentStorage.cpp",
+      "symbol": "PersistentStorage::getReferenced",
+      "sha256": "55ac51d110596e68ba4aa242e51d52253844163674812a8ef15bdf253f978163",
+      "excerpt": "utility::append(referenced, getReferencedByIncludes(filePaths));",
+      "contracts": [
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "include と import の推移閉包を別々に計算して和集合にする。混在した辺を一つの閉包として扱ってはいない。",
+      "uncertainty": "混在閉包への変更が将来必要かは未決定。現在の同等性の基準には含めない。",
+      "next_action": "新しい言語を追加するとき、依存辺の種類と更新への写像を明示する。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "symbol": "RefreshInfoGenerator::didFileChange",
+      "sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "excerpt": "if (diskFileInfo.lastWriteTime > info.lastWriteTime)",
+      "contracts": [
+        "INPUT-001",
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "ディスクの mtime が保存値より新しい場合にだけ内容比較する。更新計画の集合計算の正しさは、変更検出の完全性を保証しない。",
+      "uncertainty": "同時刻・逆行時刻の変更、読み取り中の編集は今回のモデル対象外。",
+      "next_action": "時刻が進まない変更を検出する契約と実例を先に作り、検出方式の変更を別途評価する。"
+    },
+    {
+      "id": "ANN-004",
+      "path": "src/lib/project/SourceGroup.cpp",
+      "symbol": "SourceGroup::containsSourceFilePath",
+      "sha256": "2d86b6e69eed1f03ab59d2a58a3d3e33f6c76bd39e68b8824ae62f6bff54310d",
+      "excerpt": "return sourceFilePaths.find(sourceFilePath) != sourceFilePaths.end();",
+      "contracts": [
+        "SOURCE-GROUP-001",
+        "REFRESH-003"
+      ],
+      "finding_type": "observed",
+      "observation": "包含判定を集合の membership として実装し、除外操作は getSourceFilePathsExcept に分けた。旧 filterToContainedSourceFilePath は除外の互換入口として残る。",
+      "uncertainty": "これは旧包含判定の誤りを直す意図的な振る舞いの変更。更新計画抽出の同等性とは区別する。",
+      "next_action": "単一・複数・空のソース集合と、Python の全体更新への切替えをローカルレビューで確認する。"
+    },
+    {
+      "id": "ANN-005",
+      "path": "src/lib/project/Project.cpp",
+      "symbol": "Project::swapToTempStorageFile",
+      "sha256": "def83c65fe0330d51e016acff186d7a60da0b3855a21e98a0ecf9ad71ed947fd",
+      "excerpt": "FileSystem::remove(indexDbFilePath);",
+      "contracts": [
+        "PUBLICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "旧 DB を削除してから一時 DB を rename する。形式モデルの一遷移を根拠に、この公開処理の原子性を主張できない。",
+      "uncertainty": "削除後・rename 前後のクラッシュ回復は未検証で、今回変更していない。",
+      "next_action": "失敗時の保持・復旧契約を定め、障害注入と起動時回復の受入試験を作る。"
+    },
+    {
+      "id": "ANN-006",
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "SqliteIndexStorage::addNodes",
+      "sha256": "1ff12b79b6fa96778ce329aa137ea14d5aa713ebb038b676726aabc5e1763629",
+      "excerpt": "nodeId = m_tempNodeNameIndex.find(name);",
+      "contracts": [
+        "NAME-001",
+        "STORAGE-001"
+      ],
+      "finding_type": "observed",
+      "observation": "ノード再利用は serializedName の索引を使い、既存ノードの型を更新する場合がある。数値 ID は意味上の恒久キーとして比較できない。",
+      "uncertainty": "言語・パッケージ・ビルド構成を横断する名前衝突と将来の移行規約は未確定。",
+      "next_action": "Rust や解析器更新前に同一性規約と衝突例を追加し、ブックマーク復元も別に評価する。"
+    },
+    {
+      "id": "ANN-007",
+      "path": "src/lib/data/parser/ParseLocation.cpp",
+      "symbol": "ParseLocation::isValid",
+      "sha256": "cedadc4f61c86a861e58abef3387f07379849bfc4f10a02a0e9b2ddb4e900031",
+      "excerpt": "return fileId;",
+      "contracts": [
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "isValid は fileId の真偽だけを確認する。列単位、行範囲、始点と終点の順序の完全な検証ではない。",
+      "uncertainty": "Unicode・改行・マクロ展開で全アダプターが同じ位置規約になることは未証明。",
+      "next_action": "各アダプターの座標単位と共通の観測座標を定義し、Unicode とマクロの対応試験を加える。"
+    },
+    {
+      "id": "ANN-008",
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "symbol": "TaskExecuteCustomCommands::runPythonPostProcessing",
+      "sha256": "9feddb9990489ec0a7d2c7d7ce2e65391cb3142a11d1f60bddd73877f4a64eac",
+      "excerpt": "ElementComponentKind::IS_AMBIGUOUS",
+      "contracts": [
+        "RELATION-001",
+        "LANGUAGE-001"
+      ],
+      "finding_type": "observed",
+      "observation": "Python の後処理は未解決位置から候補の辺を作り、IS_AMBIGUOUS 成分を付ける。保存辺の本数だけでは確定参照と推測参照を区別できない。",
+      "uncertainty": "Python の完全・浅い解析の能力差や新版への互換性は、単一の試験ランナー版から推測できない。",
+      "next_action": "能力プロファイルごとに診断・位置・曖昧性を比較し、既存部分と新しい構文能力を別に受け入れる。"
+    },
+    {
+      "id": "ANN-009",
+      "path": "src/lib/data/storage/StorageAccess.h",
+      "symbol": "getGraphForTrail",
+      "sha256": "850110a183867bc2099f00535e24785dca446d1356fb075c14720f3d060e18f1",
+      "excerpt": "virtual std::shared_ptr<Graph> getGraphForTrail(",
+      "contracts": [
+        "QUERY-001"
+      ],
+      "finding_type": "observed",
+      "observation": "問い合わせには始点・終点、ノード型・辺型、深さ、方向などの条件がある。保存 DB の意味比較だけでは問い合わせ結果の同等性を保証できない。",
+      "uncertainty": "候補順位、キャッシュ、GUI の表示や履歴、外部エディター往復は本バッチでは実行していない。",
+      "next_action": "StorageAccess の問い合わせを意味上のキーで観測する適合試験を先に作り、GUI 試験を段階的に加える。"
+    },
+    {
+      "id": "ANN-010",
+      "path": "docs/contracts/formal/RefreshPlan.tla",
+      "symbol": "Refinement",
+      "sha256": "0ee786c2952fea4791408a60fe287310d801df5384f812e011451f79b773d1e7",
+      "excerpt": "Refinement == Reference!Spec",
+      "contracts": [
+        "REFRESH-001",
+        "REFRESH-002"
+      ],
+      "finding_type": "observed",
+      "observation": "途中の計算を隠した結果観測が、抽象的な更新計画の許す状態列に含まれることを有限モデルで確認する。共有依存を消す変異モデルは反例を返す。",
+      "uncertainty": "C++ の自動翻訳や任意サイズの証明ではなく、ファイル分類・DB 公開・並行ワーカー・完了性は対象外。",
+      "next_action": "モデルの前提を変更するときは C++ の実装試験と両方を実行し、新しい有限範囲と反例を記録する。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-30/001-contract-boundaries/evidence/formal-summary.json",
+      "description": "実行した TLC の設定、モデルハッシュ、実行結果。元の build/formal/summary.json を保存。"
+    },
+    {
+      "path": "docs/reports/2026-10-30/001-contract-boundaries/evidence/verification.md",
+      "description": "このバッチに関係する実行コマンドと成功・未実行の範囲。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "local-agent",
+    "note": "ユーザー側のローカルエージェントによる独立レビューはまだ行っていない。追加レビューは新しいバッチとして記録する。"
+  }
+}

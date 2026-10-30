@@ -1,6 +1,7 @@
 #include "catch.hpp"
 
 #include <QDateTime>
+#include <QTemporaryDir>
 
 #include "FileSystem.h"
 #include "PersistentStorage.h"
@@ -166,6 +167,57 @@ Id addVeryNewFileToStorage(
 		storage);
 }
 }	 // namespace
+
+TEST_CASE(
+	"refresh incomplete files reindexes affected sources instead of healthy sources",
+	"[cxx][regression][refresh]")
+{
+	bool incompleteHeader = false;
+	SECTION("an incomplete source file") {}
+	SECTION("an incomplete header and the source that includes it")
+	{
+		incompleteHeader = true;
+	}
+
+	QTemporaryDir directory;
+	REQUIRE(directory.isValid());
+	const FilePath root(directory.path().toStdWString());
+	const FilePath affectedSource = root.getConcatenated(L"affected.cpp");
+	const FilePath healthySource = root.getConcatenated(L"healthy.cpp");
+	const FilePath header = root.getConcatenated(L"api.h");
+	for (const FilePath& path: {affectedSource, healthySource, header})
+	{
+		addFileToFileSystem(path);
+		REQUIRE(path.exists());
+	}
+
+	auto storage = std::make_shared<PersistentStorage>(
+		root.getConcatenated(L"project.srctrldb"), root.getConcatenated(L"project.srctrlbm"));
+	storage->setup();
+	// A stored timestamp newer than the fixture prevents the updated-file path from
+	// accidentally making this incomplete-file regression pass.
+	const Id sourceId = addVeryNewFileToStorage(affectedSource, true, incompleteHeader, storage);
+	addVeryNewFileToStorage(healthySource, true, true, storage);
+	const Id headerId = addVeryNewFileToStorage(header, true, !incompleteHeader, storage);
+	storage->addEdge(StorageEdgeData(Edge::EDGE_INCLUDE, sourceId, headerId));
+	storage->buildCaches();
+	const std::vector<std::shared_ptr<SourceGroup>> sourceGroups {std::make_shared<SourceGroupTest>(
+		std::set<FilePath> {affectedSource, healthySource},
+		std::set<FilePath> {affectedSource, healthySource, header})};
+
+	const RefreshInfo info = RefreshInfoGenerator::getRefreshInfoForIncompleteFiles(
+		sourceGroups, storage);
+	const std::set<FilePath> expectedToIndex {affectedSource};
+	std::set<FilePath> expectedToClear {affectedSource};
+	if (incompleteHeader)
+	{
+		expectedToClear.insert(header);
+	}
+	REQUIRE(info.mode == REFRESH_UPDATED_AND_INCOMPLETE_FILES);
+	REQUIRE(info.filesToIndex == expectedToIndex);
+	REQUIRE(info.filesToClear == expectedToClear);
+	REQUIRE(info.nonIndexedFilesToClear.empty());
+}
 
 TEST_CASE("refresh info for all files is empty for empty project")
 {

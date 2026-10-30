@@ -69,6 +69,8 @@ message ("bash: '${BASH}'")
 
 project(${PROJECT_NAME})
 
+include(CTest)
+
 # set Standard build type to Release
 set(CMAKE_BUILD_TYPE_INIT "Release")
 
@@ -293,7 +295,9 @@ add_subdirectory(src/lib_gui)
 add_subdirectory(src/lib_java)
 add_subdirectory(src/lib_python)
 add_subdirectory(src/lib_utility)
-add_subdirectory(src/test)
+if(BUILD_TESTING)
+	add_subdirectory(src/test)
+endif()
 
 
 # Lib Utility ------------------------------------------------------------------
@@ -805,6 +809,8 @@ endif ()
 
 # Test ----------------------------------------------------------------------
 
+if(BUILD_TESTING)
+
 if (UNIX)
 	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/")
 else ()
@@ -854,6 +860,10 @@ if (WIN32)
 			PROPERTY VS_DEBUGGER_WORKING_DIRECTORY
 			"${CMAKE_SOURCE_DIR}/bin/test")
 endif ()
+
+include(cmake/testing.cmake)
+
+endif()
 
 
 # symlinks for data
