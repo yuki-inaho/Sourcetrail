@@ -1,9 +1,13 @@
 #include "TaskExecuteCustomCommands.h"
 
+#include <thread>
+#include <utility>
+
 #include "ApplicationSettings.h"
 #include "Blackboard.h"
 #include "DialogView.h"
 #include "ElementComponentKind.h"
+#include "ExternalIndexerRunState.h"
 #include "FileSystem.h"
 #include "IndexerCommandCustom.h"
 #include "IndexerCommandProvider.h"
@@ -247,10 +251,12 @@ TaskExecuteCustomCommands::TaskExecuteCustomCommands(
 	std::shared_ptr<PersistentStorage> storage,
 	std::shared_ptr<DialogView> dialogView,
 	size_t indexerThreadCount,
-	const FilePath& projectDirectory)
+	const FilePath& projectDirectory,
+	std::shared_ptr<ExternalIndexerRunState> runState)
 	: m_indexerCommandProvider(std::move(indexerCommandProvider))
 	, m_storage(storage)
 	, m_dialogView(dialogView)
+	, m_runState(runState ? std::move(runState) : std::make_shared<ExternalIndexerRunState>())
 	, m_indexerThreadCount(indexerThreadCount)
 	, m_projectDirectory(projectDirectory)
 	, m_indexerCommandCount(m_indexerCommandProvider->size())
@@ -335,6 +341,17 @@ Task::TaskState TaskExecuteCustomCommands::doUpdate(std::shared_ptr<Blackboard> 
 
 	// clear errors here, because otherwise injecting into the main storage will show them twice
 	MessageErrorCountClear().dispatch();
+
+	// A failed external run is finalized normally so candidate disposal and the
+	// terminal notification still run. Do not merge or postprocess failed output.
+	if (m_runState->snapshot().hasFailure())
+	{
+		for (const FilePath& sourceDatabaseFilePath: m_sourceDatabaseFilePaths)
+		{
+			FileSystem::remove(sourceDatabaseFilePath);
+		}
+		return STATE_SUCCESS;
+	}
 
 	{
 		PersistentStorage targetStorage(m_targetDatabaseFilePath, FilePath());
@@ -456,14 +473,12 @@ void TaskExecuteCustomCommands::runIndexerCommand(
 {
 	if (indexerCommand)
 	{
-		int indexedSourceFileCount = 0;
-		blackboard->get("indexed_source_file_count", indexedSourceFileCount);
-
 		const FilePath sourcePath = indexerCommand->getSourceFilePath();
+		const sourcetrail::core::ExternalIndexerOutcome started = m_runState->beginCommand();
 
 		m_dialogView->updateCustomIndexingDialog(
-			indexedSourceFileCount + 1, indexedSourceFileCount, m_indexerCommandCount, {sourcePath});
-		MessageIndexingStatus(true, indexedSourceFileCount * 100 / m_indexerCommandCount).dispatch();
+			started.attempted, started.settled, m_indexerCommandCount, {sourcePath});
+		MessageIndexingStatus(true, started.settled * 100 / m_indexerCommandCount).dispatch();
 
 		const std::wstring command = indexerCommand->getCommand();
 		const std::vector<std::wstring> arguments = indexerCommand->getArguments();
@@ -479,8 +494,11 @@ void TaskExecuteCustomCommands::runIndexerCommand(
 		const utility::ProcessOutput out = utility::executeProcess(
 			command, arguments, m_projectDirectory, false, -1, true);
 		LOG_INFO("Finished indexing");
+		const sourcetrail::core::ExternalProcessOutcome outcome =
+			sourcetrail::core::classifyExternalProcess(!out.error.empty(), out.exitCode);
+		m_runState->settleCommand(outcome);
 
-		if (storage)
+		if (storage && outcome == sourcetrail::core::ExternalProcessOutcome::Succeeded)
 		{
 			std::vector<ErrorInfo> errors = storage->getErrorInfos();
 			const ErrorCountInfo currentErrorCount(errors);
@@ -503,10 +521,11 @@ void TaskExecuteCustomCommands::runIndexerCommand(
 			}
 		}
 
-		if (out.exitCode == 0 && out.error.empty())
+		if (outcome == sourcetrail::core::ExternalProcessOutcome::Succeeded)
 		{
 			std::wstring message = L"Process returned successfully.\n";
 			LOG_INFO(message);
+			blackboard->update<int>("indexed_source_file_count", [](int count) { return count + 1; });
 		}
 		else
 		{
@@ -526,8 +545,5 @@ void TaskExecuteCustomCommands::runIndexerCommand(
 			MessageShowStatus().dispatch();
 			MessageStatus(statusText, true, false, true).dispatch();
 		}
-
-		indexedSourceFileCount++;
-		blackboard->update<int>("indexed_source_file_count", [=](int count) { return count + 1; });
 	}
 }

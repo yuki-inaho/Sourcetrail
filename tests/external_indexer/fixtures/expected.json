@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "toy_id": "TOY-EXTERNAL-001",
+  "contracts": ["EXECUTION-001", "COMMAND-001", "PROCESS-001", "GRAPH-001"],
+  "adrs": ["ADR-0004", "ADR-0005", "ADR-0006", "ADR-0007"],
+  "cases": [
+    {"id": "missing-executable", "modes": {"missing.toy": "silent-zero"}, "missing_executable": true, "parallel": false, "exit_code": 1, "successful": 0, "failed": 1, "receipts": 0},
+    {"id": "nonzero-exit", "modes": {"failure.toy": "exit7"}, "parallel": false, "exit_code": 1, "successful": 0, "failed": 1, "receipts": 1},
+    {"id": "stderr-zero", "modes": {"warning.toy": "stderr-zero"}, "parallel": false, "exit_code": 0, "successful": 1, "failed": 0, "receipts": 1},
+    {"id": "silent-zero", "modes": {"silent.toy": "silent-zero"}, "parallel": false, "exit_code": 0, "successful": 1, "failed": 0, "receipts": 1},
+    {"id": "mixed-serial", "modes": {"failure.toy": "exit7", "success.toy": "silent-zero"}, "parallel": false, "exit_code": 1, "successful": 1, "failed": 1, "receipts": 2},
+    {"id": "mixed-parallel", "modes": {"failure.toy": "exit7", "success.toy": "silent-zero"}, "parallel": true, "exit_code": 1, "successful": 1, "failed": 1, "receipts": 2}
+  ],
+  "preservation": {
+    "schedules": ["serial", "parallel"],
+    "seed_symbol": "previously_accepted_symbol",
+    "replacement_symbol": "replacement_candidate_symbol",
+    "failure_exit_code": 1,
+    "successful_during_failure": 2,
+    "total_during_failure": 3,
+    "retry_exit_code": 0
+  }
+}

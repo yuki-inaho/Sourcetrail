@@ -2,6 +2,7 @@
 
 import importlib.util
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -66,3 +67,54 @@ def test_corrupt_cached_jar_is_rejected_before_execution(tmp_path):
 def test_offline_mode_fails_when_tool_is_missing(tmp_path):
     with pytest.raises(FileNotFoundError, match="missing in offline mode"):
         RUNNER.ensure_jar(tmp_path / "missing.jar", offline=True)
+
+
+@pytest.mark.parametrize("module,config", [
+    ("RefreshPlan.tla", "RefreshPlan.cfg"),
+    ("ExternalIndexing.tla", "ExternalIndexing.cfg"),
+])
+def test_run_case_executes_selected_module_and_retains_evidence(tmp_path, monkeypatch, module, config):
+    """A new model must not silently execute the formerly hard-coded module."""
+    commands = []
+
+    def execute(command, **kwargs):
+        commands.append(command)
+        assert command[-1] == module
+        assert command[command.index("-config") + 1] == config
+        assert kwargs["cwd"] == RUNNER.MODEL_DIR
+        assert Path(command[command.index("-metadir") + 1]).is_dir()
+        return subprocess.CompletedProcess(command, 0, stdout=SUCCESS)
+
+    monkeypatch.setattr(RUNNER.subprocess, "run", execute)
+    result = RUNNER.run_case("java", tmp_path / "tool.jar", tmp_path, 5,
+                             "selected-module", module, config, None)
+    assert result["passed"]
+    assert result["module"] == module
+    assert result["config"] == config
+    assert result["command"] == commands[0]
+    assert (tmp_path / result["log"]).read_text() == SUCCESS
+    assert not Path(commands[0][commands[0].index("-metadir") + 1]).exists()
+
+
+def test_case_catalog_preserves_refresh_checks_and_requires_external_negative_control():
+    cases = {case[0]: case[1:] for case in RUNNER.CASES}
+    assert len(cases) == len(RUNNER.CASES), "Case names must not overwrite another result log"
+    assert cases["refresh-mixed"] == ("RefreshPlan.tla", "RefreshPlan.cfg", None)
+    assert cases["refresh-single-relation"] == ("RefreshPlan.tla", "RefreshPlanSingleRelation.cfg", None)
+    assert cases["refresh-negative-control"] == (
+        "RefreshPlan.tla", "RefreshPlanMutant.cfg", "SharedDependenciesPreserved",
+    )
+    assert cases["external-indexing"] == ("ExternalIndexing.tla", "ExternalIndexing.cfg", None)
+    assert cases["external-indexing-negative-control"] == (
+        "ExternalIndexing.tla", "ExternalIndexingMutant.cfg", "NoPublicationAfterFailure",
+    )
+
+
+@pytest.mark.parametrize("violation,passed", [
+    ("NoPublicationAfterFailure", True),
+    ("FailureIsSticky", False),
+    ("OutcomeAccounting", False),
+])
+def test_external_negative_control_requires_publication_counterexample(violation, passed):
+    output = COUNTEREXAMPLE.replace("SharedDependenciesPreserved", violation)
+    assert RUNNER.evaluate_result(12, output, "NoPublicationAfterFailure")["passed"] is passed

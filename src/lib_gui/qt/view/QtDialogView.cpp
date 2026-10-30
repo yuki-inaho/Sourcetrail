@@ -47,6 +47,7 @@ void QtDialogView::clearDialogs()
 	m_onQtThread2([=]() {
 		m_windowStack.clearWindows();
 
+		m_mainWindow->hideWindowsTaskbarProgress();
 		setUIBlocked(false);
 	});
 

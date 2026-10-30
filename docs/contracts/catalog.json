@@ -428,7 +428,7 @@
         "docs/architecture/indexing-lifecycle.md"
       ],
       "limitations": [
-        "プロセス失敗と構文診断を統一する状態契約はGAP-005。",
+        "外部プロセスの起動・非ゼロ終了はEXECUTION-001で別管理。取消・タイムアウトと出力の意味検査はGAP-005に残る。",
         "異なるコンパイラー版の診断文面一致は別プロファイルで判断する。"
       ]
     },
@@ -518,7 +518,8 @@
       ],
       "limitations": [
         "機械可読プロファイルは本変更で追加するが、実行時の交渉APIは未実装。",
-        "新版Python/C++とRustの対応完了を示さない。"
+        "新版Python/C++とRustの対応完了を示さない。",
+        "外部実行の起動・非ゼロ終了の境界はEXECUTION-001。版・能力・出力の交渉は未実装。"
       ]
     },
     {
@@ -539,7 +540,8 @@
       ],
       "limitations": [
         "現実装は旧DB削除後にrename。原子的な公開/クラッシュ耐性は保証しない。",
-        "TLA+のPublishは更新計画の戻り値でありDB公開ではない。"
+        "RefreshPlanモデルのPublishは更新計画の戻り値。ExternalIndexingモデルの候補処分も実ファイル置換の原子性を証明しない。",
+        "外部実行失敗が判明した候補の破棄と既存索引保持はEXECUTION-001で扱う。公開中の障害回復とは別の範囲。"
       ]
     },
     {
@@ -646,6 +648,90 @@
         "テンプレート展開はシェルの引用・解析を行わない。OS別のプロセス起動は従来アダプターの責務。",
         "std::wstringのABIやコード単位幅の共通化を保証しない。UTF-8文字列のコア入力も別に試験する。",
         "既知変数の同一・以前の展開は再帰させず、不明変数は保持する既存仕様。"
+      ]
+    },
+    {
+      "id": "EXECUTION-001",
+      "title": "外部実行の失敗を保持し、失敗した候補索引を採用しない",
+      "status": "enforced",
+      "scope": "Python/Customのプロセス実行エラーと非ゼロ終了を分類・集約し、成功件数、候補破棄、後始末後の完了通知、CLI非ゼロ終了へ接続する。",
+      "sources": [
+        {
+          "path": "src/lib_core/ExternalIndexerOutcome.h",
+          "symbol": "classifyExternalProcess"
+        },
+        {
+          "path": "src/lib/data/indexer/ExternalIndexerRunState.h",
+          "symbol": "ExternalIndexerRunState"
+        },
+        {
+          "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+          "symbol": "m_runState->settleCommand(outcome)"
+        },
+        {
+          "path": "src/lib/data/TaskFinishParsing.cpp",
+          "symbol": "outcome.hasFailure()"
+        },
+        {
+          "path": "src/lib/project/Project.cpp",
+          "symbol": "MessageIndexingFinished(externalIndexerRunState->snapshot().exitCode())"
+        },
+        {
+          "path": "src/lib/app/Application.cpp",
+          "symbol": "MessageQuitApplication(message->exitCode)"
+        }
+      ],
+      "verification": [
+        {
+          "path": "tests/core/external_indexer_outcome_test.cpp",
+          "anchor": "completion order must preserve counts and every failure"
+        },
+        {
+          "path": "src/test/ExternalIndexerOutcomeTestSuite.cpp",
+          "anchor": "failed external run finishes scheduling and forces candidate discard"
+        },
+        {
+          "path": "src/test/ExternalIndexerOutcomeTestSuite.cpp",
+          "anchor": "external run counts concurrent attempts and retains every failure"
+        },
+        {
+          "path": "src/test/UtilityTestSuite.cpp",
+          "anchor": "process logging handles silent and newline terminated output"
+        },
+        {
+          "path": "tests/external_indexer/harness.py",
+          "anchor": "def check_case"
+        },
+        {
+          "path": "tests/external_indexer/harness.py",
+          "anchor": "def observe_preservation"
+        },
+        {
+          "path": "tests/external_indexer/fixtures/expected.json",
+          "anchor": "mixed-parallel"
+        },
+        {
+          "path": "docs/contracts/formal/ExternalIndexing.tla",
+          "anchor": "NoPublicationAfterFailure"
+        },
+        {
+          "path": "docs/contracts/formal/ExternalIndexing.tla",
+          "anchor": "CleanupBeforeNotification"
+        }
+      ],
+      "docs": [
+        "docs/adr/0007-external-indexer-outcomes.md",
+        "docs/contracts/external-indexing.md",
+        "docs/architecture/indexing-lifecycle.md",
+        "docs/architecture/language-compatibility.md",
+        "docs/contracts/formal/README.md"
+      ],
+      "limitations": [
+        "起動・非ゼロ終了を成功扱いしていた既存挙動への意図した修正。成功経路の保存観測は別途比較する。",
+        "終了コード0でstderr出力やDB書き込みがなくてもプロセス成功。意味的完全性、保存版、出力妥当性の交渉は未実装。",
+        "スケジューラーの正常終了と索引器の実行成功は別の結果。取消、タイムアウト、子孫回収、内部C++/Javaワーカーは本契約の範囲外。",
+        "有限モデルは2〜3コマンドの結果確定・集約・採用方針・後始末・通知を扱う。全スレッド実行やOSの原子性の証明ではない。",
+        "失敗が判明した候補の採用を抑止する範囲であり、DB置換中のクラッシュ復旧はPUBLICATION-001に残る。"
       ]
     },
     {

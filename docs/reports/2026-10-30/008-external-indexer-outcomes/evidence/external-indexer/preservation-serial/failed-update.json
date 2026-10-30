@@ -1,0 +1,40 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/external.srctrlprj"
+  ],
+  "database_state": "schema-25",
+  "indexed_counts": [
+    2,
+    3
+  ],
+  "indexed_files": 1,
+  "log": "failed-update.log",
+  "log_sha256": "3287c7b3a3d6e8c71bb84c917461f054ee562ec9e81b6c667541371a3827414a",
+  "node_count": 3,
+  "receipts": [
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial",
+      "exit_code": 7,
+      "mode": "exit7",
+      "pid": 172397,
+      "source": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/commands 日本語 with spaces/failure.toy"
+    },
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 172400,
+      "source": "/tmp/external indexer 日本語 kxefbhfr/preservation-serial/commands 日本語 with spaces/success.toy"
+    }
+  ],
+  "returncode": 1,
+  "snapshot": "failed-update.snapshot.json",
+  "snapshot_sha256": "4060de36b07c7c1378ec3dbb24e72d80f77b27e909dcd6c8b8a82a0cc16dc3cc",
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

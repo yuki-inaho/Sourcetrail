@@ -1,0 +1,70 @@
+Command: ['/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail', 'index', '--full', '/tmp/external indexer 日本語 kxefbhfr/nonzero-exit/external.srctrlprj']
+Exit: 1
+stdout:
+02:45:19 | LogManager.cpp:35 setLoggingEnabled() | INFO: Enabled logging for Sourcetrail 64 bit, version 0.0.0
+02:45:19 | SharedMemoryGarbageCollector.cpp:59 run() | INFO: start shared memory garbage collection
+02:45:19 | ApplicationSettingsPrefiller.cpp:31 prefillJavaRuntimePath() | INFO: Prefilling Java path
+02:45:19 | INFO: send MessageStatus Starting Sourcetrail 64 bit, version 0.0.0
+02:45:19 | ApplicationSettingsPrefiller.cpp:84 prefillMavenExecutablePath() | INFO: Prefilling Maven path
+Starting Sourcetrail 64 bit, version 0.0.0
+02:45:19 | INFO: send MessageStatus Load settings: /tmp/external indexer 日本語 kxefbhfr/nonzero-exit/isolated-home/.config/sourcetrail/ApplicationSettings.xml
+Load settings: /tmp/external indexer �,� kxefbhfr/nonzero-exit/isolated-home/.config/sourcetrail/ApplicationSettings.xml
+02:45:19 | ApplicationSettingsPrefiller.cpp:57 prefillJreSystemLibraryPaths() | INFO: Prefilling JRE system library path
+02:45:19 | INFO: send MessageStatus Enabled console and file logging.
+Enabled console and file logging.
+02:45:19 | INFO: send MessageStatus Ran Java runtime path detection, no path found.
+Ran Java runtime path detection, no path found.
+02:45:19 | INFO: send MessageStatus Ran Maven executable path detection, no path found.
+Ran Maven executable path detection, no path found.
+02:45:19 | INFO: send MessageStatus Ran JRE system library path detection, no path found.
+Ran JRE system library path detection, no path found.
+02:45:19 | INFO: send MessageLoadProject /tmp/external indexer 日本語 kxefbhfr/nonzero-exit/external.srctrlprj, settingsChanged: false, refreshMode: 3
+02:45:19 | INFO: send MessageStatus Loading Project: /tmp/external indexer 日本語 kxefbhfr/nonzero-exit/external.srctrlprj - loading
+Loading Project: /tmp/external indexer �,� kxefbhfr/nonzero-exit/external.srctrlprj
+02:45:19 | TaskExecuteCustomCommands.cpp:486 runIndexerCommand() | INFO: Start processing command ""/tmp/external indexer 日本語 kxefbhfr/nonzero-exit/commands 日本語 with spaces/failure.toy" "
+02:45:19 | TaskExecuteCustomCommands.cpp:493 runIndexerCommand() | INFO: Starting to index
+02:45:19 | INFO: send MessageStatus Project could not load any symbols because the index database is empty. Please re-index the project.
+Project could not load any symbols because the index database is empty. Please re-index the project.
+02:45:19 | INFO: send MessageStatus Preparing Indexing - loading
+Preparing Indexing
+02:45:19 | INFO: send MessageErrorCountClear 
+02:45:19 | INFO: send MessageIndexingStatus 
+0% 
+02:45:19 | INFO: send MessageStatus Starting Indexing: 1 source files - loading
+Starting Indexing: 1 source files
+02:45:19 | INFO: send MessageIndexingStarted 
+02:45:19 | INFO: send MessageIndexingStatus 
+0% 
+02:45:19 | INFO: Process output: TOY_EXTERNAL_NONZERO
+02:45:19 | INFO: Process output: 
+02:45:19 | INFO: Process output: 
+02:45:19 | TaskExecuteCustomCommands.cpp:496 runIndexerCommand() | INFO: Finished indexing
+02:45:19 | TaskExecuteCustomCommands.cpp:544 runIndexerCommand() | ERROR: command ""/tmp/external indexer 日本語 kxefbhfr/nonzero-exit/commands 日本語 with spaces/failure.toy" " returned code "7".
+02:45:19 | Project.cpp:840 discardTempStorage() | INFO: Discarding temporary indexing data
+02:45:19 | INFO: send MessageShowStatus 
+02:45:19 | INFO: send MessageStatus command ""/tmp/external indexer 日本語 kxefbhfr/nonzero-exit/commands 日本語 with spaces/failure.toy" " returned code "7". - error
+ERROR: command ""/tmp/external indexer �,� kxefbhfr/nonzero-exit/commands �,� with spaces/failure.toy" " returned code "7".
+02:45:19 | INFO: send MessageErrorCountClear 
+02:45:19 | INFO: send MessageStatus Indexing failed: 0/1 source files indexed; 1 external commands failed. Discarding temporary index. - error
+ERROR: Indexing failed: 0/1 source files indexed; 1 external commands failed. Discarding temporary index.
+02:45:19 | INFO: send MessageIndexingStatus 
+02:45:19 | INFO: send MessageIndexingFinished 
+02:45:19 | Application.cpp:475 logStorageStats() | INFO: 
+Graph:
+	0 Nodes
+	0 Edges
+
+Code:
+	0 Files
+	0 Lines of Code
+
+Errors:
+	0 Errors
+	0 Fatal Errors
+
+02:45:19 | INFO: send MessageQuitApplication 
+Quitting
+02:45:19 | SharedMemoryGarbageCollector.cpp:77 stop() | INFO: stop shared memory garbage collection
+02:45:20 | SharedMemoryGarbageCollector.cpp:132 stop() | INFO: delete garbage collector memory: grbg_cllctr_64
+
+stderr:

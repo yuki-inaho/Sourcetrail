@@ -1,0 +1,31 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 _wnm044i/stderr-zero/external.srctrlprj"
+  ],
+  "indexed_counts": [
+    1,
+    1
+  ],
+  "indexed_files": 0,
+  "log": "execution.log",
+  "log_sha256": "4d485dbfaee79a47d41e67a454f39cedda032e338e27ec34f707a1e02ee707f4",
+  "node_count": 0,
+  "receipts": [
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 _wnm044i/stderr-zero",
+      "exit_code": 0,
+      "mode": "stderr-zero",
+      "pid": 362,
+      "source": "/tmp/external indexer 日本語 _wnm044i/stderr-zero/commands 日本語 with spaces/warning.toy"
+    }
+  ],
+  "returncode": 0,
+  "snapshot": "execution.snapshot.json",
+  "snapshot_sha256": "80dda8818d7c93f47c330176b14ae782e3cb6ab52af0d47dee126c37498fa6fd",
+  "stderr_warning_observed": true,
+  "temporary_databases": []
+}

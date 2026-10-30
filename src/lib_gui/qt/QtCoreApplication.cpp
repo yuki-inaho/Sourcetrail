@@ -1,13 +1,18 @@
 #include "QtCoreApplication.h"
 
 #include <iostream>
+#include <QMetaObject>
 
 QtCoreApplication::QtCoreApplication(int argc, char** argv): QCoreApplication(argc, argv) {}
 
 void QtCoreApplication::handleMessage(MessageQuitApplication* message)
 {
 	std::cout << "Quitting" << std::endl;
-	emit quit();
+	// Message listeners may run on the message-queue thread. exit(int) must run
+	// on the QCoreApplication thread; copy the value before the message expires.
+	const int exitCode = message->exitCode;
+	QMetaObject::invokeMethod(
+		this, [exitCode]() { QCoreApplication::exit(exitCode); }, Qt::QueuedConnection);
 }
 
 void QtCoreApplication::handleMessage(MessageIndexingStatus* message)

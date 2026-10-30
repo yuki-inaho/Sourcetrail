@@ -12,9 +12,13 @@ flowchart TD
     D -->|不要| E["現在の索引を保持"]
     D -->|必要| F["一時 DB を準備・消去"]
     F --> G["解析・集約・後処理"]
-    G --> H{"索引の採用方針"}
+    G --> K{"外部実行失敗ありか"}
+    K -->|あり| J["一時 DB を削除"]
+    K -->|なし| H{"索引の採用方針"}
     H -->|採用| I["DB 切り替え・キャッシュ再構築"]
-    H -->|破棄| J["一時 DB を削除"]
+    H -->|破棄| J
+    I --> L["更新段階を解除し結果を通知"]
+    J --> L
 ```
 
 この図は通常の操作の経路であり、クラッシュ時に原子的に切り替わる保証ではない。
@@ -81,7 +85,13 @@ Index = { s ∈ S : s ∈ Clear または s ∉ U }
 
 ### Python／Custom
 
-外部プロセスを起動し、作業用 DB に索引を書かせる。並列実行では追加ワーカーごとの DB に書いた結果を注入する経路もある。Python には未解決参照の後処理があり、曖昧な候補を追加する。失敗した外部コマンドは状態表示へ報告されるが、プロセスが起動できたこと・CLI が終了したことだけで完全な索引生成を判定してはいけない。DB の存在・構造・必要な意味を必ず観測する。[TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp)
+外部プロセスを起動し、作業用DBに索引を書かせる。並列実行では追加ワーカーごとのDBに書いた結果を注入する経路もある。Pythonには未解決参照の後処理があり、曖昧な候補を追加する。[TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp)
+
+`EXECUTION-001` は、外部コマンドの実行エラー・非ゼロ終了・終了コード0を値として分類し、実行単位で開始数・結果確定数・成功数・失敗数を集約する。一度記録した失敗は後続の成功で消さず、既存の索引済み件数には成功分だけを加える。値処理は [ExternalIndexerOutcome](../../src/lib_core/ExternalIndexerOutcome.h)、並列更新の同期は [ExternalIndexerRunState](../../src/lib/data/indexer/ExternalIndexerRunState.h) が担当する。
+
+失敗を含む実行ではPython後処理を省き、終了処理へ失敗を渡す。タスク列の `STATE_SUCCESS` は後始末へ進むためのスケジューラー上の完了であり、外部実行の成功という意味ではない。別の実行結果を持つことで、候補DBの処分と更新段階の解除を飛ばさずに終了できる。[ADR-0007](../adr/0007-external-indexer-outcomes.md)
+
+stderrへ警告を出した終了コード0や、DBへ書き込まない終了コード0も、プロセスの分類では成功する。実行成功と構文診断・意味的完全性を区別し、必要な記号・関係・位置・診断は別の期待値と観測で確認する。[外部実行結果の契約](../contracts/external-indexing.md)
 
 Python の Source Group は `allowsPartialClearing() == false` である。`Project::buildIndex` は、消去予定のファイルに対し、有効かつ部分消去を許可しない各グループの `filterToContainedFilePaths` を呼ぶ。これは設定上のソースパスと除外条件による所属判定なので、現在のソース列挙から消えた削除済みファイルも対象になる。先のグループに該当しなければ後のグループを調べ、所属するグループが見つかればプロジェクト全体を再索引化する。GUI では従来の確認を行い、取り消しを選べる。切り替え時も shallow 指定を保持する。[Project.cpp](../../src/lib/project/Project.cpp)、[SourceGroupPythonEmpty.cpp](../../src/lib_python/project/SourceGroupPythonEmpty.cpp)
 
@@ -89,7 +99,13 @@ Python の Source Group は `allowsPartialClearing() == false` である。`Proj
 
 ## DB の採用と中断
 
-更新分の処理では既存索引を一時 DB にコピーし、解析中も既存状態を参照できるようにする。全体更新は旧索引をそのままコピーする経路ではない。完了時は `TaskFinishParsing` が最適化と結果表示を行い、採用・破棄・採用後再更新の方針を返す。GUI のない `DialogView::finishedIndexingDialog` は採用を返す。[TaskFinishParsing.cpp](../../src/lib/data/TaskFinishParsing.cpp)、[DialogView.cpp](../../src/lib/component/view/DialogView.cpp)
+更新分の処理では既存索引を一時DBにコピーし、解析中も既存状態を参照できるようにする。全体更新は旧索引をそのままコピーする経路ではない。外部実行失敗のない通常経路では `TaskFinishParsing` が最適化と結果表示を行い、採用・破棄・採用後再更新の方針を返す。この通常経路のGUIのない `DialogView::finishedIndexingDialog` は採用を返す。[TaskFinishParsing.cpp](../../src/lib/data/TaskFinishParsing.cpp)、[DialogView.cpp](../../src/lib/component/view/DialogView.cpp)
+
+外部実行失敗がある場合は、候補DBの破棄を選び、GUIの採用選択で上書きしない。採用済みDBがあればそれを維持し、初回索引化なら失敗候補を採用しない。`Project` は候補の処分を終え、更新段階を解除してから `MessageIndexingFinished` に結果を載せる。CLIでは `MessageQuitApplication` まで終了コードを伝え、非ゼロで終了する。スケジューラーの途中失敗に任せて後続処理を飛ばす設計にはしない。[Project.cpp](../../src/lib/project/Project.cpp)、[Application.cpp](../../src/lib/app/Application.cpp)
+
+初回の候補破棄後に、プロジェクト初期化による未版付けの空DBが残る場合がある。DBファイルがあることと、候補索引を採用したことは区別する。人工対象では初期化時の既知の空構造だけを別状態として識別し、採用済みDBがあった場合はその意味スナップショットの厳密一致を要求する。[判定の詳細](../contracts/external-indexing.md#採用していないdbの識別)
+
+取消やタイムアウトをこの結果から一般的に判定する機能は追加していない。`executeProcess` のパイプ読込と期限待ちの順序は追加実験が必要であり、子プロセス・子孫回収・取消後の採用方針を含め [GAP-005](evolution-plan.md#gap-005-外部索引器の失敗と終了状態) に残る。
 
 現行の `swapToTempStorageFile` は旧索引ファイルを削除した後、一時索引を rename する。途中の障害について「必ず旧版か新版のどちらかが残る」という保証は確認できない。モデルの一つの遷移で表せても、そのモデルに実装が従うことの証明にはならない。障害注入・復旧設計は [GAP-001](evolution-plan.md#gap-001-db-公開の障害耐性) として追跡する。
 
@@ -99,7 +115,8 @@ Python の Source Group は `allowsPartialClearing() == false` である。`Proj
 2. Source Group が生成するコマンドの対象・引数・作業ディレクトリを比較する。
 3. 実アプリを起動し、変更・削除・共有依存・診断修復後の DB を比較する。
 4. キャッシュを再構築した後の検索・位置取得・グラフ問い合わせを確認する。
-5. 公開や中断の仕組みを変更する場合は、別途障害・復旧の契約と試験を追加する。
+5. 外部実行の失敗では、件数・候補の破棄・既存DB・CLI終了・再試行を [人工の外部索引器](../../tests/external_indexer/) で観測する。
+6. 公開中の障害や中断の仕組みを変更する場合は、別途障害・復旧の契約と試験を追加する。
 
 この順序により、純粋な集合処理の等価性と、アプリ全体の観測結果を混同しない。
 

@@ -11,7 +11,9 @@ public:
 		return "MessageIndexingFinished";
 	}
 
-	MessageIndexingFinished() {}
+	explicit MessageIndexingFinished(int exitCode = 0): exitCode(exitCode) {}
+
+	const int exitCode;
 };
 
 #endif	  // MESSAGE_INDEXING_FINISHED_H

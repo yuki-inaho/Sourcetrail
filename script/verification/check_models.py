@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the bounded TLA+ contract checks and a required negative control.
+"""Run the bounded TLA+ contract checks and required negative controls.
 
 No third-party Python packages are required. The official TLC JAR is downloaded
 only when absent and is always checked against a pinned SHA-256 before execution.
@@ -28,9 +28,11 @@ TLC_VERSION = "1.7.4"
 TLC_URL = f"https://github.com/tlaplus/tlaplus/releases/download/v{TLC_VERSION}/tla2tools.jar"
 TLC_SHA256 = "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
 CASES = (
-    ("refresh-mixed", "RefreshPlan.cfg", None),
-    ("refresh-single-relation", "RefreshPlanSingleRelation.cfg", None),
-    ("refresh-negative-control", "RefreshPlanMutant.cfg", "SharedDependenciesPreserved"),
+    ("refresh-mixed", "RefreshPlan.tla", "RefreshPlan.cfg", None),
+    ("refresh-single-relation", "RefreshPlan.tla", "RefreshPlanSingleRelation.cfg", None),
+    ("refresh-negative-control", "RefreshPlan.tla", "RefreshPlanMutant.cfg", "SharedDependenciesPreserved"),
+    ("external-indexing", "ExternalIndexing.tla", "ExternalIndexing.cfg", None),
+    ("external-indexing-negative-control", "ExternalIndexing.tla", "ExternalIndexingMutant.cfg", "NoPublicationAfterFailure"),
 )
 
 
@@ -106,14 +108,15 @@ def evaluate_result(returncode: int, output: str, expected_violation: str | None
 
 
 def run_case(java: str, jar: Path, output_dir: Path, timeout: int,
-             name: str, config: str, expected_violation: str | None) -> dict[str, Any]:
+             name: str, module: str, config: str,
+             expected_violation: str | None) -> dict[str, Any]:
     log_path = output_dir / f"{name}.log"
     # Each run owns its temporary state directory. Do not delete other checks' data.
     with tempfile.TemporaryDirectory(prefix=f"{name}-", dir=output_dir) as state_dir:
         command = [
             java, "-XX:+UseParallelGC", "-Xmx1024m", "-jar", str(jar),
             "-workers", "1", "-fp", "0", "-seed", "1",
-            "-metadir", state_dir, "-config", config, "RefreshPlan.tla",
+            "-metadir", state_dir, "-config", config, module,
         ]
         started = time.monotonic()
         try:
@@ -131,6 +134,7 @@ def run_case(java: str, jar: Path, output_dir: Path, timeout: int,
         log_path.write_text(output, encoding="utf-8")
         result.update({
             "name": name,
+            "module": module,
             "config": config,
             "command": command,
             "seconds": round(time.monotonic() - started, 3),

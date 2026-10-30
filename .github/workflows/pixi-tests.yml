@@ -55,5 +55,7 @@ jobs:
             build/toy-projects/current/**/*.snapshot.json
             build/toy-projects/current/**/*.log
             build/toy-projects/current/**/*.diff
+            build/external-indexer/current/**/*.json
+            build/external-indexer/current/**/*.log
           if-no-files-found: ignore
           retention-days: 14

@@ -1,0 +1,585 @@
+{
+  "binary_sha256": "4cf3f921f83c741cab2f305359ea92950a9c689e2bb021dded3b420a5f703dbc",
+  "compile_standard_observations": {
+    "src/lib/": [
+      "gnu++17"
+    ],
+    "src/lib_cxx/": [
+      "gnu++14"
+    ],
+    "src/test/": [
+      "gnu++17"
+    ]
+  },
+  "documentation_after_report": {
+    "git_index_export": {
+      "contracts": 20,
+      "error_count": 0,
+      "language_profiles": 6,
+      "markdown_files": 33,
+      "reports": 8,
+      "returncode": 0
+    },
+    "working_tree": {
+      "contracts": 20,
+      "error_count": 0,
+      "language_profiles": 6,
+      "markdown_files": 33,
+      "reports": 8,
+      "returncode": 0
+    }
+  },
+  "external_cli_invocations": 14,
+  "external_scenarios": 6,
+  "first_gate": {
+    "failed_suite": "external-indexer-e2e",
+    "passed_suites": 11,
+    "production_change_required_for_this_failure": false,
+    "pytest_at_that_revision": {
+      "passed": 13,
+      "setup_errors": 8
+    },
+    "reason": "Harness assumed every existing DB had schema25 metadata; a rejected first candidate leaves empty unversioned initialization tables.",
+    "returncode_observed_by_root": 8
+  },
+  "fixture_sha256": {
+    "driver.py": "4e23e693749250b037d636a96eb54ca5163e7787ea43ae76ef5e514e43b1e7fd",
+    "expected.json": "236d904f62db1e7166145b8dffd1820a61b332461878e84cc7619e9e079a8b5a"
+  },
+  "formal": {
+    "model_sha256": {
+      "ExternalIndexing.cfg": "954bf0163a87a03cb44b47d5d0127dc06112835ebe38122cb96e044cd1aa2d82",
+      "ExternalIndexing.tla": "ba3efd70702567c9dad512ff9b25aab0339ddea1b684c4231dd0fd3352669792",
+      "ExternalIndexingMutant.cfg": "b958f13a6c25fcaf81b485419da841834e3dff376dd9674124d2dcdb47d3aa54",
+      "RefreshContract.tla": "c1eb45945571a9c3ce11adab4c1d1a9766da823ea261b668a97152652247b30f",
+      "RefreshPlan.cfg": "9be616219e57f1d32a29e0db0e725340b0555987b7d2e5c130e943794613b9ff",
+      "RefreshPlan.tla": "0ee786c2952fea4791408a60fe287310d801df5384f812e011451f79b773d1e7",
+      "RefreshPlanMutant.cfg": "4e5523963fdca144959c18009ff281ba354972206b0d1ed9739112d2dce9a17f",
+      "RefreshPlanSingleRelation.cfg": "d03e6a2c3d7f4175a7cf5a028b80c659966ad6fce6822c4f504dc0b7231d4e1c"
+    },
+    "passed": true,
+    "results": [
+      {
+        "actual_violation": null,
+        "config": "RefreshPlan.cfg",
+        "expected_violation": null,
+        "module": "RefreshPlan.tla",
+        "name": "refresh-mixed",
+        "passed": true,
+        "returncode": 0,
+        "states": {
+          "distinct": 522720,
+          "generated": 627264,
+          "pending": 0
+        }
+      },
+      {
+        "actual_violation": null,
+        "config": "RefreshPlanSingleRelation.cfg",
+        "expected_violation": null,
+        "module": "RefreshPlan.tla",
+        "name": "refresh-single-relation",
+        "passed": true,
+        "returncode": 0,
+        "states": {
+          "distinct": 69120,
+          "generated": 82944,
+          "pending": 0
+        }
+      },
+      {
+        "actual_violation": "SharedDependenciesPreserved",
+        "config": "RefreshPlanMutant.cfg",
+        "expected_violation": "SharedDependenciesPreserved",
+        "module": "RefreshPlan.tla",
+        "name": "refresh-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "states": {
+          "distinct": 25,
+          "generated": 25,
+          "pending": 5
+        }
+      },
+      {
+        "actual_violation": null,
+        "config": "ExternalIndexing.cfg",
+        "expected_violation": null,
+        "module": "ExternalIndexing.tla",
+        "name": "external-indexing",
+        "passed": true,
+        "returncode": 0,
+        "states": {
+          "distinct": 374,
+          "generated": 656,
+          "pending": 0
+        }
+      },
+      {
+        "actual_violation": "NoPublicationAfterFailure",
+        "config": "ExternalIndexingMutant.cfg",
+        "expected_violation": "NoPublicationAfterFailure",
+        "module": "ExternalIndexing.tla",
+        "name": "external-indexing-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "states": {
+          "distinct": 178,
+          "generated": 270,
+          "pending": 88
+        }
+      }
+    ]
+  },
+  "gate": {
+    "catch_and_pytest_cases": 838,
+    "command": "SOURCETRAIL_TOY_BASELINE=/workspace/scratch/715c5c4089e4/Sourcetrail/build/toy-projects/before-external-outcomes/summary.json pixi run --locked verify",
+    "ctest": {
+      "disabled": "0",
+      "failures": "0",
+      "hostname": "b6e5f938579f",
+      "name": "Linux-x86_64-conda-linux-gnu-c++",
+      "skipped": "0",
+      "tests": "12",
+      "time": "88",
+      "timestamp": "2026-10-30T02:45:18"
+    },
+    "note": "Python regression/E2E markers select four disjoint cases each. No CTest suite skipped.",
+    "returncode_observed_by_root": 0,
+    "standalone_cpp_programs": 3,
+    "suites": [
+      {
+        "assertions": null,
+        "cases": 31,
+        "kind": "pytest",
+        "name": "external-indexer-e2e",
+        "seconds": 23.9259
+      },
+      {
+        "assertions": null,
+        "cases": 30,
+        "kind": "pytest",
+        "name": "toy-projects",
+        "seconds": 25.7739
+      },
+      {
+        "assertions": 1616,
+        "cases": 608,
+        "kind": "Catch",
+        "name": "legacy",
+        "seconds": 3.7922
+      },
+      {
+        "assertions": 65692,
+        "cases": 26,
+        "kind": "Catch",
+        "name": "cpp-contracts",
+        "seconds": 0.841747
+      },
+      {
+        "assertions": null,
+        "cases": 125,
+        "kind": "pytest",
+        "name": "verification-contracts",
+        "seconds": 9.89009
+      },
+      {
+        "assertions": 54,
+        "cases": 7,
+        "kind": "Catch",
+        "name": "cpp-regression",
+        "seconds": 0.117882
+      },
+      {
+        "assertions": 270,
+        "cases": 3,
+        "kind": "Catch",
+        "name": "cpp-e2e",
+        "seconds": 11.5236
+      },
+      {
+        "assertions": null,
+        "cases": 4,
+        "kind": "pytest",
+        "name": "python-regression",
+        "seconds": 2.1877
+      },
+      {
+        "assertions": null,
+        "cases": 4,
+        "kind": "pytest",
+        "name": "python-e2e",
+        "seconds": 10.7964
+      },
+      {
+        "assertions": null,
+        "cases": null,
+        "kind": "standalone C++",
+        "name": "core-refresh-contracts",
+        "seconds": 0.0250679
+      },
+      {
+        "assertions": null,
+        "cases": null,
+        "kind": "standalone C++",
+        "name": "core-command-contracts",
+        "seconds": 0.00209121
+      },
+      {
+        "assertions": null,
+        "cases": null,
+        "kind": "standalone C++",
+        "name": "core-execution-contracts",
+        "seconds": 0.00200664
+      }
+    ]
+  },
+  "harness_controls": {
+    "command": "pixi run --locked python -m pytest tests/external_indexer -q -k 'not external_process_outcome and not failed_update_preserves_accepted_index'",
+    "deselected": 8,
+    "passed": 23,
+    "returncode": 0
+  },
+  "harness_sha256": "46c29c66dd21c4da7a63dee4788e5054de7e321598c4ce8a69904c9a78d35689",
+  "intentional_changes": {
+    "missing-executable": {
+      "after": {
+        "database_state": "uninitialized-empty",
+        "indexed_counts": [
+          0,
+          1
+        ],
+        "returncode": 1
+      },
+      "before": {
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    },
+    "mixed-parallel": {
+      "after": {
+        "database_state": "uninitialized-empty",
+        "indexed_counts": [
+          1,
+          2
+        ],
+        "returncode": 1
+      },
+      "before": {
+        "indexed_counts": [
+          2,
+          2
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    },
+    "mixed-serial": {
+      "after": {
+        "database_state": "uninitialized-empty",
+        "indexed_counts": [
+          1,
+          2
+        ],
+        "returncode": 1
+      },
+      "before": {
+        "indexed_counts": [
+          2,
+          2
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    },
+    "nonzero-exit": {
+      "after": {
+        "database_state": "uninitialized-empty",
+        "indexed_counts": [
+          0,
+          1
+        ],
+        "returncode": 1
+      },
+      "before": {
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    },
+    "preservation-parallel": {
+      "after": {
+        "accepted_graph_preserved": true,
+        "both_external_commands_attempted": true,
+        "failed_candidate_removed": true,
+        "failed_command_not_counted": true,
+        "failure_is_nonzero": true,
+        "old_symbol_removed_on_retry": true,
+        "replacement_is_visible": true,
+        "retry_candidate_removed": true,
+        "retry_counts_all_successes": true,
+        "retry_fixtures_match_contract": true,
+        "retry_matches_clean": true,
+        "retry_succeeds": true
+      },
+      "before": {
+        "accepted_graph_preserved": false,
+        "failed_command_not_counted": false,
+        "failure_is_nonzero": false
+      }
+    },
+    "preservation-serial": {
+      "after": {
+        "accepted_graph_preserved": true,
+        "both_external_commands_attempted": true,
+        "failed_candidate_removed": true,
+        "failed_command_not_counted": true,
+        "failure_is_nonzero": true,
+        "old_symbol_removed_on_retry": true,
+        "replacement_is_visible": true,
+        "retry_candidate_removed": true,
+        "retry_counts_all_successes": true,
+        "retry_fixtures_match_contract": true,
+        "retry_matches_clean": true,
+        "retry_succeeds": true
+      },
+      "before": {
+        "accepted_graph_preserved": false,
+        "failed_command_not_counted": false,
+        "failure_is_nonzero": false
+      }
+    },
+    "silent-zero": {
+      "after": {
+        "database_state": "schema-25",
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "before": {
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    },
+    "stderr-zero": {
+      "after": {
+        "database_state": "schema-25",
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "before": {
+        "indexed_counts": [
+          1,
+          1
+        ],
+        "returncode": 0
+      },
+      "failures": []
+    }
+  },
+  "limits": [
+    "Linux CLI only; no real GUI or Windows execution",
+    "Retry uses separate CLI processes",
+    "TLA+ checks bounded safety, not implementation refinement or liveness",
+    "No parser upgrade, Rust source indexing, timeout/cancellation, output protocol validation, or crash-atomic publication claim"
+  ],
+  "portability": {
+    "bounded_cases": 32768,
+    "fixed_cases": 10,
+    "status": "passed",
+    "versions": {
+      "cxx": "x86_64-conda-linux-gnu-c++ (conda-forge gcc 12.4.0-2) 12.4.0",
+      "linker_driver": "x86_64-conda-linux-gnu-cc (conda-forge gcc 12.4.0-2) 12.4.0",
+      "python": "3.11.18 (main, Oct 26 2026, 11:35:17) [GCC 15.3.0]",
+      "rustc": "rustc 1.85.1 (4eb161250 2025-03-15)"
+    }
+  },
+  "preservation_schedules": 2,
+  "previous_binary_sha256": "51b9e74eb9d344ea136b89c17aaf0eb59eaa801f984a1974a94004f1b76889d7",
+  "recorded_at": "2026-10-30T16:50:53.909310+09:00",
+  "schema_version": 1,
+  "semantic_reader_unchanged_from_base": true,
+  "source_revision": {
+    "base_commit": "78e63759709be5a2f9380f3c4b0f92cc48dfd4ed",
+    "mode": "working-tree",
+    "note": "Source bytes were frozen before the successful build/gate; report and clarifying documentation added afterward."
+  },
+  "source_sha256": {
+    ".github/workflows/pixi-tests.yml": "f8b28d4b6effa50a64d437d1ded3d8eb6f019fe634c742bc72c7540bc27769a3",
+    "CMakeLists.txt": "9b9a621d91a4d3fb2dfa806748c7dc01fb8f791b379a2b1512551584230dc2c2",
+    "cmake/testing.cmake": "11cc32e38c50ec10bd9f195bd8f22a489acf69ea51d53b4f29e4048f250df245",
+    "pixi.lock": "bf9521fb3e8fce5b24d985c3ede0ff739cb9dcb44ee10f7cd3786696c2a156e3",
+    "pixi.toml": "0fc2c1b6eeccb7ea287e588074d91b4918ab2f6d5966e1586f937b6939d3562d",
+    "script/verification/check_models.py": "6c8cdeae0fb38c597dc119500d8edfddc5a15a9db5299192c7ae26e094b447da",
+    "src/lib/CMakeLists.txt": "360fd0e41c014d49a3c4d708877efbf5b622d00177115e1471f635ff5c5ab308",
+    "src/lib/app/Application.cpp": "7f1db0fafda7c076e1d0f74e6be12424c9cc7926602fff7545b3e7a6ede17f6e",
+    "src/lib/data/TaskFinishParsing.cpp": "e0263b31aaaab7dea5267c1e7ac9859a0bd0389f93f35f2f923b9c7df5177478",
+    "src/lib/data/TaskFinishParsing.h": "f658c301bf9f4fd5573f4f9d6149d51aca50b2e9c69619dbb0ee4721761829d9",
+    "src/lib/data/indexer/ExternalIndexerRunState.h": "b924a6364bd76e79b495c0d25c0adfd5fca2e9a0ea1095d361ce67cc74063d7a",
+    "src/lib/data/indexer/TaskExecuteCustomCommands.cpp": "48b09783bfae3f8ea262a76212598cffbae978fbcda7f1adf12775384059df95",
+    "src/lib/data/indexer/TaskExecuteCustomCommands.h": "abe468c4717f923f519dd0127a087a16f6f3646c1861ba284e2434579d9b39c3",
+    "src/lib/project/Project.cpp": "8a233bf2ac992d2b17317f7f51202feaa62811bc157fed5b68039cf48fdd5280",
+    "src/lib/utility/messaging/type/MessageQuitApplication.h": "d469ce71ea8878d66903459c62447ff6ba3aea111a6d945fc9ff25167c5b0fdf",
+    "src/lib/utility/messaging/type/indexing/MessageIndexingFinished.h": "d9e3eccc9527f84fae25c7e8df166ebc39832fdcef185a6405b45284ba254139",
+    "src/lib_core/CMakeLists.txt": "7cb586a76e7d67065947ea8f93ab2e5ba02ba33d21b85b5c3e47117666ff589a",
+    "src/lib_core/ExternalIndexerOutcome.h": "169bf33e330d84a91ccca00ef8511de378bc96f1712ebcb984444ea81515d847",
+    "src/lib_gui/qt/QtCoreApplication.cpp": "5c335d653ee1977541da220f21629b20b367e1a5166f0ef5e719698d9d28ab10",
+    "src/lib_gui/qt/view/QtDialogView.cpp": "1357bc62c6745e85ebba74959a0115f131c3eea8cbb2b73b16f105706e5be733",
+    "src/lib_gui/utility/utilityApp.cpp": "7188f8a15cdf50c8aa726cc67405215c4fe8ce3adab0d703c880beec7093d45f",
+    "src/test/CMakeLists.txt": "583e1a737c90be0877dae69d2fcd12ce57edb921d7cf7b9e8adbc5a0393d0e27",
+    "src/test/ExternalIndexerOutcomeTestSuite.cpp": "e3e918284c12b599189b1219e3e19aa426f2af3086d56af24f65424a0d678b24",
+    "src/test/UtilityTestSuite.cpp": "dd9b7bbe6fca6b4b7bfa353c0d4d967d1484aa4a6c4df9d38461db2cad209ec6",
+    "tests/contracts/test_models.py": "3663e3ea69b955be9bb21fa1ccdc016fb9cdab0d22667c6a43eefc149ab8529b",
+    "tests/core/external_indexer_outcome_test.cpp": "258a8eb4f8c9a96341104183452790e6955ae03e03f00e1a830e27ec8eb1ae29",
+    "tests/external_indexer/README.md": "0de08d1ade24903f37f29f2c84f605753f619e4f401f41f9be7cafbbc6e1e5de",
+    "tests/external_indexer/fixtures/driver.py": "4e23e693749250b037d636a96eb54ca5163e7787ea43ae76ef5e514e43b1e7fd",
+    "tests/external_indexer/fixtures/expected.json": "236d904f62db1e7166145b8dffd1820a61b332461878e84cc7619e9e079a8b5a",
+    "tests/external_indexer/harness.py": "46c29c66dd21c4da7a63dee4788e5054de7e321598c4ce8a69904c9a78d35689",
+    "tests/external_indexer/test_external_indexer.py": "56ee86934db4e89d2bafcc24c6ae9e0773ac6f73f0df4d05742ce68e377d3cc5"
+  },
+  "success_graph_comparisons": [
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/deleted.snapshot.json",
+      "after_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/deleted.snapshot.json",
+      "before_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+      "equal": true,
+      "language": "cxx",
+      "phase": "deleted"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/deleted-clean.snapshot.json",
+      "after_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/deleted-clean.snapshot.json",
+      "before_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+      "equal": true,
+      "language": "cxx",
+      "phase": "deleted-clean"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/initial.snapshot.json",
+      "after_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/initial.snapshot.json",
+      "before_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+      "equal": true,
+      "language": "cxx",
+      "phase": "initial"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/no-op.snapshot.json",
+      "after_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/no-op.snapshot.json",
+      "before_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+      "equal": true,
+      "language": "cxx",
+      "phase": "no-op"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/updated.snapshot.json",
+      "after_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/updated.snapshot.json",
+      "before_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "equal": true,
+      "language": "cxx",
+      "phase": "updated"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/updated-clean.snapshot.json",
+      "after_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/updated-clean.snapshot.json",
+      "before_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "equal": true,
+      "language": "cxx",
+      "phase": "updated-clean"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/cxx/updated-no-op.snapshot.json",
+      "after_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/cxx/updated-no-op.snapshot.json",
+      "before_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+      "equal": true,
+      "language": "cxx",
+      "phase": "updated-no-op"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/deleted.snapshot.json",
+      "after_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/deleted.snapshot.json",
+      "before_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+      "equal": true,
+      "language": "python",
+      "phase": "deleted"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/deleted-clean.snapshot.json",
+      "after_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/deleted-clean.snapshot.json",
+      "before_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+      "equal": true,
+      "language": "python",
+      "phase": "deleted-clean"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/initial.snapshot.json",
+      "after_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/initial.snapshot.json",
+      "before_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+      "equal": true,
+      "language": "python",
+      "phase": "initial"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/no-op.snapshot.json",
+      "after_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/no-op.snapshot.json",
+      "before_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+      "equal": true,
+      "language": "python",
+      "phase": "no-op"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/updated.snapshot.json",
+      "after_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/updated.snapshot.json",
+      "before_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "equal": true,
+      "language": "python",
+      "phase": "updated"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/updated-clean.snapshot.json",
+      "after_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/updated-clean.snapshot.json",
+      "before_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "equal": true,
+      "language": "python",
+      "phase": "updated-clean"
+    },
+    {
+      "after": "docs/reports/2026-10-30/008-external-indexer-outcomes/evidence/successful-toys/python/updated-no-op.snapshot.json",
+      "after_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "before": "docs/reports/2026-10-30/005-portable-core-and-verification/evidence/refactored/python/updated-no-op.snapshot.json",
+      "before_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+      "equal": true,
+      "language": "python",
+      "phase": "updated-no-op"
+    }
+  ],
+  "user_local_agent_review": "pending"
+}

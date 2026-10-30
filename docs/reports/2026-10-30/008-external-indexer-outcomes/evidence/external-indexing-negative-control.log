@@ -1,0 +1,104 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 173728] (Linux 6.18.55 amd64, N/A 17.0.18-internal x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /workspace/scratch/715c5c4089e4/Sourcetrail/docs/contracts/formal/ExternalIndexing.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module ExternalIndexing
+Starting... (2026-10-30 02:47:26)
+Computing initial states...
+Computed 2 initial states...
+Finished computing initial states: 4 distinct states generated at 2026-10-30 02:47:26.
+Error: Invariant NoPublicationAfterFailure is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ notification = "none"
+/\ succeeded = {}
+/\ outcomes = (a :> "pending" @@ b :> "pending")
+/\ counts = [attempted |-> 0, settled |-> 0, succeeded |-> 0, failed |-> 0]
+/\ attempted = {}
+/\ phase = "running"
+/\ cleaned = FALSE
+/\ settled = {}
+/\ failureSeen = FALSE
+/\ planned = {a, b}
+/\ failed = {}
+/\ candidate = "pending"
+
+State 2: <Next line 80, col 10 to line 80, col 36 of module ExternalIndexing>
+/\ notification = "none"
+/\ succeeded = {}
+/\ outcomes = (a :> "pending" @@ b :> "pending")
+/\ counts = [attempted |-> 1, settled |-> 0, succeeded |-> 0, failed |-> 0]
+/\ attempted = {a}
+/\ phase = "running"
+/\ cleaned = FALSE
+/\ settled = {}
+/\ failureSeen = FALSE
+/\ planned = {a, b}
+/\ failed = {}
+/\ candidate = "pending"
+
+State 3: <Next line 80, col 10 to line 80, col 36 of module ExternalIndexing>
+/\ notification = "none"
+/\ succeeded = {}
+/\ outcomes = (a :> "pending" @@ b :> "pending")
+/\ counts = [attempted |-> 2, settled |-> 0, succeeded |-> 0, failed |-> 0]
+/\ attempted = {a, b}
+/\ phase = "running"
+/\ cleaned = FALSE
+/\ settled = {}
+/\ failureSeen = FALSE
+/\ planned = {a, b}
+/\ failed = {}
+/\ candidate = "pending"
+
+State 4: <Next line 81, col 13 to line 81, col 78 of module ExternalIndexing>
+/\ notification = "none"
+/\ succeeded = {}
+/\ outcomes = (a :> "transport-error" @@ b :> "pending")
+/\ counts = [attempted |-> 2, settled |-> 1, succeeded |-> 0, failed |-> 1]
+/\ attempted = {a, b}
+/\ phase = "running"
+/\ cleaned = FALSE
+/\ settled = {a}
+/\ failureSeen = TRUE
+/\ planned = {a, b}
+/\ failed = {a}
+/\ candidate = "pending"
+
+State 5: <Next line 81, col 13 to line 81, col 78 of module ExternalIndexing>
+/\ notification = "none"
+/\ succeeded = {b}
+/\ outcomes = (a :> "transport-error" @@ b :> "success")
+/\ counts = [attempted |-> 2, settled |-> 2, succeeded |-> 1, failed |-> 1]
+/\ attempted = {a, b}
+/\ phase = "running"
+/\ cleaned = FALSE
+/\ settled = {a, b}
+/\ failureSeen = FALSE
+/\ planned = {a, b}
+/\ failed = {a}
+/\ candidate = "pending"
+
+State 6: <Finalize line 58, col 5 to line 63, col 64 of module ExternalIndexing>
+/\ notification = "none"
+/\ succeeded = {b}
+/\ outcomes = (a :> "transport-error" @@ b :> "success")
+/\ counts = [attempted |-> 2, settled |-> 2, succeeded |-> 1, failed |-> 1]
+/\ attempted = {a, b}
+/\ phase = "finalized"
+/\ cleaned = FALSE
+/\ settled = {a, b}
+/\ failureSeen = FALSE
+/\ planned = {a, b}
+/\ failed = {a}
+/\ candidate = "published"
+
+270 states generated, 178 distinct states found, 88 states left on queue.
+The depth of the complete state graph search is 6.
+The average outdegree of the complete state graph is 2 (minimum is 0, the maximum 9 and the 95th percentile is 6).
+Finished in 00s at (2026-10-30 02:47:26)

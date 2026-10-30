@@ -33,4 +33,13 @@ if(BUILD_TESTING)
         LABELS "cpp;contract;portability"
         TIMEOUT 60
     )
+    add_executable(core-execution-contracts
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../tests/core/external_indexer_outcome_test.cpp"
+    )
+    target_link_libraries(core-execution-contracts PRIVATE Sourcetrail_core)
+    add_test(NAME core-execution-contracts COMMAND core-execution-contracts)
+    set_tests_properties(core-execution-contracts PROPERTIES
+        LABELS "cpp;contract;portability"
+        TIMEOUT 60
+    )
 endif()

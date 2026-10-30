@@ -1,0 +1,463 @@
+{
+  "binary_sha256": "4cf3f921f83c741cab2f305359ea92950a9c689e2bb021dded3b420a5f703dbc",
+  "binary_source_revision": null,
+  "binary_source_revision_provenance": "caller-declared; not inferred from the working tree",
+  "languages": {
+    "cxx": {
+      "baseline_equalities": 7,
+      "equalities": [
+        {
+          "after": "no-op",
+          "before": "initial",
+          "equal": true
+        },
+        {
+          "after": "deleted-clean",
+          "before": "deleted",
+          "equal": true
+        },
+        {
+          "after": "updated-clean",
+          "before": "updated",
+          "equal": true
+        },
+        {
+          "after": "updated-no-op",
+          "before": "updated",
+          "equal": true
+        }
+      ],
+      "failures": [],
+      "fixture_sha256": {
+        "expected.json": "30bffb31b73288c3bfdbf75c91e608788111f9bb595318939f7d681b61ceb3d1",
+        "initial/include/api.h": "197a1b13eb9793a4d2618003d4f7c72b364bffc0fee4635341e8f7e7444d3be5",
+        "initial/src/library.cpp": "461cb572dc91325b5385c8a549e83423f9aa35283c350de6b2144b1b2d4a8d59",
+        "initial/src/main.cpp": "bd09b755b908747a945ae4ddfd2a0ee52d5c65db4353465d2552cdf492fb2ff9",
+        "initial/src/obsolete.cpp": "46b7ae19064f5c3ed724ef7af42a715cd66257dd30bf649814d840c8bd6d2f2d",
+        "project.srctrlprj": "3610cdecd460ae821e5c1682662aab7ce0970111e20653ec394a3dd56af8d9d2",
+        "updated/include/api.h": "5ae9eac3c76c851b578b3c60f4d5453001232a82d1c77abdb70a88e1ccfb9b98",
+        "updated/src/library.cpp": "749c844ac25e8e5dbd5aea9f6c63a7f79476a8c5d5d2481a6518ee72a61ff1e9",
+        "updated/src/main.cpp": "e34c3a3a0b83950cbe9191d10372a362df182ceef7c7515950c2daa5fab34a93"
+      },
+      "language": "cxx",
+      "language_profile": "cxx-clang11-core",
+      "phases": {
+        "deleted": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 7,
+            "forbidden_names": 1,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 3
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 12,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 11,
+            "locations": 59,
+            "nodes": 10,
+            "occurrences": 59,
+            "symbols": 7
+          },
+          "snapshot": "cxx/deleted.snapshot.json",
+          "snapshot_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+          "state": "deleted"
+        },
+        "deleted-clean": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 7,
+            "forbidden_names": 1,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 3
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 12,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 11,
+            "locations": 59,
+            "nodes": 10,
+            "occurrences": 59,
+            "symbols": 7
+          },
+          "snapshot": "cxx/deleted-clean.snapshot.json",
+          "snapshot_sha256": "766fc2c5e9c7a3a670bb4b95f23f981621dda1c65ac69966067474907652867b",
+          "state": "deleted"
+        },
+        "initial": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 8,
+            "forbidden_names": 0,
+            "indexed_files": 4,
+            "occurrences": 2,
+            "symbols": 4
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 15,
+            "errors": 0,
+            "file_contents": 4,
+            "files": 4,
+            "local_symbols": 12,
+            "locations": 68,
+            "nodes": 12,
+            "occurrences": 68,
+            "symbols": 8
+          },
+          "snapshot": "cxx/initial.snapshot.json",
+          "snapshot_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+          "state": "initial"
+        },
+        "no-op": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 8,
+            "forbidden_names": 0,
+            "indexed_files": 4,
+            "occurrences": 2,
+            "symbols": 4
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 15,
+            "errors": 0,
+            "file_contents": 4,
+            "files": 4,
+            "local_symbols": 12,
+            "locations": 68,
+            "nodes": 12,
+            "occurrences": 68,
+            "symbols": 8
+          },
+          "snapshot": "cxx/no-op.snapshot.json",
+          "snapshot_sha256": "b347ae742ca7bc9c0cca640a9c051a4d8365294b77f3d0dfcebd6354570d5c5b",
+          "state": "initial"
+        },
+        "updated": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 7,
+            "forbidden_names": 2,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 3
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 12,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 11,
+            "locations": 59,
+            "nodes": 10,
+            "occurrences": 59,
+            "symbols": 7
+          },
+          "snapshot": "cxx/updated.snapshot.json",
+          "snapshot_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+          "state": "updated"
+        },
+        "updated-clean": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 7,
+            "forbidden_names": 2,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 3
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 12,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 11,
+            "locations": 59,
+            "nodes": 10,
+            "occurrences": 59,
+            "symbols": 7
+          },
+          "snapshot": "cxx/updated-clean.snapshot.json",
+          "snapshot_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+          "state": "updated"
+        },
+        "updated-no-op": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 7,
+            "forbidden_names": 2,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 3
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 12,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 11,
+            "locations": 59,
+            "nodes": 10,
+            "occurrences": 59,
+            "symbols": 7
+          },
+          "snapshot": "cxx/updated-no-op.snapshot.json",
+          "snapshot_sha256": "18ba7bfba403bef74c2114f35e622d51af73c85955b4ba9722c33d9c6112b980",
+          "state": "updated"
+        }
+      },
+      "toy_id": "TOY-CXX-001"
+    },
+    "python": {
+      "baseline_equalities": 7,
+      "equalities": [
+        {
+          "after": "no-op",
+          "before": "initial",
+          "equal": true
+        },
+        {
+          "after": "deleted-clean",
+          "before": "deleted",
+          "equal": true
+        },
+        {
+          "after": "updated-clean",
+          "before": "updated",
+          "equal": true
+        },
+        {
+          "after": "updated-no-op",
+          "before": "updated",
+          "equal": true
+        }
+      ],
+      "failures": [],
+      "fixture_sha256": {
+        "expected.json": "5415b6c587365a94036a0b9b2fb09672b2619e6919124d59e128bff62dfc7111",
+        "initial/first/keeper.py": "386fcb3ef8d511446b23b1c508b30d78d84e2489016e9f7bcf7e8bf94f022e5f",
+        "initial/second/library.py": "f3b24b75e03fcb7293880852fc4b6b489477bce64f35a1073b31926d6f820f61",
+        "initial/second/main.py": "67e1bb83d9250e2e7c6769d21251d4ec21cf7a87c4ecc0ecddb2ab3548ccfee8",
+        "initial/second/obsolete.py": "2287efca897c733fab3c2bc877ae62d18ff2395f41cf7ad6bc7538978be520f7",
+        "project.srctrlprj": "987cf33a3205260abfd275abe13610a9acc4929deb8b48bcba3042d29fd949d5",
+        "updated/first/keeper.py": "386fcb3ef8d511446b23b1c508b30d78d84e2489016e9f7bcf7e8bf94f022e5f",
+        "updated/second/library.py": "14002a3cbf91a9c2c088e643316475717f0b5ca3464b62b25b38fb050a4d5077",
+        "updated/second/main.py": "b607e81e99eaa699311f6fe6690cda3032989aab1cca738cd889751716ab498a"
+      },
+      "language": "python",
+      "language_profile": "python-jedi017-full",
+      "phases": {
+        "deleted": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 2,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 7
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 13,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 3,
+            "locations": 26,
+            "nodes": 13,
+            "occurrences": 26,
+            "symbols": 10
+          },
+          "snapshot": "python/deleted.snapshot.json",
+          "snapshot_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+          "state": "deleted"
+        },
+        "deleted-clean": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 2,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 7
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 13,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 3,
+            "locations": 26,
+            "nodes": 13,
+            "occurrences": 26,
+            "symbols": 10
+          },
+          "snapshot": "python/deleted-clean.snapshot.json",
+          "snapshot_sha256": "ff2a88e3ed24b45ff7c053ceda2bba66e894cd418484a54cbe5b930e8904b8e2",
+          "state": "deleted"
+        },
+        "initial": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 0,
+            "indexed_files": 4,
+            "occurrences": 2,
+            "symbols": 8
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 14,
+            "errors": 0,
+            "file_contents": 4,
+            "files": 4,
+            "local_symbols": 3,
+            "locations": 28,
+            "nodes": 16,
+            "occurrences": 28,
+            "symbols": 12
+          },
+          "snapshot": "python/initial.snapshot.json",
+          "snapshot_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+          "state": "initial"
+        },
+        "no-op": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 0,
+            "indexed_files": 4,
+            "occurrences": 2,
+            "symbols": 8
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 14,
+            "errors": 0,
+            "file_contents": 4,
+            "files": 4,
+            "local_symbols": 3,
+            "locations": 28,
+            "nodes": 16,
+            "occurrences": 28,
+            "symbols": 12
+          },
+          "snapshot": "python/no-op.snapshot.json",
+          "snapshot_sha256": "a3b719eb860dc0c86787dafbb9829bfc4238b209d3370fad4e54a2b48e2a467e",
+          "state": "initial"
+        },
+        "updated": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 3,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 7
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 13,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 3,
+            "locations": 26,
+            "nodes": 13,
+            "occurrences": 26,
+            "symbols": 10
+          },
+          "snapshot": "python/updated.snapshot.json",
+          "snapshot_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+          "state": "updated"
+        },
+        "updated-clean": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 3,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 7
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 13,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 3,
+            "locations": 26,
+            "nodes": 13,
+            "occurrences": 26,
+            "symbols": 10
+          },
+          "snapshot": "python/updated-clean.snapshot.json",
+          "snapshot_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+          "state": "updated"
+        },
+        "updated-no-op": {
+          "checked_facts": {
+            "diagnostics": 0,
+            "edges": 3,
+            "forbidden_names": 3,
+            "indexed_files": 3,
+            "occurrences": 2,
+            "symbols": 7
+          },
+          "counts": {
+            "access": 0,
+            "components": 0,
+            "edges": 13,
+            "errors": 0,
+            "file_contents": 3,
+            "files": 3,
+            "local_symbols": 3,
+            "locations": 26,
+            "nodes": 13,
+            "occurrences": 26,
+            "symbols": 10
+          },
+          "snapshot": "python/updated-no-op.snapshot.json",
+          "snapshot_sha256": "d19a2ebcc966e8d4300c8ab95974196356f6f38400804dc80f6c59ea68bd6215",
+          "state": "updated"
+        }
+      },
+      "toy_id": "TOY-PYTHON-001"
+    }
+  },
+  "python_environment": "/workspace/scratch/715c5c4089e4/Sourcetrail/.pixi/envs/python-parser/bin/python3.8",
+  "schema_version": 1,
+  "snapshot_profile": "schema25-exact-v1",
+  "status": "passed",
+  "verification_tools_sha256": {
+    "script/verification/semantic_graph.py": "5bf9c1f0cd90027af55be427a5a428f567d65855e7eef991241de9b298dcdbbc",
+    "tests/toy_projects/runner.py": "97383cdd1af176606ff1d1d3c10c831e094edc1286b3a3dd9f4b04d21ed9e616"
+  }
+}

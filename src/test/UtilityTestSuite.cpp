@@ -21,6 +21,26 @@ TEST_CASE("trim blank spaces of wstring")
 }
 
 #ifndef _WIN32
+TEST_CASE("process logging handles silent and newline terminated output", "[contract][execution][process]")
+{
+	std::wstring script;
+	std::wstring expected;
+	SECTION("silent child")
+	{
+		script = L":";
+	}
+	SECTION("EOF after a complete logged line")
+	{
+		script = L"printf 'finished\\n'";
+		expected = L"finished";
+	}
+	const utility::ProcessOutput result = utility::executeProcess(
+		L"/bin/sh", {L"-c", script}, FilePath(), false, 1000, true);
+	REQUIRE(result.exitCode == 0);
+	REQUIRE(result.error.empty());
+	REQUIRE(result.output == expected);
+}
+
 TEST_CASE(
 	"process preserves Unicode executable arguments and working directory",
 	"[cxx][regression][process]")

@@ -8,12 +8,12 @@
 | --- | --- | --- |
 | 0: 基準の固定 | 既存挙動を再現する | pixi の依存固定、C++／Python の実アプリ試験、比較の観測範囲を記録 |
 | 1: 意味と責務の分離 | 整理の単位を小さくする | `RefreshPlan` の抽出に続き、集合計画とコマンド変数展開を標準ライブラリーだけの `src/lib_core` へ分離。既存型・I/O はアダプターに残し、人工対象で実索引の観測を比較する |
-| 2: アダプターの境界 | 解析エンジンを更新可能にする | 版・構文・能力・位置規約・実行失敗の契約を、実装と適合試験へ接続 |
+| 2: アダプターの境界 | 解析エンジンを更新可能にする | 外部実行の起動・非ゼロ終了を集約し、失敗候補の破棄とCLI終了へ接続。版・構文・能力・位置規約・出力の意味検査は後続 |
 | 3: 既存言語の更新 | 既存能力の保持と新能力の追加 | Python と C++ を別変更で更新し、共通範囲比較と新機能の期待値を両方通す |
 | 4: Rust の導入 | 共通の探索操作を新言語へ広げる | Cargo 文脈、記号の写像、更新・診断・位置の最小能力を実装し適合試験を通す |
 | 5: 公開・問い合わせの整理 | 操作全体と障害耐性を保つ | DB 公開、キャッシュ、検索・経路・UI、ブックマークを独立した契約単位にする |
 
-段階 2 以降の実装は、この文書があるだけでは完了しない。本変更の試験・形式モデルの成功から、新版 Python／C++ や Rust の対応完了を推論してはいけない。
+段階 2 は [外部実行結果の契約](../contracts/external-indexing.md)から着手した。実装した範囲は外部コマンドの起動・非ゼロ終了と、その失敗を終了処理へ渡す境界である。段階 2 の残りと段階 3 以降は未完了であり、試験・形式モデルの成功から新版 Python／C++ や Rust の対応完了を推論しない。
 
 段階 1 の具体的な境界は [ADR-0006](../adr/0006-portable-refresh-core.md)、変更前後に使用する入力と期待は [トイプロブレム](../contracts/toy-problems.md) を参照する。標準ライブラリーだけのコアを別環境からコンパイルできることと、解析エンジン・GUI・配布の移植が終わったことは別である。
 
@@ -25,7 +25,8 @@
 | --- | --- | --- | --- |
 | プロジェクト設定・Source Group | [ProjectSettings.cpp](../../src/lib/settings/ProjectSettings.cpp), [SourceGroup.cpp](../../src/lib/project/SourceGroup.cpp) | ソース確認、設定・列挙境界を記述 | 保存／再読込／移動／除外／重複 |
 | 更新計画 | [RefreshPlanner.h](../../src/lib_core/RefreshPlanner.h), [RefreshPlan.cpp](../../src/lib/project/RefreshPlan.cpp) | 値処理と依存問い合わせアダプターを分離、単独試験・契約・有限モデル | 入力分類と同一依存スナップショットの保証は別単位 |
-| 外部コマンド構築 | [IndexerCommandTemplate.h](../../src/lib_core/IndexerCommandTemplate.h), [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp) | 変数展開を分離、引数境界・展開順・遅延 DB 切り替えを保持 | 実行失敗・取消・版交渉の再設計は別単位 |
+| 外部コマンド構築 | [IndexerCommandTemplate.h](../../src/lib_core/IndexerCommandTemplate.h), [IndexerCommandCustom.cpp](../../src/lib/data/indexer/IndexerCommandCustom.cpp) | 変数展開を分離、引数境界・展開順・遅延 DB 切り替えを保持 | エンジン版・出力能力の交渉 |
+| 外部実行結果 | [ExternalIndexerOutcome.h](../../src/lib_core/ExternalIndexerOutcome.h), [実行結果の契約](../contracts/external-indexing.md) | 起動・非ゼロ終了の分類、実行単位の集約、失敗候補の破棄、CLI終了を接続 | タイムアウト・取消・子孫回収・出力の意味検査 |
 | 更新時刻・ファイル内容 | [RefreshInfoGenerator.cpp](../../src/lib/project/RefreshInfoGenerator.cpp) | 条件を明記 | 同時刻・逆行時刻・削除・編集競合 |
 | C++ 解析 | [lib_cxx](../../src/lib_cxx/) | 基準試験と拡張点整理 | 新規構文・異なるビルド構成 |
 | Python 解析 | [lib_python](../../src/lib_python/), [外部処理](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp) | 基準試験、後処理・環境分離を記述 | 新版構文、import、曖昧性 |
@@ -34,7 +35,7 @@
 | 中間表現・統合 | [Storage.cpp](../../src/lib/data/storage/Storage.cpp), [IntermediateStorage.cpp](../../src/lib/data/storage/IntermediateStorage.cpp) | ID 対応と付加情報を確認 | 注入順の変更、欠損・例外 |
 | 永続化・スキーマ | [SqliteIndexStorage.cpp](../../src/lib/data/storage/sqlite/SqliteIndexStorage.cpp) | 全テーブルの意味を整理 | スキーマ移行、破損入力 |
 | ファイル削除時の所属関係 | [StorageCleanupContractTestSuite.cpp](../../src/test/StorageCleanupContractTestSuite.cpp), [トイプロブレム](../contracts/toy-problems.md) | 既存の所属辺欠落を検出し、両端が残る所属辺を保持する限定修正 | 他の関係種類・巨大入力の一般保証は含めない |
-| 公開・取消・復旧 | [Project.cpp](../../src/lib/project/Project.cpp), [TaskFinishParsing.cpp](../../src/lib/data/TaskFinishParsing.cpp) | 非原子的な公開箇所を記録 | 障害注入と復旧手順 |
+| 公開・取消・復旧 | [Project.cpp](../../src/lib/project/Project.cpp), [TaskFinishParsing.cpp](../../src/lib/data/TaskFinishParsing.cpp) | 外部実行失敗が判明した候補を破棄。採用中の非原子的な公開箇所は残る | 公開中の障害注入と復旧手順、取消 |
 | ワーカー・IPC | [interprocess](../../src/lib/data/indexer/interprocess/) | 拡張時の経路を確認 | 中断、ワーカー終了、版不一致 |
 | 検索・グラフ・コード | [StorageAccess.h](../../src/lib/data/storage/StorageAccess.h) | 問い合わせ表を作成 | 意味単位の問い合わせ適合試験 |
 | キャッシュ | [StorageCache.cpp](../../src/lib/data/storage/StorageCache.cpp) | 再構築と診断中の内容選択を確認 | 更新前後・取消後の古い結果の排除 |
@@ -52,7 +53,7 @@
 | GAP-002 | 更新時刻に依存する変更検出 | 高 | 条件を確認、完全性は未保証 | 下記 |
 | GAP-003 | 列位置と文字コードの規約 | 高 | 横断契約が未整備 | 下記 |
 | GAP-004 | Source Group の包含・所属判定と部分消去 | 高 | 本変更で修正、回帰試験を追加 | 下記 |
-| GAP-005 | 外部索引器の失敗と終了状態 | 高 | 結果の意味検査が必要 | 下記 |
+| GAP-005 | 外部索引器の失敗と終了状態 | 高 | 起動・非ゼロ終了の伝播を実装。タイムアウト・取消・出力検査は未完了 | 下記 |
 | GAP-006 | Python／C++ の新構文 | 中 | 新しい対応能力は未実装 | 下記 |
 | GAP-007 | Rust アダプター | 中 | 設計・実装待ち | 下記 |
 | GAP-008 | 検索・UI の観測契約 | 高 | DB 比較では範囲外の部分あり | 下記 |
@@ -71,7 +72,7 @@
 
 `didFileChange` は保存時刻より新しい mtime の時だけ内容比較を行う。同じ時刻・過去時刻で内容を置き換えた場合を一般に拾う仕様ではない。固定版の外部 Python 索引器は入力の mtime ではなく記録時の時刻を保存するため、コピーした試験データの古い mtime に数秒足すだけでは条件を満たさない。今回の Python E2E は元の mtime と直前の索引化後の現在時刻の両方より新しい時刻に設定する。入力条件の修正であり、この検出方式の制約は残る。[時刻の根拠と試験](indexing-lifecycle.md#純粋計画の外に残る判定)
 
-次の作業は、期待する変更検出の契約を決め、ハッシュ等を使う必要とコストを評価すること。受入条件は、同時刻変更、時刻逆行、内容不変の touch、削除、入力読み込み中の変更を、期待する扱いに分類できることである。[RefreshInfoGenerator.cpp](../../src/lib/project/RefreshInfoGenerator.cpp)
+外部実行結果の整理後も、この制約は残る。新しい解析エンジンの更新試験を受け入れる前に、入力分類を独立した検証単位として扱う。次の作業は、期待する変更検出の契約を決め、ハッシュ等を使う必要とコストを評価すること。受入条件は、同時刻変更、時刻逆行、内容不変の touch、削除、入力読み込み中の変更を、期待する扱いに分類できることである。[RefreshInfoGenerator.cpp](../../src/lib/project/RefreshInfoGenerator.cpp)
 
 ### GAP-003: 列位置と文字コードの規約
 
@@ -93,9 +94,13 @@
 
 ### GAP-005: 外部索引器の失敗と終了状態
 
-外部コマンドの非ゼロ終了は記録されるが、現在の実行タスクではコマンド後の処理数も増える。CLI の終了だけを「意味のある完全な索引がある」と解釈できない。
+変更前は非ゼロ終了を記録した後も索引済み数へ加算し、終了処理に実行失敗が渡らなかった。`EXECUTION-001` では、プロセスヘルパーの実行エラーと非ゼロ終了を成功数へ含めず、一回の実行で失敗を保持する。失敗候補の破棄・更新段階の解除・終了通知を完了し、CLIは非ゼロ終了を返す。実行失敗が判明した候補を採用しない範囲の変更である。[ADR-0007](../adr/0007-external-indexer-outcomes.md)、[外部実行の契約](../contracts/external-indexing.md)
 
-次の作業は、実行失敗・構文診断・部分結果・取消・タイムアウトの状態を分離すること。受入条件は、起動不可、途中失敗、空出力、破損 DB、未対応版で、適切な結果状態と復旧可能な索引を残すことである。[TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp)
+`GAP-005` 全体は未完了である。stderr付きの終了コード0と書き込みなしの終了コード0は、プロセス成功という既存の分類を保つ。CLIの終了コードだけで意味的に完全な索引があるとは判断しない。破損DB、空出力、未対応保存版・エンジン版を拒否するには、能力と出力の契約を接続する必要がある。
+
+タイムアウトと取消も別途確認する。現行の [executeProcess](../../src/lib_gui/utility/utilityApp.cpp) は `ios.run()` によるパイプ読込を行ってからタイムアウト付き待機へ進む。この呼び出し順はソースで確認したが、特定のハングを再現したという証跡ではない。タイマー・子プロセス終了・パイプ読込・子孫回収を含む実験が必要になる。
+
+次の受入条件は、取消・期限超過・破損出力・未対応版をそれぞれ別の人工対象で再現し、結果状態、候補の処分、既存索引の保持、再試行可能な終了を確認することである。構文診断の有無とプロセス失敗を一つのフラグにまとめない。[TaskExecuteCustomCommands.cpp](../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp)
 
 ### GAP-006: Python／C++ の新構文
 
@@ -125,7 +130,7 @@ SQLite の意味比較だけでは、候補順位、フィルター、経路の�
 
 ### GAP-010: 並行処理とスナップショット
 
-今回の更新モデルは固定された依存集合を仮定する。ワーカーの停止、キュー完了、取消、注入順、途中の入力変更、キャッシュの切り替えは検証していない。
+更新計画モデルは固定された依存集合を仮定する。外部実行結果のモデルではコマンドの開始・結果確定の順序と失敗保持を扱うが、内部ワーカーの停止、キュー完了、取消、DB注入順、途中の入力変更、キャッシュの切り替えは検証していない。外部実行状態への同期追加を、索引処理全体の並行安全性の証明へ広げない。
 
 次の作業は、実行順序を観測できるイベント記録と、停止・再試行の状態機械を定義すること。受入条件は、欠落・二重注入・古いキャッシュを検知し、モデルの前提を実装側のどの箇所が保証するか追跡できることである。[Project.cpp](../../src/lib/project/Project.cpp)、[interprocess](../../src/lib/data/indexer/interprocess/)
 

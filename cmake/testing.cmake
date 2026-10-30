@@ -5,6 +5,18 @@ endif()
 
 find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
 
+if(BUILD_CXX_LANGUAGE_PACKAGE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    add_test(NAME external-indexer-e2e
+        COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/external_indexer"
+    )
+    set_tests_properties(external-indexer-e2e PROPERTIES
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;SOURCETRAIL_BINARY=$<TARGET_FILE:${APP_PROJECT_NAME}>;SOURCETRAIL_EXTERNAL_OUTPUT=${CMAKE_BINARY_DIR}/../external-indexer/current"
+        LABELS "cpp;python;contract;e2e;external-indexer"
+        TIMEOUT 300
+    )
+endif()
+
 if(BUILD_CXX_LANGUAGE_PACKAGE AND BUILD_PYTHON_LANGUAGE_PACKAGE)
     add_test(NAME toy-projects
         COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/toy_projects"

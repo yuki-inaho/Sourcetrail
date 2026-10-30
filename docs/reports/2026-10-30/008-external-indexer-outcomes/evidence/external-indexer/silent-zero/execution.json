@@ -1,0 +1,32 @@
+{
+  "command": [
+    "/workspace/scratch/715c5c4089e4/Sourcetrail/build/pixi/app/Sourcetrail",
+    "index",
+    "--full",
+    "/tmp/external indexer 日本語 kxefbhfr/silent-zero/external.srctrlprj"
+  ],
+  "database_state": "schema-25",
+  "indexed_counts": [
+    1,
+    1
+  ],
+  "indexed_files": 0,
+  "log": "execution.log",
+  "log_sha256": "e905681245980e97d029a788bbcd8648038d6926129a9661272b49339249fc8e",
+  "node_count": 0,
+  "receipts": [
+    {
+      "arguments": [],
+      "cwd": "/tmp/external indexer 日本語 kxefbhfr/silent-zero",
+      "exit_code": 0,
+      "mode": "silent-zero",
+      "pid": 172287,
+      "source": "/tmp/external indexer 日本語 kxefbhfr/silent-zero/commands 日本語 with spaces/silent.toy"
+    }
+  ],
+  "returncode": 0,
+  "snapshot": "execution.snapshot.json",
+  "snapshot_sha256": "80dda8818d7c93f47c330176b14ae782e3cb6ab52af0d47dee126c37498fa6fd",
+  "stderr_warning_observed": false,
+  "temporary_databases": []
+}

@@ -8,6 +8,7 @@
 | --- | --- |
 | 何をするソフトで、何を保つ必要があるか | [全体構成](architecture/overview.md)、[概念・用語・内部表現](architecture/domain-model.md) |
 | 索引化と更新の処理順・責務 | [索引化のライフサイクル](architecture/indexing-lifecycle.md) |
+| 外部索引器が失敗したときの件数・DB・終了コード | [外部実行結果の契約](contracts/external-indexing.md)、[ADR-0007](adr/0007-external-indexer-outcomes.md) |
 | 保存形式、検索、グラフ、位置、ブックマーク | [保存と問い合わせ](architecture/storage-and-query.md) |
 | 同じ意味を保ったことをどう判断するか | [契約と観測プロファイル](contracts/README.md)、[機械可読の契約台帳](contracts/catalog.json) |
 | 人工的な小さい対象を何のために設計したか | [トイプロブレムの仕様と検査方法](contracts/toy-problems.md)、[実行対象・期待値](../tests/toy_projects/README.md) |
@@ -28,7 +29,7 @@ pixi install --locked --all
 pixi run --locked verify
 ```
 
-`verify` はアプリケーションのビルドと既存／回帰／E2E／トイ対象／契約テスト、文書の参照整合性、TLA+の有限モデル検査、独立したC++コアとRust参照実装の適合試験を実行する。Javaは `formal`、C++／Rustの値契約は `portability` の独立環境に固定する。TLCは公式リリースの固定ハッシュを確認して取得する。
+`verify` はアプリケーションのビルドと既存／回帰／E2E／トイ対象／契約テスト、外部索引器の人工障害対象、文書の参照整合性、TLA+の有限モデル検査、独立したC++コアとRust参照実装の適合試験を実行する。Javaは `formal`、C++／Rustの値契約は `portability` の独立環境に固定する。TLCは公式リリースの固定ハッシュを確認して取得する。
 
 ```sh
 pixi run --locked test-contracts

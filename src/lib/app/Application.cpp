@@ -235,7 +235,7 @@ void Application::handleMessage(MessageIndexingFinished* message)
 	}
 	else
 	{
-		MessageQuitApplication().dispatch();
+		MessageQuitApplication(message->exitCode).dispatch();
 	}
 }
 
