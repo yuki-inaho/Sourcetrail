@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Linux-x86_64-conda-linux-gnu-c++"
+	tests="5"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname="d8886e63630a"
+	time="0"
+	timestamp="2026-10-31T16:26:07"
+	>
+	<testcase name="core-input-contracts" classname="core-input-contracts" time="0.00171117" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>INPUT-001: 44 content, empty and failure observations passed
+</system-out>
+	</testcase>
+	<testcase name="core-location-contracts" classname="core-location-contracts" time="0.0018048" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>LOCATION-001: 8 authored ranges and 14 invalid inputs passed
+</system-out>
+	</testcase>
+	<testcase name="core-refresh-contracts" classname="core-refresh-contracts" time="0.0243878" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>Refresh core: named examples, opaque identity, and 32768 bounded input snapshots passed.
+</system-out>
+	</testcase>
+	<testcase name="core-command-contracts" classname="core-command-contracts" time="0.00225547" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>COMMAND-001: 5 independent command-template scenarios passed
+</system-out>
+	</testcase>
+	<testcase name="core-execution-contracts" classname="core-execution-contracts" time="0.00219438" status="run">
+		<properties>
+			<property name="cmake_labels" value="contract;cpp;portability"/>
+		</properties>
+		<system-out>EXECUTION-001: classification matrix, 162 completion orders and lifecycle controls passed
+</system-out>
+	</testcase>
+</testsuite>

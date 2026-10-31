@@ -23,6 +23,7 @@ add_files(
 	FileSystemTestSuite.cpp
 	GraphTestSuite.cpp
 	HierarchyCacheTestSuite.cpp
+	InputObservationTestSuite.cpp
 	JavaIndexSampleProjectsTestSuite.cpp
 	JavaParserTestSuite.cpp
 	LogManagerTestSuite.cpp
@@ -30,6 +31,7 @@ add_files(
 	MatrixBaseTestSuite.cpp
 	MatrixDynamicBaseTestSuite.cpp
 	MessageQueueTestSuite.cpp
+	ModernSourceGroupTestSuite.cpp
 	NetworkProtocolHelperTestSuite.cpp
 	PythonIndexerTestSuite.cpp
 	RefreshInfoGeneratorTestSuite.cpp

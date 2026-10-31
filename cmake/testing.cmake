@@ -18,6 +18,20 @@ if(BUILD_CXX_LANGUAGE_PACKAGE AND CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 
 if(BUILD_CXX_LANGUAGE_PACKAGE AND BUILD_PYTHON_LANGUAGE_PACKAGE)
+    # pytest creates basetemp itself, but requires its parent to exist on a
+    # clean checkout as well as when a previous report happened to create it.
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/../input-observation")
+    add_test(NAME input-observation-e2e
+        COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/input_observation"
+            "--basetemp=${CMAKE_BINARY_DIR}/../input-observation/current"
+            "--junitxml=${CMAKE_BINARY_DIR}/../input-observation/results.xml"
+    )
+    set_tests_properties(input-observation-e2e PROPERTIES
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        ENVIRONMENT "QT_QPA_PLATFORM=offscreen;SOURCETRAIL_BINARY=$<TARGET_FILE:${APP_PROJECT_NAME}>"
+        LABELS "cpp;python;contract;e2e;input-observation"
+        TIMEOUT 600
+    )
     add_test(NAME toy-projects
         COMMAND "${Python3_EXECUTABLE}" -m pytest -q "${CMAKE_SOURCE_DIR}/tests/toy_projects"
     )

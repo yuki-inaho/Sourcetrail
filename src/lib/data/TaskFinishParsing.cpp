@@ -54,7 +54,8 @@ Task::TaskState TaskFinishParsing::doUpdate(std::shared_ptr<Blackboard> blackboa
 			L"Indexing failed: " + std::to_wstring(indexedSourceFileCount) + L"/" +
 				std::to_wstring(sourceFileCount) + L" source files indexed; " +
 				std::to_wstring(outcome.failed) +
-				L" external commands failed. Discarding temporary index.",
+				L" external commands failed; " + std::to_wstring(outcome.invalidOutputs) +
+				L" invalid outputs. Discarding temporary index.",
 			true,
 			false)
 			.dispatch();

@@ -1,0 +1,5 @@
+........................................................................ [ 45%]
+........................................................................ [ 90%]
+................                                                         [100%]
+- generated xml file: /workspace/scratch/b7462e898297/Sourcetrail/build/modern-indexers/integration-review-after.xml -
+160 passed in 10.12s

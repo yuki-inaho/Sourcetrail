@@ -160,6 +160,8 @@ public:
 
 	std::shared_ptr<TextAccess> getFileContent(const FilePath& filePath, bool showsErrors) const override;
 	bool hasContentForFile(const FilePath& filePath) const;
+	sourcetrail::core::SourceContent tryGetStoredFileContent(const FilePath& filePath) const;
+	bool normalizePythonSourceLocations(const std::set<FilePath>& sourceFiles, std::string& error);
 
 	FileInfo getFileInfoForFileId(Id id) const override;
 

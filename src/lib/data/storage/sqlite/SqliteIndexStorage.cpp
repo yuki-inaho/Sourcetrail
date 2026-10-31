@@ -1,6 +1,7 @@
 #include "SqliteIndexStorage.h"
 
 #include <sstream>
+#include <limits>
 #include <unordered_map>
 
 #include "Edge.h"
@@ -9,6 +10,9 @@
 #include "SourceLocationCollection.h"
 #include "SourceLocationFile.h"
 #include "TextAccess.h"
+#include "SourceChange.h"
+#include "Utf8SourceLocationMap.h"
+#include "NodeKind.h"
 #include "logging.h"
 #include "utilityString.h"
 
@@ -544,6 +548,17 @@ void SqliteIndexStorage::removeElementsWithLocationInFiles(
 		updateStatusCallback(4);
 	}
 
+	// Built-in types have no source declaration. Remember only built-ins touched
+	// by this clearing operation before their last incoming edge disappears.
+	executeStatement("DROP TABLE IF EXISTS temp.builtin_id_to_check;");
+	executeStatement("CREATE TEMP TABLE builtin_id_to_check(id INTEGER PRIMARY KEY);");
+	executeStatement(
+		"INSERT OR IGNORE INTO builtin_id_to_check SELECT node.id FROM node "
+		"INNER JOIN edge ON edge.target_node_id = node.id WHERE node.type = " +
+		std::to_string(nodeKindToInt(NODE_BUILTIN_TYPE)) +
+		" AND (edge.id IN (SELECT id FROM element_id_to_clear) OR "
+		"edge.source_node_id IN (SELECT id FROM element_id_to_clear));");
+
 	// delete all edges in element_id_to_clear
 	executeStatement(
 		"DELETE FROM element WHERE element.id IN "
@@ -645,6 +660,15 @@ void SqliteIndexStorage::removeElementsWithLocationInFiles(
 	{
 		updateStatusCallback(87);
 	}
+
+	// Retain shared built-ins while any occurrence or incident edge still uses
+	// them. This is deliberately not a general garbage collection pass.
+	executeStatement(
+		"DELETE FROM element WHERE id IN (SELECT id FROM builtin_id_to_check) "
+		"AND NOT EXISTS (SELECT 1 FROM occurrence WHERE element_id = element.id) "
+		"AND NOT EXISTS (SELECT 1 FROM edge WHERE source_node_id = element.id "
+		"OR target_node_id = element.id);");
+	executeStatement("DROP TABLE IF EXISTS temp.builtin_id_to_check;");
 
 	// cleaning up
 	executeStatement("DROP TABLE IF EXISTS main.element_id_to_clear;");
@@ -855,7 +879,11 @@ std::vector<int> SqliteIndexStorage::getAvailableEdgeTypes() const
 
 StorageFile SqliteIndexStorage::getFileByPath(const std::wstring& filePath) const
 {
-	return doGetFirst<StorageFile>("WHERE file.path == '" + utility::encodeToUtf8(filePath) + "'");
+	CppSQLite3Statement statement = m_database.compileStatement("SELECT id FROM file WHERE path=?;");
+	const std::string path = utility::encodeToUtf8(filePath);
+	statement.bind(1, path.c_str());
+	CppSQLite3Query query = statement.execQuery();
+	return query.eof() ? StorageFile() : getFirstById<StorageFile>(query.getIntField(0));
 }
 
 std::vector<StorageFile> SqliteIndexStorage::getFilesByPaths(const std::vector<FilePath>& filePaths) const
@@ -898,6 +926,196 @@ std::shared_ptr<TextAccess> SqliteIndexStorage::getFileContentByPath(const std::
 	}
 
 	return TextAccess::createFromString("");
+}
+
+sourcetrail::core::SourceContent SqliteIndexStorage::tryGetStoredFileContentByPath(
+	const std::wstring& filePath) const
+{
+	using namespace sourcetrail::core;
+	try
+	{
+		CppSQLite3Statement statement = m_database.compileStatement(
+			"SELECT filecontent.content FROM filecontent INNER JOIN file "
+			"ON filecontent.id = file.id WHERE file.path = ?;");
+		const std::string path = utility::encodeToUtf8(filePath);
+		statement.bind(1, path.c_str());
+		CppSQLite3Query query = statement.execQuery();
+		if (query.eof())
+		{
+			return {SourceContentStatus::Missing, ""};
+		}
+		if (query.fieldIsNull(0))
+		{
+			return {SourceContentStatus::Null, ""};
+		}
+		// Read by length: getStringField truncates at embedded NUL, which would
+		// turn malformed external output into an apparently valid prefix.
+		int length = 0;
+		const unsigned char* bytes = query.getBlobField(0, length);
+		const std::string content = length ?
+			std::string(reinterpret_cast<const char*>(bytes), static_cast<size_t>(length)) : "";
+		query.nextRow();
+		if (!query.eof())
+		{
+			return {SourceContentStatus::ReadError, ""};
+		}
+		return {SourceContentStatus::Available, content};
+	}
+	catch (CppSQLite3Exception& error)
+	{
+		LOG_ERROR(std::to_string(error.errorCode()) + ": " + error.errorMessage());
+		return {SourceContentStatus::ReadError, ""};
+	}
+}
+
+bool SqliteIndexStorage::normalizePythonSourceLocations(
+	const std::set<FilePath>& sourceFiles, std::string& error)
+{
+	using namespace sourcetrail::core;
+	bool savepoint = false;
+	try
+	{
+		// All selected files are one conversion unit. A malformed later file
+		// rolls back preceding updates, preserving IDs, types and occurrences.
+		m_database.execDML("SAVEPOINT python_source_positions;");
+		savepoint = true;
+		for (const FilePath& sourcePath: sourceFiles)
+		{
+			const SourceContent stored = tryGetStoredFileContentByPath(sourcePath.wstr());
+			const auto disk = TextAccess::tryCreateFromFile(sourcePath);
+			// The fixed legacy writer omits filecontent for an actual empty file.
+			// Materialize that one observed format only after file ownership and the
+			// absence of source locations have been checked below. Missing saved
+			// observations still trigger refresh in the ordinary input adapter.
+			const bool omittedEmptyContent = disk && disk->isEmpty() &&
+				stored.status == SourceContentStatus::Missing;
+			if (!disk || (stored.status != SourceContentStatus::Available && !omittedEmptyContent))
+			{
+				throw std::invalid_argument("Python output or source content is unavailable: " + sourcePath.str());
+			}
+			const std::string text = disk->getText();
+			// The bundled DB writer appends a final LF to non-empty unterminated
+			// sources. This is the only tolerated content mismatch.
+			if (stored.text != text &&
+				(text.empty() || text.back() == '\n' || stored.text != text + '\n'))
+			{
+				throw std::invalid_argument("Python output does not match its source: " + sourcePath.str());
+			}
+			const Utf8SourceLocationMap positions(text);
+			Id fileId = 0;
+			{
+				CppSQLite3Statement statement = m_database.compileStatement(
+					"SELECT id, indexed, language FROM file WHERE path = ?;");
+				statement.bind(1, sourcePath.str().c_str());
+				CppSQLite3Query query = statement.execQuery();
+				if (query.eof() || query.fieldDataType(0) != SQLITE_INTEGER ||
+					query.getInt64Field(0) <= 0 || query.getInt64Field(0) > std::numeric_limits<int>::max() ||
+					query.getIntField(1) != 1 ||
+					std::string(query.getStringField(2)) != "python")
+				{
+					throw std::invalid_argument("Python command did not produce an indexed source file");
+				}
+				fileId = static_cast<Id>(query.getInt64Field(0));
+				query.nextRow();
+				if (!query.eof())
+				{
+					throw std::invalid_argument("Python output contains duplicate source ownership");
+				}
+			}
+			std::vector<StorageSourceLocation> normalized;
+			{
+				CppSQLite3Statement statement = m_database.compileStatement(
+					"SELECT id, start_line, start_column, end_line, end_column, type "
+					"FROM source_location WHERE file_node_id = ?;");
+				statement.bind(1, static_cast<int>(fileId));
+				CppSQLite3Query query = statement.execQuery();
+				if (omittedEmptyContent && !query.eof())
+				{
+					throw std::invalid_argument("Empty Python output without content cannot own source locations");
+				}
+				while (!query.eof())
+				{
+					for (int field = 0; field < 6; ++field)
+					{
+						if (query.fieldIsNull(field) || query.fieldDataType(field) != SQLITE_INTEGER ||
+							query.getInt64Field(field) < 0 ||
+							query.getInt64Field(field) > std::numeric_limits<int>::max())
+						{
+							throw std::invalid_argument("Python output contains an invalid location field");
+						}
+					}
+					const int type = query.getIntField(5);
+					if (type > locationTypeToInt(LOCATION_UNSOLVED))
+					{
+						throw std::invalid_argument("Python output contains an unknown location type");
+					}
+					const SourceRange range = positions.toBytes({
+						static_cast<size_t>(query.getInt64Field(1)),
+						static_cast<size_t>(query.getInt64Field(2)),
+						static_cast<size_t>(query.getInt64Field(3)),
+						static_cast<size_t>(query.getInt64Field(4))},
+						type == locationTypeToInt(LOCATION_SCOPE) ||
+						type == locationTypeToInt(LOCATION_SIGNATURE) ||
+						type == locationTypeToInt(LOCATION_ERROR));
+					if (range.startColumn > static_cast<size_t>(std::numeric_limits<int>::max()) ||
+						range.endColumn > static_cast<size_t>(std::numeric_limits<int>::max()))
+					{
+						throw std::invalid_argument("Python UTF-8 column exceeds the storage range");
+					}
+					normalized.emplace_back(static_cast<Id>(query.getInt64Field(0)), fileId,
+						range.startLine, range.startColumn, range.endLine, range.endColumn, type);
+					query.nextRow();
+				}
+			}
+			for (const StorageSourceLocation& location: normalized)
+			{
+				CppSQLite3Statement statement = m_database.compileStatement(
+					"UPDATE source_location SET start_line=?, start_column=?, end_line=?, "
+					"end_column=? WHERE id=?;");
+				statement.bind(1, static_cast<int>(location.startLine));
+				statement.bind(2, static_cast<int>(location.startCol));
+				statement.bind(3, static_cast<int>(location.endLine));
+				statement.bind(4, static_cast<int>(location.endCol));
+				statement.bind(5, static_cast<int>(location.id));
+				statement.execDML();
+			}
+			CppSQLite3Statement content = m_database.compileStatement(
+				"INSERT OR REPLACE INTO filecontent(id, content) VALUES (?, ?);");
+			content.bind(1, static_cast<int>(fileId));
+			content.bind(2, text.c_str());
+			content.execDML();
+			CppSQLite3Statement lines = m_database.compileStatement(
+				"UPDATE file SET line_count=? WHERE id=?;");
+			lines.bind(1, static_cast<int>(disk->getLineCount()));
+			lines.bind(2, static_cast<int>(fileId));
+			lines.execDML();
+		}
+		m_database.execDML("RELEASE SAVEPOINT python_source_positions;");
+		m_tempSourceLocationIndices.clear();
+		return true;
+	}
+	catch (CppSQLite3Exception& failure)
+	{
+		error = failure.errorMessage();
+	}
+	catch (const std::exception& failure)
+	{
+		error = failure.what();
+	}
+	if (savepoint)
+	{
+		try
+		{
+			m_database.execDML("ROLLBACK TO SAVEPOINT python_source_positions;");
+			m_database.execDML("RELEASE SAVEPOINT python_source_positions;");
+		}
+		catch (CppSQLite3Exception& failure)
+		{
+			error += std::string("; rollback failed: ") + failure.errorMessage();
+		}
+	}
+	LOG_ERROR("Rejected Python output: " + error);
+	return false;
 }
 
 void SqliteIndexStorage::setFileIndexed(Id fileId, bool indexed)

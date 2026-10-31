@@ -4,56 +4,59 @@
 
 #include "logging.h"
 
-namespace
-{
-std::istream& safeGetline(std::istream& is, std::string& t)
-{
-	t.clear();
-
-	// The characters in the stream are read one-by-one using a std::streambuf.
-	// That is faster than reading them one-by-one using the std::istream.
-	// Code that uses streambuf this way must be guarded by a sentry object.
-	// The sentry object performs various tasks,
-	// such as thread synchronization and updating the stream state.
-
-	std::istream::sentry se(is, true);
-	std::streambuf* sb = is.rdbuf();
-
-	while (true)
-	{
-		const int c = sb->sbumpc();
-		switch (c)
-		{
-		case '\n':
-			return is;
-		case '\r':
-			if (sb->sgetc() == '\n')
-			{
-				sb->sbumpc();
-			}
-			return is;
-		case std::streambuf::traits_type::eof():
-			// Also handle the case when the last line has no line ending
-			if (t.empty())
-			{
-				is.setstate(std::ios::eofbit);
-			}
-			return is;
-		default:
-			t += (char)c;
-		}
-	}
-}
-}	 // namespace
-
 std::shared_ptr<TextAccess> TextAccess::createFromFile(const FilePath& filePath)
 {
-	std::shared_ptr<TextAccess> result(new TextAccess());
+	std::shared_ptr<TextAccess> result = tryCreateFromFile(filePath);
+	return result ? result : createFromString("", filePath);
+}
 
-	result->m_filePath = filePath;
-	result->m_lines = readFile(filePath);
-
-	return result;
+std::shared_ptr<TextAccess> TextAccess::tryCreateFromFile(const FilePath& filePath)
+{
+	try
+	{
+		std::ifstream input(filePath.str(), std::ios::binary | std::ios::in);
+		if (!input.is_open())
+		{
+			LOG_ERROR(L"Could not open file " + filePath.wstr());
+			return nullptr;
+		}
+		std::string raw;
+		char buffer[8192];
+		while (input.read(buffer, sizeof(buffer)) || input.gcount())
+		{
+			raw.append(buffer, static_cast<size_t>(input.gcount()));
+		}
+		if (input.bad() || !input.eof())
+		{
+			LOG_ERROR(L"Could not completely read file " + filePath.wstr());
+			return nullptr;
+		}
+		// The display/storage convention is LF. Preserve whether the source has
+		// a final newline; never turn a failed read into successful empty content.
+		std::string text;
+		text.reserve(raw.size());
+		for (size_t i = 0; i < raw.size(); ++i)
+		{
+			if (raw[i] == '\r')
+			{
+				if (i + 1 < raw.size() && raw[i + 1] == '\n')
+				{
+					++i;
+				}
+				text += '\n';
+			}
+			else
+			{
+				text += raw[i];
+			}
+		}
+		return createFromString(text, filePath);
+	}
+	catch (const std::exception& error)
+	{
+		LOG_ERROR_STREAM(<< "Could not read " << filePath.str() << ": " << error.what());
+		return nullptr;
+	}
 }
 
 std::shared_ptr<TextAccess> TextAccess::createFromString(const std::string& text, const FilePath& filePath)
@@ -128,55 +131,6 @@ std::string TextAccess::getText() const
 	for (unsigned int i = 0; i < m_lines.size(); i++)
 	{
 		result += m_lines[i];
-	}
-
-	return result;
-}
-
-std::vector<std::string> TextAccess::readFile(const FilePath& filePath)
-{
-	std::vector<std::string> result;
-
-	try
-	{
-		std::ifstream srcFile;
-		srcFile.open(filePath.str(), std::ios::binary | std::ios::in);
-
-		if (srcFile.fail())
-		{
-			LOG_ERROR(L"Could not open file " + filePath.wstr());
-			return result;
-		}
-
-		while (!srcFile.eof())
-		{
-			std::string line;
-			safeGetline(srcFile, line);
-			result.push_back(line + '\n');
-		}
-
-		srcFile.close();
-	}
-	catch (std::exception& e)
-	{
-		LOG_ERROR_STREAM(
-			<< "Exception thrown while reading file \"" << filePath.str() << "\": " << e.what());
-		result.clear();
-	}
-	catch (...)
-	{
-		LOG_ERROR_STREAM(<< "Unknown exception thrown while reading file \"" << filePath.str() << "\"");
-		result.clear();
-	}
-
-	if (!result.empty())
-	{
-		std::string last = result.back().substr(0, result.back().size() - 1);
-		result.pop_back();
-		if (!last.empty())
-		{
-			result.push_back(last);
-		}
 	}
 
 	return result;

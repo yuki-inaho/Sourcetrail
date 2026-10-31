@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "content_cases": [
+    {"id": "same-mtime", "change": "replace", "timestamp": "same", "symbol": "after", "reindexed": true},
+    {"id": "past-mtime", "change": "replace", "timestamp": "past", "symbol": "after", "reindexed": true},
+    {"id": "touch", "change": "none", "timestamp": "future", "symbol": "before", "reindexed": false},
+    {"id": "truncate", "change": "empty", "timestamp": "same", "symbol": null, "reindexed": true},
+    {"id": "remove-final-newline", "change": "unterminated", "timestamp": "same", "symbol": "before", "reindexed": true},
+    {"id": "missing-stored-content", "change": "missing", "timestamp": "same", "symbol": "before", "reindexed": true},
+    {"id": "null-stored-content", "change": "null", "timestamp": "same", "symbol": "before", "reindexed": true},
+    {"id": "empty-to-populated", "change": "add", "timestamp": "same", "symbol": "after", "reindexed": true}
+  ],
+  "positions": {"function": "日本語", "call_source": "caller", "column_unit": "utf8-bytes", "line_base": 1, "column_base": 1, "end": "inclusive"}
+}

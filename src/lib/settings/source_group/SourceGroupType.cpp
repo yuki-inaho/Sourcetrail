@@ -30,6 +30,8 @@ std::string sourceGroupTypeToString(SourceGroupType v)
 #endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
 	case SOURCE_GROUP_CUSTOM_COMMAND:
 		return "Custom Command Source Group";
+	case SOURCE_GROUP_MODERN:
+		return "Modern Language Source Group";
 	case SOURCE_GROUP_UNKNOWN:
 		break;
 	}
@@ -66,6 +68,8 @@ std::string sourceGroupTypeToProjectSetupString(SourceGroupType v)
 #endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
 	case SOURCE_GROUP_CUSTOM_COMMAND:
 		return "Custom Command Source Group";
+	case SOURCE_GROUP_MODERN:
+		return "Modern Language Source Group";
 	case SOURCE_GROUP_UNKNOWN:
 		break;
 	}
@@ -119,6 +123,10 @@ SourceGroupType stringToSourceGroupType(const std::string& v)
 	if (v == sourceGroupTypeToString(SOURCE_GROUP_CUSTOM_COMMAND))
 	{
 		return SOURCE_GROUP_CUSTOM_COMMAND;
+	}
+	if (v == sourceGroupTypeToString(SOURCE_GROUP_MODERN))
+	{
+		return SOURCE_GROUP_MODERN;
 	}
 
 	return SOURCE_GROUP_UNKNOWN;

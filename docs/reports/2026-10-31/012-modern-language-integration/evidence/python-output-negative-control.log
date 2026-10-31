@@ -1,0 +1,52 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 55821] (Linux 6.18.57 amd64, N/A 17.0.18-internal x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /workspace/scratch/b7462e898297/Sourcetrail/docs/contracts/formal/PythonOutputValidation.tla
+Parsing file /tmp/Naturals.tla
+Parsing file /tmp/FiniteSets.tla
+Parsing file /tmp/Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module PythonOutputValidation
+Starting... (2026-10-31 16:26:04)
+Computing initial states...
+Computed 2 initial states...
+Finished computing initial states: 4 distinct states generated at 2026-10-31 16:26:04.
+Error: Invariant NoPublicationAfterInvalidOutput is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ validated = {}
+/\ rejected = FALSE
+/\ validity = (a :> "valid" @@ b :> "invalid")
+/\ phase = "validating"
+/\ conversions = (a :> 0 @@ b :> 0)
+/\ candidate = "pending"
+
+State 2: <Validate line 18, col 5 to line 23, col 47 of module PythonOutputValidation>
+/\ validated = {a}
+/\ rejected = FALSE
+/\ validity = (a :> "valid" @@ b :> "invalid")
+/\ phase = "validating"
+/\ conversions = (a :> 1 @@ b :> 0)
+/\ candidate = "pending"
+
+State 3: <Validate line 18, col 5 to line 23, col 47 of module PythonOutputValidation>
+/\ validated = {a, b}
+/\ rejected = FALSE
+/\ validity = (a :> "valid" @@ b :> "invalid")
+/\ phase = "validating"
+/\ conversions = (a :> 1 @@ b :> 1)
+/\ candidate = "pending"
+
+State 4: <Finalize line 26, col 5 to line 30, col 63 of module PythonOutputValidation>
+/\ validated = {a, b}
+/\ rejected = FALSE
+/\ validity = (a :> "valid" @@ b :> "invalid")
+/\ phase = "finished"
+/\ conversions = (a :> 1 @@ b :> 1)
+/\ candidate = "published"
+
+22 states generated, 18 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 4.
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 2 and the 95th percentile is 2).
+Finished in 00s at (2026-10-31 16:26:04)

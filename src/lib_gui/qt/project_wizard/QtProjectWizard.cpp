@@ -1005,8 +1005,9 @@ void QtProjectWizard::selectedProjectType(SourceGroupType sourceGroupType)
 #endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
 
 	case SOURCE_GROUP_CUSTOM_COMMAND:
+	case SOURCE_GROUP_MODERN:
 		settings = std::make_shared<SourceGroupSettingsCustomCommand>(
-			sourceGroupId, m_projectSettings.get());
+			sourceGroupId, m_projectSettings.get(), sourceGroupType);
 		break;
 	case SOURCE_GROUP_UNKNOWN:
 		break;

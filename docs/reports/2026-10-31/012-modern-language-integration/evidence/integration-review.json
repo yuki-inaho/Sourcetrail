@@ -1,0 +1,101 @@
+{
+  "recorded_at_utc": "2026-10-31T07:27:04.117520+00:00",
+  "edit_freeze_utc": "2026-10-31T07:26:17Z",
+  "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+  "branch": "refactor/input-observation-contracts",
+  "state": "working-tree review; no commit or push performed by this agent",
+  "scope": [
+    "portable graph/schema-25 writer",
+    "CLI configuration/native source enumeration boundary",
+    "native Modern source-group routing and settings read-only review",
+    "C++ observed inputs, external response dependencies, Unicode diagnostics",
+    "Python module-path boundary"
+  ],
+  "native_edits_by_this_review": [],
+  "file_sha256": {
+    "script/indexers/graph.py": "23846f62ab24e3cc1fa9ac883f32509fbf3f8a39a49e8c3c80375d65a0bbdb1e",
+    "script/indexers/cli.py": "93a7bd1100d1b8699445aaf29cef41bb94040beaf10b794b96c1330cd236523d",
+    "script/indexers/python_indexer.py": "4efab49ae90f658ef1cf63a6a75cc9b1a7b6fe7fc7b36a93105c449202fc4505",
+    "script/indexers/cpp_indexer.py": "2f1bf788eadecb6437149d6d72c4e7e20ef85905a5f02446312ce660280817d5",
+    "tests/modern_indexers/test_graph.py": "e0e6597be5ae043df23d8a8379f9474f1c5c72e2f336cdd53960b135df7672f1",
+    "tests/modern_indexers/test_cli.py": "095d62970ef61e7b8b6ba5fdb2ec6279e9b68dcc30e235bde61dd4107b968b58",
+    "tests/modern_indexers/test_python_indexer.py": "b58b74bfa60d8692bcb49b275080be4904eb02cc0c41f6ce6cf948f646b5619a",
+    "tests/modern_indexers/test_cpp_indexer.py": "4dd32cf41511c017d50a489097f6ff03d65e3bb6cdf377cf3630a4ed764f33ae",
+    "tests/modern_indexers/test_integration_review_e2e.py": "c3ca96c64bd909a9330e1b48add2d63849c8491e0768835aeaf5f4d5a4da529f",
+    "docs/adr/0012-modern-cpp-indexer.md": "6c6f4ea6a83e3a5d9fdd69364f371b1039398651a0686a7cf02ece1f09c96c8a"
+  },
+  "before": {
+    "unit_xml": "build/modern-indexers/integration-review-before.xml",
+    "unit_log": "build/modern-indexers/integration-review-before.log",
+    "unit_counts": {
+      "tests": 60,
+      "failures": 36,
+      "errors": 0,
+      "skipped": 0
+    },
+    "explicit_definition_collision": "build/modern-indexers/integration-review-name-before.log",
+    "app_receipt": "build/modern-indexers/integration-review-app-before.json",
+    "app_failures": [
+      "CDB-unselected source/header inputs cause reindexing without any changes",
+      "Out-of-root response input is reindexed and its stored record disappears on an unchanged refresh"
+    ]
+  },
+  "after": {
+    "command": "../tools/pixi run --locked -e modern python -m pytest tests/modern_indexers/test_graph.py tests/modern_indexers/test_cli.py tests/modern_indexers/test_python_indexer.py tests/modern_indexers/test_cpp_indexer.py tests/modern_indexers/test_integration_review_e2e.py -q --tb=short --junitxml=build/modern-indexers/integration-review-after.xml",
+    "exit_code": 0,
+    "counts": {
+      "tests": 160,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "xml": "build/modern-indexers/integration-review-after.xml",
+    "log": "build/modern-indexers/integration-review-after.log",
+    "additional_container_command": "../tools/pixi run --locked -e modern python -m pytest tests/modern_indexers/test_graph.py::test_separate_groups_can_extend_a_shared_container -q --tb=short",
+    "additional_container_tests": 2,
+    "additional_container_exit_code": 0,
+    "additional_container_log": "build/modern-indexers/integration-review-containers.log",
+    "diff_check": {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  },
+  "verified_fixes": [
+    "Cross-injection serialized-name/kind collisions reject and preserve existing database bytes.",
+    "Separate explicit definitions with disjoint scope/token positions reject; namespace/module sharing and repeated identical injection remain valid.",
+    "Existing duplicate names and missing primary/foreign-key constraints are rejected before candidate mutation.",
+    "Multiple observations preserve indexed with OR and completeness with AND; conflicting source languages reject.",
+    "Malformed graph/config field types, non-UTF8 names, embedded NUL diagnostics, and nonboolean fatal flags reject.",
+    "Physical CRLF line-end ranges and diagnostics map to LF; line_count counts LF rather than Unicode splitlines separators.",
+    "Configure requires .srctrlprj and validates source-root/config-path types before writing output.",
+    "Native excluded-directory filters are scoped below each absolute source root, including Python build exclusion.",
+    "Rust extensionless .cargo/config and rust-toolchain inputs are registered even before creation.",
+    "C++ native extension enumeration matches engine input discovery; CDB-unselected files are observed with an explicit unparsed diagnostic.",
+    "External C++ response files remain stored nonowned dependencies; include relationships propagate same-mtime content changes to owned translation units.",
+    "C++ Unicode diagnostics cover complete UTF8 scalars, including BOM/CRLF cases.",
+    "Nonidentifier Python module paths are observed and diagnosed without fabricated import identities; an explicit containing source_root permits normal names."
+  ],
+  "app_e2e": {
+    "tests": "tests/modern_indexers/test_integration_review_e2e.py",
+    "binary": "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail",
+    "cases": [
+      "review-cdb-unselected",
+      "review-external-response",
+      "review-exclude-parent"
+    ],
+    "evidence_directory": "build/modern-indexers/e2e",
+    "assertions": [
+      "valid native schema accepted",
+      "unchanged input does not reindex",
+      "accepted snapshot preserved on no-op",
+      "external response changed at identical mtime changes definitions",
+      "incremental result equals clean rebuild",
+      "ancestor named build does not suppress project sources; descendant build remains excluded"
+    ]
+  },
+  "limitations": [
+    "This receipt covers the named counterexamples and tests; final whole-repository verification and publication belong to the parent task.",
+    "Unselected C++ inputs are deliberately not given semantic declarations and are marked incomplete with a diagnostic.",
+    "Schema-25 names cannot represent unrelated explicit definitions with one identical serialized hierarchy; the writer now rejects that ambiguity."
+  ]
+}

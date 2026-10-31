@@ -33,6 +33,10 @@ CASES = (
     ("refresh-negative-control", "RefreshPlan.tla", "RefreshPlanMutant.cfg", "SharedDependenciesPreserved"),
     ("external-indexing", "ExternalIndexing.tla", "ExternalIndexing.cfg", None),
     ("external-indexing-negative-control", "ExternalIndexing.tla", "ExternalIndexingMutant.cfg", "NoPublicationAfterFailure"),
+    ("source-observation", "SourceObservation.tla", "SourceObservation.cfg", None),
+    ("source-observation-negative-control", "SourceObservation.tla", "SourceObservationMutant.cfg", "ContentChangesDetected"),
+    ("python-output-validation", "PythonOutputValidation.tla", "PythonOutputValidation.cfg", None),
+    ("python-output-negative-control", "PythonOutputValidation.tla", "PythonOutputValidationMutant.cfg", "NoPublicationAfterInvalidOutput"),
 )
 
 

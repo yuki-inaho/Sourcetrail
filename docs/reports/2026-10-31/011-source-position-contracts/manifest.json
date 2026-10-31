@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "011-source-position-contracts",
+  "created_on": "2026-10-31",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree",
+    "note": "公開基準からこのセッションで再実装した未コミット差分。前回の未回収実装・元レポートの復元ではない。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "path": "src/lib_core/Utf8SourceLocationMap.h",
+      "symbol": "SourceRange toBytes(",
+      "excerpt": "\tSourceRange toBytes(SourceRange input, bool allowEmptyBoundary = false) const\n\t{\n\t\tconst Line& first = line(input.startLine);\n\t\tif (input.startColumn == 0 || input.startColumn > first.boundaries.size())",
+      "contracts": [
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "旧Pythonスカラー列を厳格UTF8境界で1始まり終端込みバイトへ変換する。BOM、次行列0、空診断境界を扱う。",
+      "id": "ANN-001",
+      "sha256": "503ad517e4d50f9daf5533884ade84609a4ec2b941a5cc2a2fc8688f414aa8e8",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "bool SqliteIndexStorage::normalizePythonSourceLocations(",
+      "excerpt": "bool SqliteIndexStorage::normalizePythonSourceLocations(\n\tconst std::set<FilePath>& sourceFiles, std::string& error)\n{\n\tusing namespace sourcetrail::core;",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "実入力と保存内容を照合し、ID/所有/種別を保つsavepoint更新。旧ライブラリーが省略する空内容は限定条件で明示行を作る。",
+      "id": "ANN-002",
+      "sha256": "4300574fbc033fea2374831861ba5378ac64b654904eb5119a8cd7e07076b2ab",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "symbol": "for (const auto& output: m_pythonSourcesByDatabase)",
+      "excerpt": "\tfor (const auto& output: m_pythonSourcesByDatabase)\n\t{\n\t\tstd::string error;\n\t\tbool valid = false;",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "ワーカー停止後・注入前にDB/ソース組を一回変換する。無効なら候補不採用へ進み、旧索引保持と再試行を実CLIで確認した。",
+      "id": "ANN-003",
+      "sha256": "5bc7214d4ab597adb7abacdc64b9fdf32e9ba539edba6af4346c0d993f1fde29",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib_core/ExternalIndexerOutcome.h",
+      "symbol": "void observeOutput(",
+      "excerpt": "\tvoid observeOutput(ExternalOutputOutcome outcome)\n\t{\n\t\tif (outcome == ExternalOutputOutcome::InvalidOutput)\n\t\t{",
+      "contracts": [
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "出力拒否件数をプロセス失敗件数と分離し、後続成功で失敗を消さない。",
+      "id": "ANN-004",
+      "sha256": "3d9185c5274590e67f6c2e79b97332d4b28e2595b944a5757962e3d26199c27c",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/TaskFinishParsing.cpp",
+      "symbol": "std::to_wstring(outcome.invalidOutputs)",
+      "excerpt": "\t\t\t\tL\" external commands failed; \" + std::to_wstring(outcome.invalidOutputs) +\n\t\t\t\tL\" invalid outputs. Discarding temporary index.\",\n\t\t\ttrue,\n\t\t\tfalse)",
+      "contracts": [
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "プロセス失敗と無効出力の件数をそれぞれ通知し、共通の不採用終了経路へつなぐ。",
+      "id": "ANN-005",
+      "sha256": "f72e7dc31bafbc428a5344f218d6789e8f40f7624c0b2027797e944c7095e0c7",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "tests/input_observation/test_input_observation.py",
+      "symbol": "def test_python_positions_select_utf8_tokens_in_stored_content(",
+      "excerpt": "def test_python_positions_select_utf8_tokens_in_stored_content(tmp_path, bom, ending):\n    project = Project(tmp_path / \"positions\", \"python\")\n    source = \"def 日本語(値):\\n    return 値\\n\\ndef caller():\\n    return 日本語(1)\\n\"\n    if \"no-final\" in ending:",
+      "contracts": [
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "BOM/改行組合せ8ケースで保存UTF8から実トークンと呼出辺を確認する。重複1/2threadと無効出力の保持/再試行も別ケースで検証。",
+      "id": "ANN-006",
+      "sha256": "023481e0245e724d5e44f569f8a77f289a7683c46f030031fda11553a7fc9975",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "docs/contracts/formal/PythonOutputValidation.tla",
+      "symbol": "NoPublicationAfterInvalidOutput",
+      "excerpt": "NoPublicationAfterInvalidOutput ==\n    (\\E f \\in Files : validity[f] = \"invalid\") => candidate # \"published\"\nAllSourcesValidatedBeforePublication == candidate = \"published\" => validated = Files\nRejectedOutputStaysRejected ==",
+      "contracts": [
+        "EXECUTION-001",
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "正常モデル20 distinct statesを探索。無効出力を無視する変異はNoPublicationAfterInvalidOutputで失敗。",
+      "id": "ANN-007",
+      "sha256": "5c0a0d40d44c071f94bc248482f690c7126a2958d03dc1cee56c3d187f747be3",
+      "uncertainty": "有限のDB/ソース2組の検証・公開モデルであり、全スレッド/OS原子性を証明しない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/verification.json",
+      "description": "実行結果、途中の失敗と修正、適用範囲。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/cpp-contracts.txt",
+      "description": "C++契約試験39件、65,801 assertions。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/input-e2e.txt",
+      "description": "入力・位置の実アプリ試験28件。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/input-e2e.xml",
+      "description": "同試験のJUnit。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/existing-suites.txt",
+      "description": "既存5スイートの成功。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/formal-summary.json",
+      "description": "新しい正常モデル2件と指定反例2件の結果。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/native-build.txt",
+      "description": "当該バッチの最終ネイティブビルドの原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/source-observation.log",
+      "description": "入力観測の正常モデル原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/source-observation-negative-control.log",
+      "description": "mtimeゲート変異の指定反例原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/python-output-validation.log",
+      "description": "出力検査の正常モデル原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/011-source-position-contracts/evidence/python-output-negative-control.log",
+      "description": "不正出力許容変異の指定反例原文。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "repository-user",
+    "note": "実装担当の検証と親担当のコード・証跡照合を実施。ユーザー側レビューは未実施。"
+  }
+}

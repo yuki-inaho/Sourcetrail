@@ -1,0 +1,749 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-10-31T07:33:04.945323+00:00",
+  "reviewer": "/root/input_positions",
+  "review_type": "read-only second reading of final documentation and retained evidence",
+  "role_disclosure": "The reviewer authored the legacy input/location work and four mixed-engine tests. This record is a second reading of documentation, not an independent re-review of that implementation. No source/document edits or new test executions were performed.",
+  "scope": [
+    "docs/reports/2026-10-31/012-modern-language-integration/report.md",
+    "docs/reports/2026-10-31/012-modern-language-integration/manifest.json",
+    "docs/architecture/modern-indexers.md",
+    "docs/contracts/language-profiles.json"
+  ],
+  "document_hashes": {
+    "docs/reports/2026-10-31/012-modern-language-integration/report.md": "74d42555bd409b73bc774d47f64e81f27a53b06376b0e593251adaa197b4849c",
+    "docs/reports/2026-10-31/012-modern-language-integration/manifest.json": "b1918367b75e0bde382b3e75ffd3a289e4488758b210ec4823f8603e5760ccb9",
+    "docs/architecture/modern-indexers.md": "f758ce2a8b8e9710a3b568f03fe27b68265b6f9244693c0897607ccad9653970",
+    "docs/contracts/language-profiles.json": "9fc9b4b199dce52acfd3dce5a721a5b88c0f0df9839c88b97f11dc10010c038e"
+  },
+  "source_annotation_units": [
+    {
+      "id": "ANN-001",
+      "path": "script/indexers/python_indexer.py",
+      "sha256": "4efab49ae90f658ef1cf63a6a75cc9b1a7b6fe7fc7b36a93105c449202fc4505",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-002",
+      "path": "script/indexers/cpp_indexer.py",
+      "sha256": "2f1bf788eadecb6437149d6d72c4e7e20ef85905a5f02446312ce660280817d5",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-003",
+      "path": "script/indexers/rust_indexer.py",
+      "sha256": "3840291cecaa450f1c6cba9beb2b7fd8f1b8b8be85903e1d047453c6fcb6e068",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-004",
+      "path": "script/indexers/rust_lsp.py",
+      "sha256": "23f74edca417b42b5688af73a856215ceaeea954b3688c6f21f2bc620828d58f",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-005",
+      "path": "script/indexers/graph.py",
+      "sha256": "23846f62ab24e3cc1fa9ac883f32509fbf3f8a39a49e8c3c80375d65a0bbdb1e",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-006",
+      "path": "script/indexers/cli.py",
+      "sha256": "93a7bd1100d1b8699445aaf29cef41bb94040beaf10b794b96c1330cd236523d",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-007",
+      "path": "src/lib/project/SourceGroupCustomCommand.cpp",
+      "sha256": "2d31cc9d16c1f890620fc21bf6f64af36fd3e7b7e607fbe479906681101d245b",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-008",
+      "path": "src/lib/project/Project.cpp",
+      "sha256": "9ca15a28acd67ddbd11a79608081e325de0f8ad2d942c32d2ea9ed9e4a28f7dd",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-009",
+      "path": "tests/modern_indexers/test_app_e2e.py",
+      "sha256": "93efd991179c34d37c70920e84303f9d94aea6aabace5d9bb0f7fbb1d647701e",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    },
+    {
+      "id": "ANN-010",
+      "path": "pixi.toml",
+      "sha256": "a6a79ab79b1e427c45b8216867936f0a4afad0121bd48052f894fe29f7ecdb74",
+      "manifest_sha256_matches": true,
+      "excerpt_matches": true
+    }
+  ],
+  "retained_evidence": [
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/app-tests.txt",
+      "exists": true,
+      "sha256": "38df64915b6c9d7b814a0605569e3cff5e04a9fab92bf4eee5711efe4fb4a851",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/app-tests.xml",
+      "exists": true,
+      "sha256": "ac28d49bfab8e31796f82eacd952d2f3b38de49647cf5a09f5c131390b7648a3",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/core-results.xml",
+      "exists": true,
+      "sha256": "4e88e67c7da74a1773a935cf17bc27da634eabb99ab141002315722b6aaf3cd0",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/ctest-results.xml",
+      "exists": true,
+      "sha256": "68f8e2548d0f2de84b7b47ec102322c8589238c176a62b1bdc5e01c9c52fe9bd",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/docs-export-check.json",
+      "exists": true,
+      "sha256": "83f74bc7a1ccf5ef1711f6aff3dd6f79bcdae5bf98fc777e31d932b1b8a3f6ec",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/docs-worktree-check.json",
+      "exists": true,
+      "sha256": "7229215fada6d8e94667b3a2c018206c653b3e32e9082c680bbe0207eddcb043",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing-negative-control.log",
+      "exists": true,
+      "sha256": "89728b5ffd47f2aa04f648c9cd94c9b1abca08cb82e2396551b46dba6bb3d454",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing.log",
+      "exists": true,
+      "sha256": "a272b13a6e7f52b7ecaef6748d4af00f6ff1efbe3a23447101abcd735eb6cbd7",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-modern-results.xml",
+      "exists": true,
+      "sha256": "3f4de5d8a65df642b4156e70e5d22a70ec6f904bfa3726e7f70e188495075c86",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-modern-tests.txt",
+      "exists": true,
+      "sha256": "2769d03b35c66311dfe79993d67bd04f6ec12cd64bed9f17ac0c6bdd78ed3f3b",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-source-snapshot.json",
+      "exists": true,
+      "sha256": "35c3eac90af0fd7aae8413cffefc91354f6923fe24326b61da40ba22612da9e3",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/formal-summary.json",
+      "exists": true,
+      "sha256": "32333655bd6c40534bba9df5bf24dccca492d363dbd72673a39e9e11ccba6d10",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/full-verify-modern-results.xml",
+      "exists": true,
+      "sha256": "6411ead023e03d942f195d1377df1428e333870060bef848d49515dd4070a153",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/full-verify.txt",
+      "exists": true,
+      "sha256": "dd83bd8ba0cd895abd698c11ff0a70470a212cb6512b8ce0018cd40a118b5cec",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/initial-verification-failure.txt",
+      "exists": true,
+      "sha256": "9dd715b3a4b524696f229b136f0f2190ce0d157b999495b649e75dffbdc9da42",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/input-report-review.json",
+      "exists": true,
+      "sha256": "af9a836a2a26fbc52e18cf920962f7727f3cbb7f9cc6d38fda46da1cc54fe850",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-after.txt",
+      "exists": true,
+      "sha256": "491f8fca1ff0f7ab74a43c19c77457e3ba0b53ee2c60cf97b850e3a480415bb4",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-app-before.json",
+      "exists": true,
+      "sha256": "e89edb9777fe4ce989d7e6c1944a7cf886c49f0f16acc9e75ad6068c70f783f0",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-before.txt",
+      "exists": true,
+      "sha256": "bc99e5e796e05fb1090af6eec3cb55fee8d107d3baf9aa3f13d4bbf75c21d369",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-containers.txt",
+      "exists": true,
+      "sha256": "19e95f03931508bcb63d5f1f276741db94fd3f8f0399d2690ed306a73c3ba6c7",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-name-before.txt",
+      "exists": true,
+      "sha256": "973f555da268d4a9b66b237af68af0f703a2f9efdb509c60ef3cdaa4851dcb7a",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review.json",
+      "exists": true,
+      "sha256": "df8d14a8c07966de8dfd9dd39c133ce0510840db452b00a2a2a214e2712ac1c1",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-1.log",
+      "exists": true,
+      "sha256": "b4bf1d1a78ddc91f2276e46a49abd94193b0ce3447f757404372960fc01e96f7",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-2.log",
+      "exists": true,
+      "sha256": "6183fd51fd9e8363ce630b481ab38758b948ccc8a8a057c575a7e6334d04ad36",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-3.log",
+      "exists": true,
+      "sha256": "60dc580378c721cefb8365c752ade922e1656f66d5fd2e68d22528c3f7aaadd9",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-4.log",
+      "exists": true,
+      "sha256": "d07b0c1ee2eb5a4476fd1eb51049852788029259ce8512a671e07dd07c4902fd",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before.json",
+      "exists": true,
+      "sha256": "502a263a2b321541ec109fd9cf7547d06813487994c804d57368304c580b6a74",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-evidence-paths.json",
+      "exists": true,
+      "sha256": "d6c5d0e3f204bd9c451c4335d774600deff58d1093a277fa6766802e0cf8d30d",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-review.json",
+      "exists": true,
+      "sha256": "291872c962c5d84a4ddf69aa8c979fca6588c64f1a3545b7145c51046f077c5b",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/portability-summary.json",
+      "exists": true,
+      "sha256": "09a98d785fd30deeea0c72b34a1714a68a64c8e0e5391db32cfe9e13e837aaa0",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-cpp-review.json",
+      "exists": true,
+      "sha256": "0b542b9cdc89901da9b77afcd6e74ba5f553bfd6199b5d92defc06aac1c57cf4",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-negative-control.log",
+      "exists": true,
+      "sha256": "d981fed09b8f853fa07d8dae7b9721e770c0537549fb5a158243f86921b72291",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-validation.log",
+      "exists": true,
+      "sha256": "a55937383f515ca1d93b1f383d7fe5dd527b262e349c85a1d6e80a9e83e29762",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-mixed.log",
+      "exists": true,
+      "sha256": "1c0e25f0734cc080611d921893c42db144013184ca8bfc7291fd1310b63c8e28",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-negative-control.log",
+      "exists": true,
+      "sha256": "b85d371df723e66076b4d0216217608654fc3d8ad59c9cb895d9a46189405201",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-single-relation.log",
+      "exists": true,
+      "sha256": "192e747826746ac4c3e66256ca00305280276d0cafc6c40ebe8d0c1a02890bf4",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/rust-tests.txt",
+      "exists": true,
+      "sha256": "15db40d1e5b59d0bdabed0c63b2787be9a758554560adb0dc90e56984a551cea",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/rust-tests.xml",
+      "exists": true,
+      "sha256": "32f1d2d09b40b8c5f9514aca3f6856c1c0dc49675fc260a2dfa1c68bb2c39a48",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation-negative-control.log",
+      "exists": true,
+      "sha256": "a9a4ed71049b49da3cc8a64b512a1db621b6f4c2823c3c2ad41e338f3cc40580",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation.log",
+      "exists": true,
+      "sha256": "43556dad8dc451835806e6d2ff096134baa70af2a76d03f8d54ffc49e204deb2",
+      "registered_at_read": true
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/verification.json",
+      "exists": true,
+      "sha256": "e8c0ba2c4e75199c2a0f6303c27ae8394536f557230fc596966d1ffef90594ec",
+      "registered_at_read": true
+    }
+  ],
+  "observed_results": {
+    "full_verify": {
+      "state": "passed",
+      "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+      "command": "pixi run --locked verify",
+      "exit_code": 0,
+      "ctest_suites": 15,
+      "ctest_failed": 0,
+      "modern_cases_in_full_verify": 205,
+      "formal_cases": 9,
+      "formal_all_expected": true,
+      "portability_status": "passed",
+      "portability_vectors_per_language": 32778,
+      "scope": "Linux x86_64, source/SQLite/CLI, finite models; GUI, other OS and crash-atomic publication excluded",
+      "subsequent_modern_rerun": "All modern tests were rerun after implementation and tests were frozen, including the final two namespace/module sharing cases.",
+      "modern_frozen_command": "pixi run --locked -e modern python -m pytest tests/modern_indexers -v --junitxml=build/modern-indexers/final-results.xml",
+      "modern_frozen_exit_code": 0,
+      "modern_frozen_cases": 207,
+      "modern_frozen_failures": 0,
+      "modern_frozen_errors": 0,
+      "modern_frozen_skips": 0,
+      "modern_cases_by_module": {
+        "tests.modern_indexers.test_app_e2e": 12,
+        "tests.modern_indexers.test_cli": 25,
+        "tests.modern_indexers.test_cpp_indexer": 32,
+        "tests.modern_indexers.test_graph": 40,
+        "tests.modern_indexers.test_integration_review_e2e": 3,
+        "tests.modern_indexers.test_python_indexer": 62,
+        "tests.modern_indexers.test_rust_indexer": 33
+      },
+      "modern_frozen_sources_match": true,
+      "modern_seconds": 157.142
+    },
+    "ctest": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/ctest-results.xml",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "portable_core_ctest": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/core-results.xml",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modern_full_verify": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/full-verify-modern-results.xml",
+      "tests": 205,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "previous_app_run": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/app-tests.xml",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "previous_rust_run": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/rust-tests.xml",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "formal_configurations": [
+      {
+        "name": "refresh-mixed",
+        "passed": true,
+        "returncode": 0,
+        "expected_violation": null,
+        "actual_violation": null,
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-mixed.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "refresh-single-relation",
+        "passed": true,
+        "returncode": 0,
+        "expected_violation": null,
+        "actual_violation": null,
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-single-relation.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "refresh-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "expected_violation": "SharedDependenciesPreserved",
+        "actual_violation": "SharedDependenciesPreserved",
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-negative-control.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "external-indexing",
+        "passed": true,
+        "returncode": 0,
+        "expected_violation": null,
+        "actual_violation": null,
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "external-indexing-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "expected_violation": "NoPublicationAfterFailure",
+        "actual_violation": "NoPublicationAfterFailure",
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing-negative-control.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "source-observation",
+        "passed": true,
+        "returncode": 0,
+        "expected_violation": null,
+        "actual_violation": null,
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "source-observation-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "expected_violation": "ContentChangesDetected",
+        "actual_violation": "ContentChangesDetected",
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation-negative-control.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "python-output-validation",
+        "passed": true,
+        "returncode": 0,
+        "expected_violation": null,
+        "actual_violation": null,
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-validation.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      },
+      {
+        "name": "python-output-negative-control",
+        "passed": true,
+        "returncode": 12,
+        "expected_violation": "NoPublicationAfterInvalidOutput",
+        "actual_violation": "NoPublicationAfterInvalidOutput",
+        "recorded_violation_matches": true,
+        "retained_log": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-negative-control.log",
+        "log_exists": true,
+        "raw_log_contains_expected_result": true
+      }
+    ],
+    "portability": {
+      "status": "passed",
+      "profile": "refresh-sets-v1",
+      "implementations": {
+        "cpp": {
+          "status": "passed",
+          "cases": 32778,
+          "mismatches": 0
+        },
+        "rust": {
+          "status": "passed",
+          "cases": 32778,
+          "mismatches": 0
+        }
+      },
+      "scope": "C++ production value core / Rust reference policy; no Rust indexing or OS application proof",
+      "source_hashes_match": true
+    },
+    "language_profiles": [
+      {
+        "id": "cxx-clang11-core",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      },
+      {
+        "id": "python-jedi017-full",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      },
+      {
+        "id": "python-jedi017-shallow",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      },
+      {
+        "id": "python-modern",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      },
+      {
+        "id": "cxx-modern",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      },
+      {
+        "id": "rust-core",
+        "status": "tested-fixtures",
+        "all_evidence_paths_exist": true
+      }
+    ],
+    "modern_final_frozen": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-modern-results.xml",
+      "tests": 207,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases_by_module": {
+        "tests.modern_indexers.test_app_e2e": 12,
+        "tests.modern_indexers.test_cli": 25,
+        "tests.modern_indexers.test_cpp_indexer": 32,
+        "tests.modern_indexers.test_graph": 40,
+        "tests.modern_indexers.test_integration_review_e2e": 3,
+        "tests.modern_indexers.test_python_indexer": 62,
+        "tests.modern_indexers.test_rust_indexer": 33
+      },
+      "real_app_cases": 15,
+      "raw_log_contains_207_passed": true
+    },
+    "final_source_snapshot": {
+      "file": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-source-snapshot.json",
+      "files": 15,
+      "current_hashes_match": true,
+      "per_file": [
+        {
+          "path": "script/indexers/__init__.py",
+          "sha256": "5a21ab094f3c82e5e436d56a930ad7c003868d177035b33b07fd43c049c781db",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/cli.py",
+          "sha256": "93a7bd1100d1b8699445aaf29cef41bb94040beaf10b794b96c1330cd236523d",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/cpp_indexer.py",
+          "sha256": "2f1bf788eadecb6437149d6d72c4e7e20ef85905a5f02446312ce660280817d5",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/graph.py",
+          "sha256": "23846f62ab24e3cc1fa9ac883f32509fbf3f8a39a49e8c3c80375d65a0bbdb1e",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/python_indexer.py",
+          "sha256": "4efab49ae90f658ef1cf63a6a75cc9b1a7b6fe7fc7b36a93105c449202fc4505",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/rust_indexer.py",
+          "sha256": "3840291cecaa450f1c6cba9beb2b7fd8f1b8b8be85903e1d047453c6fcb6e068",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/rust_lsp.py",
+          "sha256": "23f74edca417b42b5688af73a856215ceaeea954b3688c6f21f2bc620828d58f",
+          "matches": true
+        },
+        {
+          "path": "script/indexers/rust_runtime.py",
+          "sha256": "8ebd8003b6700a11e448ed0f2ab876514a2f539e6b4ed3b0fbac163ebcb2e7aa",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_app_e2e.py",
+          "sha256": "93efd991179c34d37c70920e84303f9d94aea6aabace5d9bb0f7fbb1d647701e",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_cli.py",
+          "sha256": "095d62970ef61e7b8b6ba5fdb2ec6279e9b68dcc30e235bde61dd4107b968b58",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_cpp_indexer.py",
+          "sha256": "4dd32cf41511c017d50a489097f6ff03d65e3bb6cdf377cf3630a4ed764f33ae",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "sha256": "e0e6597be5ae043df23d8a8379f9474f1c5c72e2f336cdd53960b135df7672f1",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_integration_review_e2e.py",
+          "sha256": "c3ca96c64bd909a9330e1b48add2d63849c8491e0768835aeaf5f4d5a4da529f",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_python_indexer.py",
+          "sha256": "b58b74bfa60d8692bcb49b275080be4904eb02cc0c41f6ce6cf948f646b5619a",
+          "matches": true
+        },
+        {
+          "path": "tests/modern_indexers/test_rust_indexer.py",
+          "sha256": "4d65f2fe3b6224b409392bfa46784e7cc0cc371f22ba14e14ad5d58c2a624c72",
+          "matches": true
+        }
+      ],
+      "scope": "Recorded pre-run snapshot matches current post-run files; no implementation/test edits were made by this reviewer."
+    }
+  },
+  "checks": [
+    {
+      "id": "FINAL-DOC-001",
+      "status": "pass",
+      "subject": "Scope of GUI and language standards",
+      "reason": "012 explicitly excludes actual GUI automation/user review; modern-indexers states Linux x86_64 CLI measurement, not Windows/macOS or GUI measurement. Python inference/Jedi equivalence and C++20/23 or Rust full-language conformity are not claimed."
+    },
+    {
+      "id": "FINAL-DOC-002",
+      "status": "pass",
+      "subject": "Rust reference implementation versus source indexer",
+      "reason": "portability-summary explicitly identifies refresh-sets-v1, C++ production value core and Rust reference policy, with no Rust-indexing proof. The Rust source-indexing claim has separate rust-analyzer/Cargo files, fixture expectations, real-engine tests and real-app tests in retained full-verify evidence."
+    },
+    {
+      "id": "FINAL-DOC-003",
+      "status": "pass",
+      "subject": "Legacy database migration",
+      "reason": "012 and modern-indexers both state full reindexing is required for old Python databases; both legacy Python profiles retain the same explicit limitation."
+    },
+    {
+      "id": "FINAL-DOC-004",
+      "status": "pass",
+      "subject": "Completed full verify and final frozen modern rerun counts",
+      "reason": "CTest 15 suites, modern 205 cases in full verify, 9 finite-model configurations (5 normal and 4 specified negative controls), and 32778 vectors each in C++/Rust agree with retained XML/log/summary. The final separately retained modern rerun has 207 passes with zero failures/errors/skips; 12 app_e2e plus 3 integration_review_e2e cases explain the 15 CLI app cases. All 15 recorded implementation/test hashes match current files."
+    },
+    {
+      "id": "FINAL-DOC-005",
+      "status": "pass",
+      "subject": "Source/evidence identity",
+      "reason": "All 10 annotation source hashes and excerpts match the working tree. All 41 retained evidence files exist. All 9 formal summary log references resolve and raw logs contain the stated expected result. Manifest evidence indexing is finalized by the parent after this read."
+    }
+  ],
+  "followups": [
+    {
+      "id": "FINAL-DOC-006",
+      "severity": "documentation-clarification",
+      "status": "resolved-by-parent-and-rechecked",
+      "path": "docs/contracts/language-profiles.json",
+      "location": "rust-core.target.editions and limitations",
+      "observation": "The advertised target.editions list is 2015/2018/2021/2024. The real-engine Rust fixture packages and the generated app protocol case explicitly use edition 2024; no separate per-edition actual-engine case is present for 2015/2018/2021. The language-wide limitations already avoid a full-language claim.",
+      "recommendation": "Distinguish engine-accepted editions from edition 2024 measured by the retained fixtures; no new tests were requested or run.",
+      "resolution": "The rust-core limitations now explicitly say real-engine fixtures use edition2024 and 2015/2018/2021 are accepted engine capabilities without individual edition measurements in this PR.",
+      "evidence": "実エンジン人工対象はedition2024。2015/2018/2021はエンジンの受付能力で、このPRではedition別の実測を行っていない。"
+    },
+    {
+      "id": "FINAL-DOC-007",
+      "severity": "evidence-retention",
+      "status": "resolved-by-parent-and-rechecked",
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-review.json",
+      "location": "findings[MIX-001].before_evidence",
+      "observation": "The review refers to build/input-position-mixed-review/observations.json and its four run.log files for the pre-fix thread-dependent ownership counterexample. These still exist locally but are not among the 30 retained report artifacts. Post-fix mixed-engine results are retained in full-verify and its XML.",
+      "recommendation": "Copy the original observation JSON and four run logs into report evidence and register their paths, preserving the original evidence rather than rerunning the fixed source.",
+      "resolution": "Original pre-fix observation JSON and all four associated run logs are copied into report evidence, byte-identical to the local originals; the separate evidence-paths JSON maps original log paths to retained files.",
+      "retained_copy_checks": [
+        {
+          "original": "build/input-position-mixed-review/observations.json",
+          "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before.json",
+          "byte_identical": true
+        },
+        {
+          "original": "build/input-position-mixed-review/disjoint-1/run.log",
+          "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-1.log",
+          "byte_identical": true
+        },
+        {
+          "original": "build/input-position-mixed-review/disjoint-2/run.log",
+          "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-2.log",
+          "byte_identical": true
+        },
+        {
+          "original": "build/input-position-mixed-review/overlap-1/run.log",
+          "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-3.log",
+          "byte_identical": true
+        },
+        {
+          "original": "build/input-position-mixed-review/overlap-2/run.log",
+          "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-4.log",
+          "byte_identical": true
+        }
+      ]
+    }
+  ],
+  "verdict": "pass for the requested documentation/evidence review scope: both followups resolved and checked; actual GUI, other OS, complete language standards, Rust reference-vs-indexer distinction, and legacy Python full reindexing limits are explicit. Completed verification counts are accurate and final 207-case evidence is retained. Publication/CI/merge remain owned by the parent.",
+  "new_tests_executed": false,
+  "source_or_document_files_modified": false,
+  "completed_at_utc": "2026-10-31T07:33:44.151023+00:00",
+  "evidence_manifest_note": "The parent will refresh manifest evidence entries after this review; retained evidence files are enumerated and hashed here as read.",
+  "remaining_material_misstatements": 0,
+  "remaining_evidence_gaps": 0
+}

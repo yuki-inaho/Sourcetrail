@@ -103,3 +103,21 @@ TEST_CASE("failed external run finishes scheduling and forces candidate discard"
 	REQUIRE(dialog->clearCalls == 1);
 	REQUIRE(dialog->unknownProgressHideCalls == 0);
 }
+
+TEST_CASE("invalid output rejects a run without inventing a process failure", "[contract][execution]")
+{
+	ExternalIndexerRunState state;
+	state.beginCommand();
+	state.settleCommand(sourcetrail::core::ExternalProcessOutcome::Succeeded);
+	state.rejectOutput();
+	state.beginCommand();
+	state.settleCommand(sourcetrail::core::ExternalProcessOutcome::Succeeded);
+	const auto result = state.snapshot();
+	REQUIRE(result.attempted == 2);
+	REQUIRE(result.settled == 2);
+	REQUIRE(result.succeeded == 2);
+	REQUIRE(result.failed == 0);
+	REQUIRE(result.invalidOutputs == 1);
+	REQUIRE(result.hasFailure());
+	REQUIRE(result.exitCode() == 1);
+}

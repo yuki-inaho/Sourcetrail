@@ -569,11 +569,47 @@ void Project::buildIndex(RefreshInfo info, std::shared_ptr<DialogView> dialogVie
 		std::make_unique<CombinedIndexerCommandProvider>();
 	std::unique_ptr<CombinedIndexerCommandProvider> customIndexerCommandProvider =
 		std::make_unique<CombinedIndexerCommandProvider>();
+	bool incompatiblePythonOwnership = false;
+#if BUILD_PYTHON_LANGUAGE_PACKAGE
+	// Legacy Python emits scalar columns; modern adapters emit UTF-8 byte
+	// columns. The same file cannot own both representations in one candidate,
+	// even when commands write to separate worker databases before injection.
+	std::set<FilePath> legacyPythonSources;
+	std::set<FilePath> modernSources;
 	for (const std::shared_ptr<SourceGroup>& sourceGroup: m_sourceGroups)
 	{
 		if (sourceGroup->getStatus() == SOURCE_GROUP_STATUS_ENABLED)
 		{
-			if (sourceGroup->getType() == SOURCE_GROUP_CUSTOM_COMMAND)
+			if (sourceGroup->getType() == SOURCE_GROUP_PYTHON_EMPTY)
+			{
+				utility::append(legacyPythonSources, sourceGroup->getAllSourceFilePaths());
+			}
+			else if (sourceGroup->getType() == SOURCE_GROUP_MODERN)
+			{
+				utility::append(modernSources, sourceGroup->getAllSourceFilePaths());
+			}
+		}
+	}
+	for (const FilePath& path: legacyPythonSources)
+	{
+		if (modernSources.find(path) != modernSources.end())
+		{
+			incompatiblePythonOwnership = true;
+			externalIndexerRunState->rejectOutput();
+			MessageStatus(
+				L"Cannot index the same source with legacy Python and a modern adapter: " +
+					path.wstr(),
+				true, false, true).dispatch();
+			break;
+		}
+	}
+#endif // BUILD_PYTHON_LANGUAGE_PACKAGE
+	for (const std::shared_ptr<SourceGroup>& sourceGroup: m_sourceGroups)
+	{
+		if (!incompatiblePythonOwnership && sourceGroup->getStatus() == SOURCE_GROUP_STATUS_ENABLED)
+		{
+			if (sourceGroup->getType() == SOURCE_GROUP_CUSTOM_COMMAND ||
+				sourceGroup->getType() == SOURCE_GROUP_MODERN)
 			{
 				customIndexerCommandProvider->addProvider(
 					sourceGroup->getIndexerCommandProvider(info));

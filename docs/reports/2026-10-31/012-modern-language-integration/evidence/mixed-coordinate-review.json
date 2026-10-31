@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-31T07:17:26.100608+00:00",
+  "reviewer": "/root/input_positions",
+  "scope": "Modern統合と旧Python位置変換・DB注入の境界に対する追加ソースレビュー",
+  "independence": "Modern統合は親・他agentの実装をレビューした。旧Python入力/位置実装は本reviewer自身の担当であり、その実装全体への独立レビューとは称しない。",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree"
+  },
+  "sources": [
+    {
+      "kind": "source",
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "symbol": "m_pythonSourcesByDatabase[indexerCommand->getDatabaseFilePath()].insert(sourcePath);",
+      "sha256": "5bc7214d4ab597adb7abacdc64b9fdf32e9ba539edba6af4346c0d993f1fde29",
+      "excerpt": "\t\t\tm_pythonSourcesByDatabase[indexerCommand->getDatabaseFilePath()].insert(sourcePath);\n\t\t}\n#endif\n\n\t\tif (storage && outcome == sourcetrail::core::ExternalProcessOutcome::Succeeded)",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001"
+      ],
+      "unit_id": "ANN-001"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.h",
+      "symbol": "std::map<FilePath, std::set<FilePath>> m_pythonSourcesByDatabase;",
+      "sha256": "9b187f3ef07e023dbb0a61fda7c87cba5abf204ddafe47e9414b5b31b781a7ef",
+      "excerpt": "\tstd::map<FilePath, std::set<FilePath>> m_pythonSourcesByDatabase;\n\tstd::mutex m_pythonSourcesMutex;\n};\n\n#endif\t  // TASK_EXECUTE_CUSTOM_COMMANDS_H",
+      "contracts": [
+        "LOCATION-001"
+      ],
+      "unit_id": "ANN-002"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "bool SqliteIndexStorage::normalizePythonSourceLocations(",
+      "sha256": "4300574fbc033fea2374831861ba5378ac64b654904eb5119a8cd7e07076b2ab",
+      "excerpt": "bool SqliteIndexStorage::normalizePythonSourceLocations(\n\tconst std::set<FilePath>& sourceFiles, std::string& error)\n{\n\tusing namespace sourcetrail::core;\n\tbool savepoint = false;",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001"
+      ],
+      "unit_id": "ANN-003"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/data/storage/PersistentStorage.cpp",
+      "symbol": "bool PersistentStorage::normalizePythonSourceLocations(",
+      "sha256": "174afd42c7752f0a9a8fbd03ffc39ccae74246f1c3f2bc3008aa6997d1db53d1",
+      "excerpt": "bool PersistentStorage::normalizePythonSourceLocations(\n\tconst std::set<FilePath>& sourceFiles, std::string& error)\n{\n\tconst bool success = m_sqliteIndexStorage.normalizePythonSourceLocations(sourceFiles, error);\n\tclearCaches();",
+      "contracts": [
+        "LOCATION-001"
+      ],
+      "unit_id": "ANN-004"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/data/storage/Storage.cpp",
+      "symbol": "// TRACE(\"inject locations\")",
+      "sha256": "36a3d4870f53f246c708587422c643f29d2ee99ed938a349cc2061ae5d1cb49a",
+      "excerpt": "\t\t// TRACE(\"inject locations\");\n\n\t\tconst std::set<StorageSourceLocation>& oldLocations = injected->getStorageSourceLocations();\n\t\tstd::vector<StorageSourceLocation> locations;\n\t\tlocations.reserve(oldLocations.size());",
+      "contracts": [
+        "LOCATION-001",
+        "GRAPH-001"
+      ],
+      "unit_id": "ANN-005"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/project/SourceGroupCustomCommand.cpp",
+      "symbol": "// Whole-project semantic engines share one Cargo/CDB/import context.",
+      "sha256": "2d31cc9d16c1f890620fc21bf6f64af36fd3e7b7e607fbe479906681101d245b",
+      "excerpt": "\t\t// Whole-project semantic engines share one Cargo/CDB/import context. The\n\t\t// group disallows partial clearing; schedule exactly one serial command.\n\t\tconst std::set<FilePath> paths = getAllSourceFilePaths();\n\t\tfor (const FilePath& path: paths)\n\t\t{",
+      "contracts": [
+        "SOURCE-GROUP-001",
+        "LANGUAGE-001"
+      ],
+      "unit_id": "ANN-006"
+    },
+    {
+      "kind": "source",
+      "path": "src/lib/project/Project.cpp",
+      "symbol": "bool incompatiblePythonOwnership = false;",
+      "sha256": "9ca15a28acd67ddbd11a79608081e325de0f8ad2d942c32d2ea9ed9e4a28f7dd",
+      "excerpt": "\tbool incompatiblePythonOwnership = false;\n#if BUILD_PYTHON_LANGUAGE_PACKAGE\n\t// Legacy Python emits scalar columns; modern adapters emit UTF-8 byte\n\t// columns. The same file cannot own both representations in one candidate,\n\t// even when commands write to separate worker databases before injection.",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001",
+        "SOURCE-GROUP-001"
+      ],
+      "unit_id": "ANN-007"
+    },
+    {
+      "kind": "source",
+      "path": "script/indexers/graph.py",
+      "symbol": "def write_graph(",
+      "sha256": "4f9e41f6f2a88d541a9b353517e95d53e4c400ae0886ebeb06b5196d67b66e6b",
+      "excerpt": "def write_graph(database: Path, graph: dict, *, expected_version: int = DATABASE_VERSION) -> dict[str, int]:\n    \"\"\"Append a validated project graph to an app-owned candidate in one transaction.\n\nThe caller must rebuild a modern group as a whole. This function never clears an\naccepted index and does not pretend that app-level publication is crash-atomic.",
+      "contracts": [
+        "LOCATION-001",
+        "LANGUAGE-001"
+      ],
+      "unit_id": "ANN-008"
+    },
+    {
+      "kind": "source",
+      "path": "tests/modern_indexers/test_app_e2e.py",
+      "symbol": "def test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains(",
+      "sha256": "fb6958879e2ad1a015003afc782b8c48ee7aae7552b1587a3a760aba74cad21c",
+      "excerpt": "def test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains(tmp_path, threads):\n    project = Project(tmp_path / \"mixed\", \"python\", f\"mixed-coordinates-{threads}\")\n    modern = project.root / \"modern\"\n    legacy = project.root / \"legacy\"\n    modern.mkdir()",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001",
+        "INPUT-001"
+      ],
+      "unit_id": "ANN-009"
+    }
+  ],
+  "findings": [
+    {
+      "id": "MIX-001",
+      "finding_type": "observed",
+      "severity": "high",
+      "status": "resolved",
+      "summary": "旧PythonとModernが同一ソースを所有すると、代表コマンドのパスだけの衝突検査を通過し、1threadは拒否・2threadは採用となった。",
+      "cause": "Modernは代表1入力のCustomコマンドとして全グループを出力する。旧Pythonは別ワーカーDBへ出力できるため、正規化前には異なるDBとして両者が成立し、注入時に混ざる。",
+      "before_evidence": "build/input-position-mixed-review/observations.json",
+      "repair": "親がProject::buildIndexでenabled旧Python/Modernの全getAllSourceFilePaths集合の交差を検査する処理を追加した。重複時はproviderを作らずrejectOutputを保持し、通常終了経路で候補を破棄する。",
+      "verification": "test_mixed_legacy_and_modern_same_source_is_rejected_and_retries[1/2]は双方拒否・旧索引保持・修復後再試行を確認した。"
+    },
+    {
+      "id": "MIX-002",
+      "finding_type": "observed",
+      "severity": "none",
+      "status": "verified",
+      "summary": "所有集合が分離されたModernソースは旧Pythonの文字→byte変換対象にならない。",
+      "reason": "map登録はINDEXER_COMMAND_PYTHONの成功だけ。ModernはINDEXER_COMMAND_CUSTOM。DBごとのソース集合でfileを一意照合し、source_locationのWHERE file_node_idで変換範囲を限定する。",
+      "verification": "1/2thread双方で旧・Modernの日本語トークン、Modern BOM、保存UTF8範囲と呼出辺が正しく、旧側だけ更新後も全体再構築と一致。"
+    },
+    {
+      "id": "MIX-003",
+      "finding_type": "observed",
+      "severity": "none",
+      "status": "verified",
+      "summary": "ワーカーの実DBパス、変換回数、注入する位置の座標系が整合する。",
+      "reason": "worker DBパスはrunIndexerCommand前にsetDatabaseFilePathで確定する。成功後にその実パスをmapのキーへ登録し、setで同一ソースを重複除去。全スレッドjoin後に一回変換し、その後で新しいsourceStorageを開いて注入する。Storage::injectはファイルIDを写し換えるが位置の数値を再変換しない。"
+    },
+    {
+      "id": "MIX-004",
+      "finding_type": "observed",
+      "severity": "none",
+      "status": "verified",
+      "summary": "正規化後のキャッシュと読み出し経路に古い文字位置を残す接続は確認されなかった。",
+      "reason": "正規化用PersistentStorageは新規接続で、SQLの位置索引をclearしPersistentStorageのcacheもclearする。注入先と注入元は正規化後の新規接続。getStorageSourceLocationsは毎回SQLから再取得し、後処理前にはtargetStorageのcacheを再構築する。"
+    },
+    {
+      "id": "MIX-005",
+      "finding_type": "observed",
+      "severity": "informational",
+      "status": "bounded",
+      "summary": "旧Pythonの名前解決後処理は現状、全DBのLOCATION_UNSOLVED行を走査する。現在のModernエンジンは未解決を診断として出し、この位置種別を生成しない。",
+      "limit": "固定された現行Modern出力については巻き込みを再現しなかった。将来Modernがunsolved位置を出す場合は、後処理対象ファイルも専用の集合へ限定する必要がある。任意Custom出力への一般保証ではない。"
+    }
+  ],
+  "verification": {
+    "command": [
+      ".pixi/envs/modern/bin/python",
+      "-m",
+      "pytest",
+      "tests/modern_indexers/test_app_e2e.py",
+      "-q",
+      "-k",
+      "mixed_legacy_and_modern",
+      "--basetemp=build/input-position-mixed-regression",
+      "--junitxml=build/input-position-mixed-results.xml"
+    ],
+    "result": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.06
+    },
+    "log": "/workspace/scratch/b7462e898297/input-position-mixed-regression.log",
+    "junit": "build/input-position-mixed-results.xml",
+    "cli_receipts": [
+      "build/modern-indexers/e2e/mixed-coordinates-1",
+      "build/modern-indexers/e2e/mixed-coordinates-2",
+      "build/modern-indexers/e2e/mixed-ownership-1",
+      "build/modern-indexers/e2e/mixed-ownership-2"
+    ],
+    "binary_sha256": "dfdfec0225eb0b61c16293cb0bab0ab715099e7cf8454ddb4a2b7ec5fc352790",
+    "full_test_suite": "この追加レビューでは再実行していない。親の最終統合verifyで実行する。"
+  },
+  "changes_by_reviewer": [
+    "tests/modern_indexers/test_app_e2e.py の末尾に4ケースと補助関数を追加"
+  ],
+  "changes_by_parent": [
+    "src/lib/project/Project.cpp のグループ全所有集合の交差検査"
+  ],
+  "limitations": [
+    "Modern Pythonと旧Pythonを併用するときはsource_roots等で所有集合を分離する。",
+    "今回の追加実行対象はLinuxの旧Python/Modern Python混在1/2thread。全言語対・全OS・実GUIの網羅検証ではない。",
+    "入力取得・注入・公開の原子性や任意Customの所有宣言を完全検査するものではない。"
+  ],
+  "review_status": "completed_for_declared_scope"
+}

@@ -358,7 +358,7 @@ target_include_directories(${LIB_PROJECT_NAME} SYSTEM
 )
 
 target_link_libraries(${LIB_PROJECT_NAME}
-	PRIVATE Sourcetrail_core
+	PUBLIC Sourcetrail_core
 	PUBLIC ${LIB_UTILITY_PROJECT_NAME} ${LIB_GUI_PROJECT_NAME} ${Boost_LIBRARIES}
 )
 

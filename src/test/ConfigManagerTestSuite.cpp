@@ -38,6 +38,24 @@ TEST_CASE("config manager returns true when key is found")
 	REQUIRE(success);
 }
 
+TEST_CASE("configuration XML at EOF is parsed without a final newline", "[contract][input]")
+{
+	for (const std::string& ending: {std::string(), std::string("\n")})
+	{
+		const auto config = ConfigManager::createEmpty();
+		REQUIRE(config->load(TextAccess::createFromString(
+			"<config><value>42</value></config>" + ending)));
+		int value = 0;
+		REQUIRE(config->getValue("value", value));
+		REQUIRE(value == 42);
+	}
+	for (const std::string& malformed: {std::string(), std::string("<config><value>42</config>"),
+		std::string("<other/>")})
+	{
+		REQUIRE_FALSE(ConfigManager::createEmpty()->load(TextAccess::createFromString(malformed)));
+	}
+}
+
 
 TEST_CASE("config manager returns false when key is not found")
 {

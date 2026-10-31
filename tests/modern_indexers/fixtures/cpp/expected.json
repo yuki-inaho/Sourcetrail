@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "toy_id": "TOY-CXX-MODERN-001",
+  "profile": "cxx-modern",
+  "features": {
+    "symbols": ["modern::Addable", "modern::combine", "modern::factor", "modern::choose", "modern::Point", "modern::run"],
+    "calls": [["modern::choose", "modern::factor"], ["modern::run", "modern::choose"], ["modern::run", "modern::combine"]]
+  },
+  "coroutine": {
+    "symbols": ["Task", "Task::promise_type", "compute", "execute"],
+    "calls": [["execute", "compute"]]
+  },
+  "modules": {
+    "symbols": ["numbers", "numbers::Addable", "numbers::answer", "entry"],
+    "calls": [["entry", "numbers::answer"]],
+    "imports": [["main.cpp", "numbers.cppm"]]
+  }
+}

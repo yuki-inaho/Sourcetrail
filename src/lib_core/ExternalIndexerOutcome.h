@@ -27,12 +27,19 @@ inline ExternalProcessOutcome classifyExternalProcess(bool hasTransportError, in
 	return exitCode == 0 ? ExternalProcessOutcome::Succeeded : ExternalProcessOutcome::NonzeroExit;
 }
 
+enum class ExternalOutputOutcome
+{
+	Valid,
+	InvalidOutput
+};
+
 struct ExternalIndexerOutcome
 {
 	std::size_t attempted = 0;
 	std::size_t settled = 0;
 	std::size_t succeeded = 0;
 	std::size_t failed = 0;
+	std::size_t invalidOutputs = 0;
 
 	void beginCommand()
 	{
@@ -62,13 +69,27 @@ struct ExternalIndexerOutcome
 		++settled;
 	}
 
+	// Output validation happens after worker completion and is not another
+	// process attempt. It must not change attempted/settled process accounting.
+	void observeOutput(ExternalOutputOutcome outcome)
+	{
+		if (outcome == ExternalOutputOutcome::InvalidOutput)
+		{
+			++invalidOutputs;
+		}
+		else if (outcome != ExternalOutputOutcome::Valid)
+		{
+			throw std::invalid_argument("Unknown external output outcome");
+		}
+	}
+
 	bool hasFailure() const
 	{
-		return failed != 0;
+		return failed != 0 || invalidOutputs != 0;
 	}
 
 	// Call after the adapter's worker barrier. Zero describes process execution,
-	// not output validity, cancellation, timeout behavior or a complete index.
+	// not cancellation, timeout behavior or a complete index.
 	int exitCode() const
 	{
 		return hasFailure() ? 1 : 0;

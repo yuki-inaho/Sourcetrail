@@ -35,12 +35,41 @@ std::set<FilePath> SourceGroupCustomCommand::getAllSourceFilePaths() const
 		m_settings->getSourcePathsExpandedAndAbsolute(),
 		m_settings->getExcludeFiltersExpandedAndAbsolute(),
 		m_settings->getSourceExtensions());
-	return fileManager.getAllSourceFilePaths();
+	std::set<FilePath> paths = fileManager.getAllSourceFilePaths();
+	if (m_settings->getType() == SOURCE_GROUP_MODERN)
+	{
+		// Explicit manifests and adapter configurations are observed inputs even
+		// when their extensions differ from the language's source extensions.
+		for (const FilePath& path: m_settings->getSourcePathsExpandedAndAbsolute())
+		{
+			if (path.exists() && !path.isDirectory())
+			{
+				paths.insert(path);
+			}
+		}
+	}
+	return paths;
 }
 
 std::vector<std::shared_ptr<IndexerCommand>> SourceGroupCustomCommand::getIndexerCommands(
 	const RefreshInfo& info) const
 {
+	if (m_settings->getType() == SOURCE_GROUP_MODERN)
+	{
+		// Whole-project semantic engines share one Cargo/CDB/import context. The
+		// group disallows partial clearing; schedule exactly one serial command.
+		const std::set<FilePath> paths = getAllSourceFilePaths();
+		for (const FilePath& path: paths)
+		{
+			if (info.filesToIndex.find(path) != info.filesToIndex.end())
+			{
+				return createExternalIndexerCommands(
+					{INDEXER_COMMAND_CUSTOM, m_settings->getCustomCommand(), {}, false},
+					m_settings->getProjectSettings(), {path}, {path});
+			}
+		}
+		return {};
+	}
 	return createExternalIndexerCommands(
 		{INDEXER_COMMAND_CUSTOM, m_settings->getCustomCommand(), {}, m_settings->getRunInParallel()},
 		m_settings->getProjectSettings(),

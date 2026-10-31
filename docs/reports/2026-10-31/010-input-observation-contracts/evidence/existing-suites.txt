@@ -1,0 +1,109 @@
+Internal ctest changing into directory: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+UpdateCTestConfiguration  from :/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Parse Config file:/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Parse Config file:/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Test project /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 4
+    Start  4: legacy
+
+4: Test command: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/test/Sourcetrail_test "~[regression]~[e2e]~[contract]" "--warn" "NoTests"
+4: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail/bin/test
+4: Environment variables: 
+4:  QT_QPA_PLATFORM=offscreen
+4: Test timeout computed to be: 600
+4: no settings
+4: ===============================================================================
+4: All tests passed (1616 assertions in 608 test cases)
+4: 
+1/5 Test  #4: legacy ...........................   Passed    4.25 sec
+test 7
+    Start  7: cpp-regression
+
+7: Test command: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/test/Sourcetrail_test "[cxx][regression]" "--warn" "NoTests"
+7: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail/bin/test
+7: Environment variables: 
+7:  QT_QPA_PLATFORM=offscreen
+7: Test timeout computed to be: 600
+7: no settings
+7: ===============================================================================
+7: All tests passed (54 assertions in 7 test cases)
+7: 
+2/5 Test  #7: cpp-regression ...................   Passed    0.14 sec
+test 8
+    Start  8: cpp-e2e
+
+8: Test command: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/test/Sourcetrail_test "[cxx][e2e]" "--warn" "NoTests"
+8: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail/bin/test
+8: Environment variables: 
+8:  QT_QPA_PLATFORM=offscreen
+8: Test timeout computed to be: 600
+8: no settings
+8: ===============================================================================
+8: All tests passed (270 assertions in 3 test cases)
+8: 
+3/5 Test  #8: cpp-e2e ..........................   Passed   11.55 sec
+test 9
+    Start  9: python-regression
+
+9: Test command: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/python "-m" "pytest" "-c" "/workspace/scratch/b7462e898297/Sourcetrail/tests/python/pytest.ini" "/workspace/scratch/b7462e898297/Sourcetrail/tests/python" "-m" "regression"
+9: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail
+9: Environment variables: 
+9:  QT_QPA_PLATFORM=offscreen
+9:  SOURCETRAIL_BINARY=/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail
+9:  SOURCETRAIL_PYTHON_INDEXER=/workspace/scratch/b7462e898297/Sourcetrail/bin/app/data/python/SourcetrailPythonIndexer
+9: Test timeout computed to be: 600
+9: ============================= test session starts ==============================
+9: platform linux -- Python 3.11.17, pytest-8.4.2, pluggy-1.7.0
+9: rootdir: /workspace/scratch/b7462e898297/Sourcetrail/tests/python
+9: configfile: pytest.ini
+9: collected 8 items / 4 deselected / 4 selected
+9: 
+9: tests/python/test_regression.py ....                                     [100%]
+9: 
+9: ======================= 4 passed, 4 deselected in 2.82s ========================
+4/5 Test  #9: python-regression ................   Passed    3.00 sec
+test 10
+    Start 10: python-e2e
+
+10: Test command: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/python "-m" "pytest" "-c" "/workspace/scratch/b7462e898297/Sourcetrail/tests/python/pytest.ini" "/workspace/scratch/b7462e898297/Sourcetrail/tests/python" "-m" "e2e"
+10: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail
+10: Environment variables: 
+10:  QT_QPA_PLATFORM=offscreen
+10:  SOURCETRAIL_BINARY=/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail
+10:  SOURCETRAIL_PYTHON_INDEXER=/workspace/scratch/b7462e898297/Sourcetrail/bin/app/data/python/SourcetrailPythonIndexer
+10: Test timeout computed to be: 600
+10: ============================= test session starts ==============================
+10: platform linux -- Python 3.11.17, pytest-8.4.2, pluggy-1.7.0
+10: rootdir: /workspace/scratch/b7462e898297/Sourcetrail/tests/python
+10: configfile: pytest.ini
+10: collected 8 items / 4 deselected / 4 selected
+10: 
+10: tests/python/test_e2e.py ....                                            [100%]
+10: 
+10: ======================= 4 passed, 4 deselected in 10.92s =======================
+5/5 Test #10: python-e2e .......................   Passed   11.09 sec
+
+The following tests passed:
+	legacy
+	cpp-regression
+	cpp-e2e
+	python-regression
+	python-e2e
+
+100% tests passed, 0 tests failed out of 5
+
+Label Time Summary:
+cpp           =  11.69 sec*proc (2 tests)
+e2e           =  22.64 sec*proc (2 tests)
+legacy        =   4.25 sec*proc (1 test)
+python        =  14.09 sec*proc (2 tests)
+regression    =   7.40 sec*proc (3 tests)
+
+Total Test time (real) =  30.03 sec

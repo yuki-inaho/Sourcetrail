@@ -86,13 +86,15 @@
       "limitations": [
         "単一の実行環境版から言語仕様全体の対応を推論しない。",
         "浅い解析と完全解析は異なるプロファイル。",
-        "更新要求が全体再索引化へ昇格する場合がある。"
+        "更新要求が全体再索引化へ昇格する場合がある。",
+        "保存位置はUTF-8バイトへ変換する。旧保存DBからの移行は全体再索引化が必要。"
       ],
       "evidence": [
         "tests/python/test_regression.py",
         "tests/python/test_e2e.py",
         "tests/toy_projects/fixtures/python/expected.json",
-        "tests/toy_projects/test_runner.py"
+        "tests/toy_projects/test_runner.py",
+        "tests/input_observation/test_input_observation.py"
       ]
     },
     {
@@ -132,23 +134,32 @@
         "単一の実行環境版から言語仕様全体の対応を推論しない。",
         "浅い解析と完全解析は異なるプロファイル。",
         "更新要求が全体再索引化へ昇格する場合がある。",
-        "位置の完全な規約と浅い解析の構文診断は追加の専用適合試験が必要。"
+        "保存位置はUTF-8バイトへ変換する。旧保存DBからの移行は全体再索引化が必要。"
       ],
       "evidence": [
-        "tests/python/test_e2e.py"
+        "tests/python/test_e2e.py",
+        "tests/input_observation/test_input_observation.py"
       ]
     },
     {
       "id": "python-modern",
       "language": "Python",
-      "status": "planned",
+      "status": "tested-fixtures",
       "engine": {
-        "name": "to-be-selected"
+        "name": "CPython ast",
+        "version": "3.14.10"
       },
       "target": {
-        "versions": "to-be-selected"
+        "versions": [
+          "3.14"
+        ],
+        "runtime": "modern Pixi environment"
       },
-      "modes": [],
+      "modes": [
+        "static-scoped",
+        "full",
+        "updated"
+      ],
       "requires_contracts": [
         "GRAPH-001",
         "NAME-001",
@@ -158,22 +169,42 @@
         "DIAGNOSTIC-001"
       ],
       "capabilities": [
-        "capability-negotiation",
-        "modern-syntax",
-        "diagnostic-position-mapping"
+        "definitions",
+        "lexical-references",
+        "resolved-calls",
+        "project-imports",
+        "relative-imports",
+        "namespace-packages",
+        "inheritance",
+        "pattern-matching",
+        "exception-groups",
+        "type-parameters",
+        "type-aliases",
+        "template-strings",
+        "utf8-source-locations",
+        "diagnostics",
+        "incremental-clean-comparison"
       ],
       "limitations": [
-        "解析器とソース取得/配布方法の選定後に、版と受入例を固定する。"
+        "静的に確定できる名前解決の別プロファイル。旧Jediの一般の型推論と同一ではない。",
+        "実行時import、動的属性、monkey patch等は未解決と診断する。",
+        "対象コードを実行せず、全体再構築で更新する。"
       ],
-      "evidence": []
+      "evidence": [
+        "script/indexers/python_indexer.py",
+        "tests/modern_indexers/test_python_indexer.py",
+        "tests/modern_indexers/test_app_e2e.py",
+        "docs/adr/0011-modern-language-adapters.md"
+      ]
     },
     {
       "id": "cxx-modern",
       "language": "C++",
-      "status": "planned",
+      "status": "tested-fixtures",
       "engine": {
-        "name": "Clang",
-        "version": "to-be-selected"
+        "name": "Clang C indexing API",
+        "version": "18.1.8",
+        "python_bindings": "libclang 18.1.1"
       },
       "target": {
         "standards": [
@@ -181,7 +212,10 @@
           "C++23"
         ]
       },
-      "modes": [],
+      "modes": [
+        "full",
+        "updated"
+      ],
       "requires_contracts": [
         "GRAPH-001",
         "NAME-001",
@@ -191,29 +225,54 @@
         "DIAGNOSTIC-001"
       ],
       "capabilities": [
-        "capability-negotiation",
+        "definitions",
+        "overload-call-resolution",
+        "declaration-definition-identity",
+        "compilation-database",
         "concepts",
-        "modules",
         "coroutines",
-        "modern-standard-library"
+        "module-interfaces",
+        "prebuilt-module-imports",
+        "macro-provenance",
+        "source-locations",
+        "diagnostics",
+        "incremental-clean-comparison"
       ],
       "limitations": [
-        "新LLVMのビルドとAST API移行、各能力の意味検証が必要。"
+        "C++20/23の明示した人工対象の対応であり、規格全体の適合宣言ではない。",
+        "BMIは同じClang 18.1.8で事前生成し、コンパイル引数に明示する。",
+        "同一翻訳単位の複数の異なる構成は分けて解析する。"
       ],
-      "evidence": []
+      "evidence": [
+        "script/indexers/cpp_indexer.py",
+        "tests/modern_indexers/test_cpp_indexer.py",
+        "tests/modern_indexers/fixtures/cpp/expected.json",
+        "tests/modern_indexers/test_app_e2e.py",
+        "docs/adr/0012-modern-cpp-indexer.md"
+      ]
     },
     {
       "id": "rust-core",
       "language": "Rust",
-      "status": "planned",
+      "status": "tested-fixtures",
       "engine": {
-        "name": "to-be-selected"
+        "name": "rust-analyzer LSP",
+        "version": "0.3.2328-standalone (81ff38f53b 2025-03-02)",
+        "compiler": "1.85.1"
       },
       "target": {
-        "edition": "to-be-selected",
+        "editions": [
+          "2015",
+          "2018",
+          "2021",
+          "2024"
+        ],
         "project_context": "Cargo workspace/features/target"
       },
-      "modes": [],
+      "modes": [
+        "full",
+        "updated"
+      ],
       "requires_contracts": [
         "GRAPH-001",
         "NAME-001",
@@ -228,15 +287,28 @@
         "calls",
         "module-dependencies",
         "trait-impl-mapping",
-        "macro-provenance",
+        "macro-call-provenance",
+        "cargo-features",
+        "cargo-target",
         "diagnostics",
+        "source-locations",
         "incremental-clean-comparison"
       ],
       "limitations": [
-        "Rust専用アダプターは未実装。",
-        "共通グラフへの写像と未対応能力の扱いをADRで確定する。"
+        "小さなCargo workspaceと明示した機能の対応。全Rust機能への宣言ではない。",
+        "proc-macroやbuild.rsが必要な構成は明示拒否し、macro_rules!呼出元の由来を保存する。",
+        "更新はグループ全体の再構築。生成コードに元ソース位置を捏造しない。",
+        "実エンジン人工対象はedition2024。2015/2018/2021はエンジンの受付能力で、このPRではedition別の実測を行っていない。"
       ],
-      "evidence": []
+      "evidence": [
+        "script/indexers/rust_indexer.py",
+        "script/indexers/rust_lsp.py",
+        "script/indexers/rust_runtime.py",
+        "tests/modern_indexers/test_rust_indexer.py",
+        "tests/modern_indexers/fixtures/rust/expected.json",
+        "tests/modern_indexers/test_app_e2e.py",
+        "docs/adr/0013-rust-source-indexer.md"
+      ]
     }
   ]
 }

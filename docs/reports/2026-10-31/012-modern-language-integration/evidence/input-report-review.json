@@ -1,0 +1,360 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-31T07:21:29.628964+00:00",
+  "review_kind": "report_second_reading",
+  "reviewer": "/root/input_positions",
+  "author_disclosure": "reviewerはGAP-002/GAP-003の担当著者。ここでは報告書と実コード・保存証跡の照合のみを行い、独立した実装レビューとは称さない。",
+  "scope": [
+    "docs/reports/2026-10-31/009-input-position-baseline",
+    "docs/reports/2026-10-31/010-input-observation-contracts",
+    "docs/reports/2026-10-31/011-source-position-contracts"
+  ],
+  "read_only": {
+    "source_and_report_files_modified_by_reviewer": false,
+    "written_artifact": "build/input-position-report-review.json",
+    "test_suites_rerun": false
+  },
+  "report_checks": [
+    {
+      "report": "docs/reports/2026-10-31/009-input-position-baseline",
+      "report_sha256": "7a56f6f0bd1267836208ce2f91df878463b3ded30779d661aab9aa2e4b1d8c79",
+      "manifest_sha256": "b5409ac69cf965a8dfb52661171dc4aa45aacbf2101fe5e270182bd5a565e97b",
+      "source_mode": "base-commit",
+      "unit_checks": [
+        {
+          "id": "ANN-001",
+          "path": "src/lib/project/RefreshInfoGenerator.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-002",
+          "path": "src/lib/utility/text/TextAccess.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-003",
+          "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        }
+      ],
+      "listed_evidence_exists": true,
+      "baseline_copies_match_git_show": [
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "report": "docs/reports/2026-10-31/010-input-observation-contracts",
+      "report_sha256": "4da14de5cbeb83612613e500fe557e8920f9863c1c08a90c2c1578986ded5f5b",
+      "manifest_sha256": "47222c48d55e67e29109c43c579c9bfb2793c3e4c72637fe120dc2093a133d07",
+      "source_mode": "working-tree",
+      "unit_checks": [
+        {
+          "id": "ANN-001",
+          "path": "src/lib_core/SourceChange.h",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-002",
+          "path": "src/lib/project/RefreshInfoGenerator.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-003",
+          "path": "src/lib/utility/text/TextAccess.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-004",
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-005",
+          "path": "src/lib/data/storage/PersistentStorage.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-006",
+          "path": "src/lib/utility/ConfigManager.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-007",
+          "path": "tests/input_observation/fixtures/expected.json",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-008",
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-009",
+          "path": "src/test/StorageCleanupContractTestSuite.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-010",
+          "path": "docs/contracts/formal/SourceObservation.tla",
+          "sha256_matches": true,
+          "excerpt_present": true
+        }
+      ],
+      "listed_evidence_exists": true,
+      "input_e2e_junit": {
+        "tests": "28",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "96.399"
+      },
+      "published_logs_match_retained_originals": {
+        "cpp-contracts.txt": true,
+        "input-e2e.txt": true,
+        "existing-suites.txt": true,
+        "native-build.txt": true
+      },
+      "formal_cases": [
+        {
+          "name": "source-observation",
+          "passed": true,
+          "distinct": 1152,
+          "specified_violation": null,
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "source-observation-negative-control",
+          "passed": true,
+          "distinct": 579,
+          "specified_violation": "ContentChangesDetected",
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "python-output-validation",
+          "passed": true,
+          "distinct": 20,
+          "specified_violation": null,
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "python-output-negative-control",
+          "passed": true,
+          "distinct": 18,
+          "specified_violation": "NoPublicationAfterInvalidOutput",
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        }
+      ]
+    },
+    {
+      "report": "docs/reports/2026-10-31/011-source-position-contracts",
+      "report_sha256": "8e94003fdcba19e2631e23d387b3277d5f2a9394cf0eb1fcf779298389d97937",
+      "manifest_sha256": "1e24676a7f3cb3becae0a59b43c0f054beccbcb381325c603083dd2a90d46c6f",
+      "source_mode": "working-tree",
+      "unit_checks": [
+        {
+          "id": "ANN-001",
+          "path": "src/lib_core/Utf8SourceLocationMap.h",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-002",
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-003",
+          "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-004",
+          "path": "src/lib_core/ExternalIndexerOutcome.h",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-005",
+          "path": "src/lib/data/TaskFinishParsing.cpp",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-006",
+          "path": "tests/input_observation/test_input_observation.py",
+          "sha256_matches": true,
+          "excerpt_present": true
+        },
+        {
+          "id": "ANN-007",
+          "path": "docs/contracts/formal/PythonOutputValidation.tla",
+          "sha256_matches": true,
+          "excerpt_present": true
+        }
+      ],
+      "listed_evidence_exists": true,
+      "input_e2e_junit": {
+        "tests": "28",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "96.399"
+      },
+      "published_logs_match_retained_originals": {
+        "cpp-contracts.txt": true,
+        "input-e2e.txt": true,
+        "existing-suites.txt": true,
+        "native-build.txt": true
+      },
+      "formal_cases": [
+        {
+          "name": "source-observation",
+          "passed": true,
+          "distinct": 1152,
+          "specified_violation": null,
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "source-observation-negative-control",
+          "passed": true,
+          "distinct": 579,
+          "specified_violation": "ContentChangesDetected",
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "python-output-validation",
+          "passed": true,
+          "distinct": 20,
+          "specified_violation": null,
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        },
+        {
+          "name": "python-output-negative-control",
+          "passed": true,
+          "distinct": 18,
+          "specified_violation": "NoPublicationAfterInvalidOutput",
+          "log_exists": true,
+          "log_matches_original": true,
+          "result_visible_in_log": true
+        }
+      ]
+    }
+  ],
+  "semantic_checks": [
+    {
+      "id": "CHECK-RECOVERY",
+      "passed": true,
+      "observation": "009は公開基準のソース読解のみ、010/011は未コミット再実装と明記。未公開実装/元レポートを回収したとは称していない。",
+      "evidence": [
+        "009-input-position-baseline/report.md:対象・入力版・実施したこと",
+        "010-input-observation-contracts/report.md:対象・入力版・実施したこと",
+        "011-source-position-contracts/report.md:対象・入力版・実施したこと"
+      ]
+    },
+    {
+      "id": "CHECK-OLD-OBSERVATIONS",
+      "passed": true,
+      "observation": "011は全体再索引化の必要とASCIIスコープの意図した変更を明記し、過去の14観測との完全一致を主張しない。今回のトークン照合と同版の増分/全体一致を根拠としている。"
+    },
+    {
+      "id": "CHECK-COUNTS",
+      "passed": true,
+      "observation": "cpp-contracts=39ケース/65,801 assertions、既存legacy=608ケース/1,616 assertions、C++回帰=7/54、C++ E2E=3/270、Python回帰/E2E各4ケース。入力E2E28ケース、JUnit failures/errors/skips=0。両報告書はassertionsとケースを混ぜて合算していない。"
+    },
+    {
+      "id": "CHECK-SQL-FAILURE",
+      "passed": true,
+      "observation": "tryGetStoredFileContentByPathのAvailable/Missing/Null/ReadErrorの区別をソースと単位試験で確認。SQL失敗の実試験はDROP TABLE filecontent後の問い合わせ例外であり、全SQLite障害種別の網羅試験ではない。報告書は全DB操作/SQLite実装の証明を主張していない。",
+      "source": "src/test/InputObservationTestSuite.cpp:stored content distinguishes empty missing null and SQL failure"
+    },
+    {
+      "id": "CHECK-DISK-FAILURE",
+      "passed": true,
+      "observation": "tryCreateFromFileの正常空と読込失敗nullを確認。実試験は欠落パス/ディレクトリ、正常空、改行/BOM。アクセス権失敗や全OSの網羅を主張していない。"
+    },
+    {
+      "id": "CHECK-EMPTY-PYTHON",
+      "passed": true,
+      "observation": "011の空内容補完は実入力が空・一意のindexed Python行・位置なしという条件に限定され、現実装と一致。保存NULL/SQL読込失敗を空へ変換する規則ではない。直接観測のemptyはexit0、file行あり、filecontent/locationsなしを示す。",
+      "source": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp:omittedEmptyContent",
+      "evidence": "docs/reports/2026-10-31/011-source-position-contracts/evidence/raw-python-observations.json"
+    },
+    {
+      "id": "CHECK-BOUNDARIES",
+      "passed": true,
+      "observation": "savepointによる一DB内の選択ファイル更新、候補不採用、旧索引保持、非索引依存mtime互換、GUI/他OS/原子的取得・公開/任意Customの範囲外が維持されている。"
+    },
+    {
+      "id": "CHECK-REVIEW-IDENTITY",
+      "passed": true,
+      "observation": "報告書は実装担当の検証と親担当の証跡照合を記録し、ユーザーレビューをpendingとする。本作業も報告書の第二読解であり、自己担当の実装全体への独立レビューではない。"
+    }
+  ],
+  "findings": [
+    {
+      "id": "EVIDENCE-001",
+      "severity": "medium",
+      "status": "resolved_by_parent_and_rechecked",
+      "locations": [
+        "010-input-observation-contracts/evidence/formal-summary.json",
+        "011-source-position-contracts/evidence/formal-summary.json"
+      ],
+      "initial_observation": "results[*].logが指す4本のTLCログが公開用evidenceディレクトリに無く、JSONの結果だけから指定反例の本文を追えなかった。",
+      "requested_change": "build/input-observation-formal-finalの4ログを各evidenceへ保存しmanifestへ登録する。",
+      "resolution": "親が4本を双方へ追加・登録。元ログとのバイト一致、1,152/20 distinct states、ContentChangesDetected/NoPublicationAfterInvalidOutputの指定違反を再確認。"
+    },
+    {
+      "id": "EVIDENCE-002",
+      "severity": "low",
+      "status": "resolved_by_parent_and_rechecked",
+      "locations": [
+        "010-input-observation-contracts/evidence/verification.json:verification.native_build",
+        "011-source-position-contracts/evidence/verification.json:verification.native_build"
+      ],
+      "initial_observation": "ビルド結果の参照がscratch絶対パスだけで、公開パッケージ単独ではビルドログを読めなかった。",
+      "requested_change": "native-build.txt等で公開結果を保存する。",
+      "resolution": "親が双方へnative-build.txtを追加しmanifest登録。元build-input-xml-fix.logとバイト一致を確認。"
+    }
+  ],
+  "verdict": {
+    "passed": true,
+    "remaining_material_misstatements": 0,
+    "remaining_evidence_gaps_identified_in_this_review": 0,
+    "summary": "再実装/回収、位置変更、試験件数、SQLite読込と空の限定補完の記述は実装・証跡と整合。発見した公開証跡不足2点は親が解消した。"
+  },
+  "limitations": [
+    "ソースハッシュと本文・試験証跡の整合確認であり、実装の新しい網羅検証や全機能の正しさの証明ではない。",
+    "SQL失敗の実試験は一つの問い合わせ失敗注入。あらゆるI/O/SQLite/クラッシュ経路を実行したと解釈しない。",
+    "今後のコミット・変更でソースが変わった場合、本JSONのハッシュはこの読解時点の記録として保持する。"
+  ]
+}

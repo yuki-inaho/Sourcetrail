@@ -1,0 +1,12 @@
+{
+  "command": "python script/verification/check_docs.py",
+  "exit_code": 0,
+  "result": {
+    "passed": true,
+    "markdown_files": 45,
+    "contracts": 20,
+    "language_profiles": 6,
+    "reports": 12,
+    "error_count": 0
+  }
+}

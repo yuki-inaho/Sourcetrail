@@ -1,0 +1,77 @@
+..................FFFF.FFFFFFFFFFFFFFFF...FF..FFFFFFFFFFFFFF             [100%]
+=================================== FAILURES ===================================
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:131: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:144: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:157: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:171: assert [(0, 1)] == [(1, 0)]
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:179: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:190: assert (5,) == (1,)
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:146: script.indexers.graph.GraphError: Source column outside content: {'file': '/tmp/pytest-of-root/pytest-26/test_crlf_diagnostic_eof_ancho0/日本語.py', 'start_line': 1, 'end_line': 1, 'start_column': 8, 'end_column': 8, 'kind': 'error'}
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:134: script.indexers.graph.GraphError: Reversed source range: {'file': '/tmp/pytest-of-root/pytest-26/test_crlf_scope_points_do_not_0/日本語.py', 'start_line': 1, 'start_column': 3, 'end_line': 1, 'end_column': 2, 'kind': 'scope'}
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:146: script.indexers.graph.GraphError: Source column outside content: {'file': '/tmp/pytest-of-root/pytest-26/test_crlf_scope_points_do_not_1/日本語.py', 'start_line': 1, 'start_column': 4, 'end_line': 1, 'end_column': 4, 'kind': 'scope'}
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:106: AttributeError: 'NoneType' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:153: AttributeError: 'NoneType' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:174: AttributeError: 'NoneType' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:181: AttributeError: 'NoneType' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:157: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:171: TypeError: 'NoneType' object is not iterable
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:326: ValueError: invalid literal for int() with base 10: 'false'
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_graph.py:228: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/graph.py:267: UnicodeEncodeError: 'utf-8' codec can't encode character '\ud800' in position 10: surrogates not allowed
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:39: TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:39: TypeError: cannot use 'dict' as a dict key (unhashable type: 'dict')
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:20: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+<frozen posixpath>:457: ValueError: lstat: embedded null character in path
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:27: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:27: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:27: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:27: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:36: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:36: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:69: AttributeError: 'int' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:69: AttributeError: 'str' object has no attribute 'get'
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:36: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:36: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:71: TypeError: unsupported operand type(s) for /: 'PosixPath' and 'int'
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:36: Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+/workspace/scratch/b7462e898297/Sourcetrail/tests/modern_indexers/test_cli.py:45: AssertionError: assert '**/build/**' in ['**/.git/**', '**/.pixi/**', '**/.venv/**', '**/venv/**', '**/target/**', '**/__pycache__/**']
+/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py:74: TypeError: unsupported operand type(s) for /: 'PosixPath' and 'list'
+- generated xml file: /workspace/scratch/b7462e898297/Sourcetrail/build/modern-indexers/integration-review-before.xml -
+=========================== short test summary info ============================
+FAILED tests/modern_indexers/test_graph.py::test_separate_groups_cannot_inject_conflicting_name_kinds
+FAILED tests/modern_indexers/test_graph.py::test_existing_duplicate_names_are_rejected_without_mutation
+FAILED tests/modern_indexers/test_graph.py::test_same_columns_without_foreign_keys_are_not_a_valid_candidate
+FAILED tests/modern_indexers/test_graph.py::test_multiple_observers_preserve_indexed_and_incomplete_flags[False]
+FAILED tests/modern_indexers/test_graph.py::test_conflicting_file_languages_roll_back
+FAILED tests/modern_indexers/test_graph.py::test_non_newline_unicode_separators_do_not_add_source_lines
+FAILED tests/modern_indexers/test_graph.py::test_crlf_diagnostic_eof_anchor_maps_to_lf
+FAILED tests/modern_indexers/test_graph.py::test_crlf_scope_points_do_not_reverse_or_escape_the_line[3]
+FAILED tests/modern_indexers/test_graph.py::test_crlf_scope_points_do_not_reverse_or_escape_the_line[4]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[file-shape]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[symbol-shape]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[edge-shape]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-shape]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[kind-type]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[locations-type]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-fatal]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-nul]
+FAILED tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[name-unicode]
+FAILED tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[language-value0]
+FAILED tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[language-value1]
+FAILED tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[root-]
+FAILED tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[root-bad\x00path]
+FAILED tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.srctrlcfg]
+FAILED tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.srctrldb]
+FAILED tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.xml]
+FAILED tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[False]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options1]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[1]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[bad]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options4]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options5]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options6]
+FAILED tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options7]
+FAILED tests/modern_indexers/test_cli.py::test_configure_python_excludes_the_same_build_directory_as_the_adapter
+FAILED tests/modern_indexers/test_cli.py::test_configure_rejects_non_path_compilation_database
+36 failed, 24 passed in 0.51s

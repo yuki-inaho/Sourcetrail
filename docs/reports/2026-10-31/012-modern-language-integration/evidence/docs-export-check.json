@@ -1,0 +1,13 @@
+{
+  "command": "git checkout-index --prefix=<isolated> -a; python <isolated>/script/verification/check_docs.py --root <isolated>",
+  "source": "Git index export; no ignored build artifacts and no .git history",
+  "exit_code": 0,
+  "result": {
+    "passed": true,
+    "markdown_files": 45,
+    "contracts": 20,
+    "language_profiles": 6,
+    "reports": 12,
+    "error_count": 0
+  }
+}

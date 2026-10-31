@@ -5,6 +5,7 @@
 #include "PersistentStorage.h"
 #include "RefreshInfo.h"
 #include "RefreshPlan.h"
+#include "SourceChange.h"
 #include "SourceGroup.h"
 #include "SourceGroupStatusType.h"
 #include "TextAccess.h"
@@ -184,33 +185,12 @@ std::set<FilePath> RefreshInfoGenerator::getAllSourceFilePaths(
 bool RefreshInfoGenerator::didFileChange(
 	const FileInfo& info, std::shared_ptr<const PersistentStorage> storage)
 {
+	using namespace sourcetrail::core;
 	FileInfo diskFileInfo = FileSystem::getFileInfoForPath(info.path);
-	if (diskFileInfo.lastWriteTime > info.lastWriteTime)
-	{
-		if (!storage->hasContentForFile(info.path))
-		{
-			return true;
-		}
-
-		std::shared_ptr<TextAccess> storedFileContent = storage->getFileContent(info.path, false);
-		std::shared_ptr<TextAccess> diskFileContent = TextAccess::createFromFile(diskFileInfo.path);
-
-		const std::vector<std::string>& diskFileLines = diskFileContent->getAllLines();
-		const std::vector<std::string>& storedFileLines = storedFileContent->getAllLines();
-
-		if (diskFileLines.size() != storedFileLines.size())
-		{
-			return true;
-		}
-
-		for (size_t i = 0; i < diskFileLines.size(); i++)
-		{
-			if (diskFileLines[i] != storedFileLines[i])
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	return false;
+	const std::shared_ptr<TextAccess> diskContent = TextAccess::tryCreateFromFile(info.path);
+	const SourceContent current {diskContent ? SourceContentStatus::Available :
+		SourceContentStatus::ReadError, diskContent ? diskContent->getText() : std::string()};
+	return didSourceChange(storage->getFilePathIndexed(info.path),
+		storage->tryGetStoredFileContent(info.path), current,
+		diskFileInfo.lastWriteTime > info.lastWriteTime);
 }

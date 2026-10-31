@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "010-input-observation-contracts",
+  "created_on": "2026-10-31",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree",
+    "note": "公開基準からこのセッションで再実装した未コミット差分。前回の未回収実装・元レポートの復元ではない。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "path": "src/lib_core/SourceChange.h",
+      "symbol": "inline bool didSourceChange(",
+      "excerpt": "inline bool didSourceChange(\n\tbool indexed,\n\tconst SourceContent& stored,\n\tconst SourceContent& current,",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "取得済み内容はmtimeに関係なく比較する。非索引依存で保存行が欠落したときだけmtime互換判定を使う。",
+      "id": "ANN-001",
+      "sha256": "bce1e4ac5a7ecdcfb1a72042ecc2dcf2dee09b10b095e8a6e7f511e72da67f66",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "symbol": "bool RefreshInfoGenerator::didFileChange(",
+      "excerpt": "bool RefreshInfoGenerator::didFileChange(\n\tconst FileInfo& info, std::shared_ptr<const PersistentStorage> storage)\n{\n\tusing namespace sourcetrail::core;",
+      "contracts": [
+        "INPUT-001",
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "checkedディスク読込とchecked保存読込を純粋分類へ渡す。未来の保存mtimeより過去の変更を検出した。",
+      "id": "ANN-002",
+      "sha256": "dc8e817214782b0628b04a934c4343b5a86c5d31aa8e16d652cd546202cf01eb",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/utility/text/TextAccess.cpp",
+      "symbol": "std::shared_ptr<TextAccess> TextAccess::tryCreateFromFile(",
+      "excerpt": "std::shared_ptr<TextAccess> TextAccess::tryCreateFromFile(const FilePath& filePath)\n{\n\ttry\n\t{",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "正常な空と失敗nullを区別し、CRLF/CRをLFへ正規化して最終改行の有無を維持する。",
+      "id": "ANN-003",
+      "sha256": "10ace1faf033eb2a620341aac26e344af4e415525f4935e3ae854d644294f992",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "sourcetrail::core::SourceContent SqliteIndexStorage::tryGetStoredFileContentByPath(",
+      "excerpt": "sourcetrail::core::SourceContent SqliteIndexStorage::tryGetStoredFileContentByPath(\n\tconst std::wstring& filePath) const\n{\n\tusing namespace sourcetrail::core;",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "束縛変数でパスを照合し、Available/Missing/Null/ReadErrorを分離。長さ付き読込でNUL切詰めを防ぐ。",
+      "id": "ANN-004",
+      "sha256": "4300574fbc033fea2374831861ba5378ac64b654904eb5119a8cd7e07076b2ab",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/storage/PersistentStorage.cpp",
+      "symbol": "std::shared_ptr<TextAccess> PersistentStorage::getFileContent(",
+      "excerpt": "std::shared_ptr<TextAccess> PersistentStorage::getFileContent(\n\tconst FilePath& filePath, bool showsErrors) const\n{\n\tTRACE();",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "取得済みの空内容を現在ディスク内容で補完しない。",
+      "id": "ANN-005",
+      "sha256": "174afd42c7752f0a9a8fbd03ffc39ccae74246f1c3f2bc3008aa6997d1db53d1",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/utility/ConfigManager.cpp",
+      "symbol": "bool ConfigManager::load(",
+      "excerpt": "bool ConfigManager::load(const std::shared_ptr<TextAccess> textAccess)\n{\n\tTiXmlDocument doc;\n\tdoc.Parse(textAccess->getText().c_str(), 0, TIXML_ENCODING_UTF8);",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "最終LFなしのXMLでもTinyXMLの実エラー状態を確認してロードできる。初回E2E停止の原因を補修した。",
+      "id": "ANN-006",
+      "sha256": "3c4ef8f271f1cfdca89d937c4cb1ff68a1a50197118db3eb0d4d43215b64ba18",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "tests/input_observation/fixtures/expected.json",
+      "symbol": "\"content_cases\"",
+      "excerpt": "  \"content_cases\": [\n    {\"id\": \"same-mtime\", \"change\": \"replace\", \"timestamp\": \"same\", \"symbol\": \"after\", \"reindexed\": true},\n    {\"id\": \"past-mtime\", \"change\": \"replace\", \"timestamp\": \"past\", \"symbol\": \"after\", \"reindexed\": true},\n    {\"id\": \"touch\", \"change\": \"none\", \"timestamp\": \"future\", \"symbol\": \"before\", \"reindexed\": false},",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "mtime同一/逆行、touch、空切詰め、最終改行削除、保存行欠落/NULL、空から追加の8ケースを解析出力とは独立に記述。",
+      "id": "ANN-007",
+      "sha256": "d684226124b7282fa9e77face494c660a240f65697f065cab4fd32619af2b758",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+      "symbol": "CREATE TEMP TABLE builtin_id_to_check",
+      "excerpt": "\texecuteStatement(\"CREATE TEMP TABLE builtin_id_to_check(id INTEGER PRIMARY KEY);\");\n\texecuteStatement(\n\t\t\"INSERT OR IGNORE INTO builtin_id_to_check SELECT node.id FROM node \"\n\t\t\"INNER JOIN edge ON edge.target_node_id = node.id WHERE node.type = \" +",
+      "contracts": [
+        "STORAGE-002"
+      ],
+      "finding_type": "observed",
+      "observation": "清掃対象から参照された組込み型だけを候補に記録し、最後の出現・辺が消えたものを削除する。全ノードのGCには拡張しない。",
+      "id": "ANN-008",
+      "sha256": "4300574fbc033fea2374831861ba5378ac64b654904eb5119a8cd7e07076b2ab",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "src/test/StorageCleanupContractTestSuite.cpp",
+      "symbol": "REQUIRE(db.storage.isNode(builtin) == shared)",
+      "excerpt": "\tREQUIRE(db.storage.isNode(builtin) == shared);\n\tREQUIRE(db.storage.isNode(untouched));\n}",
+      "contracts": [
+        "STORAGE-002"
+      ],
+      "finding_type": "observed",
+      "observation": "最後の組込み型参照の削除、共有参照の保持、無関係な組込み型の保持を確認する。",
+      "id": "ANN-009",
+      "sha256": "02e69ee625551e9bf0dd0ca8759400087d193417eac0b969c9ffd298e18f953a",
+      "uncertainty": "実GUI、他OS、全入力の原子的取得は検証していない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    },
+    {
+      "path": "docs/contracts/formal/SourceObservation.tla",
+      "symbol": "ContentChangesDetected",
+      "excerpt": "ContentChangesDetected ==\n    phase = \"classified\" /\\ storedStatus = \"available\" /\\ currentStatus = \"available\"\n    /\\ stored # current => changed\nEqualContentIgnoresTimestamp ==",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "正常モデル1152 distinct statesを探索。mtimeゲート変異は指定不変条件ContentChangesDetectedで失敗。",
+      "id": "ANN-010",
+      "sha256": "c28365939a102424e7a7499b66e170a45b32eb195a6a1760957bdee159debe99",
+      "uncertainty": "有限の観測値モデルであり、実ファイルシステム/SQLite実装全体を証明しない。",
+      "next_action": "保存した人工期待・生ログ・有限モデルの負の対照をレビューし、保証を未検証範囲へ拡張しない。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/verification.json",
+      "description": "実行結果、途中の失敗と修正、適用範囲。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/cpp-contracts.txt",
+      "description": "C++契約試験39件、65,801 assertions。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/input-e2e.txt",
+      "description": "入力・位置の実アプリ試験28件。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/input-e2e.xml",
+      "description": "同試験のJUnit。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/existing-suites.txt",
+      "description": "既存5スイートの成功。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/formal-summary.json",
+      "description": "新しい正常モデル2件と指定反例2件の結果。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/native-build.txt",
+      "description": "当該バッチの最終ネイティブビルドの原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/source-observation.log",
+      "description": "入力観測の正常モデル原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/source-observation-negative-control.log",
+      "description": "mtimeゲート変異の指定反例原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/python-output-validation.log",
+      "description": "出力検査の正常モデル原文。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/010-input-observation-contracts/evidence/python-output-negative-control.log",
+      "description": "不正出力許容変異の指定反例原文。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "repository-user",
+    "note": "実装担当の検証と親担当のコード・証跡照合を実施。ユーザー側レビューは未実施。"
+  }
+}
