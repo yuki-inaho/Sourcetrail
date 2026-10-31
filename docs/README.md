@@ -17,6 +17,7 @@
 | なぜその境界・方式にしたか | [ADR一覧](adr/README.md) |
 | 新しいPython／C++／Rustをどう追加するか | [言語対応の境界と改善計画](architecture/language-compatibility.md)、[対応能力プロファイル](contracts/language-profiles.json) |
 | 不明点・未検証範囲・次の受入条件 | [改善順序とGAP一覧](architecture/evolution-plan.md) |
+| GAP-002／GAP-003の未公開作業はどこまで進んだか | [作業中断・公開状況（2026-10-31）](handoffs/input-observation-checkpoint-2026-10-31.md)。実装本体は未収録 |
 | ローカルのエージェントに調査を引き継ぐ | [注釈・作業レポート](reports/README.md)、[リポジトリ内スキル](../.agents/skills/annotate-contract-batch/SKILL.md) |
 | ビルド・テストを再現する | [pixi開発環境](pixi-development.md) |
 
