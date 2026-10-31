@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+UpdateCTestConfiguration  from :/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Parse Config file:/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Parse Config file:/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/DartConfiguration.tcl
+Test project /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 5
+    Start 5: cpp-contracts
+
+5: Test command: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/test/Sourcetrail_test "[contract]" "--warn" "NoTests"
+5: Working Directory: /workspace/scratch/b7462e898297/Sourcetrail/bin/test
+5: Environment variables: 
+5:  QT_QPA_PLATFORM=offscreen
+5: Test timeout computed to be: 600
+5: no settings
+5: ===============================================================================
+5: All tests passed (65801 assertions in 39 test cases)
+5: 
+1/1 Test #5: cpp-contracts ....................   Passed    1.42 sec
+
+The following tests passed:
+	cpp-contracts
+
+100% tests passed, 0 tests failed out of 1
+
+Label Time Summary:
+contract    =   1.42 sec*proc (1 test)
+cpp         =   1.42 sec*proc (1 test)
+
+Total Test time (real) =   1.42 sec

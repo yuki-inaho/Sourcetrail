@@ -1,0 +1,10 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_separate_groups_cannot_merge_distinct_explicit_definitions ________
+tests/modern_indexers/test_graph.py:144: in test_separate_groups_cannot_merge_distinct_explicit_definitions
+    with pytest.raises(GraphError, match="definition"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'script.indexers.graph.GraphError'>
+=========================== short test summary info ============================
+FAILED tests/modern_indexers/test_graph.py::test_separate_groups_cannot_merge_distinct_explicit_definitions
+1 failed in 0.08s

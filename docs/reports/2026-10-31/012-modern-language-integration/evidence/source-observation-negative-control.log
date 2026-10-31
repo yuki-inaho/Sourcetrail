@@ -1,0 +1,44 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 9 cores with 910MB heap and 64MB offheap memory [pid: 55698] (Linux 6.18.57 amd64, N/A 17.0.18-internal x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /workspace/scratch/b7462e898297/Sourcetrail/docs/contracts/formal/SourceObservation.tla
+Parsing file /tmp/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module SourceObservation
+Starting... (2026-10-31 16:26:03)
+Computing initial states...
+Computed 2 initial states...
+Computed 4 initial states...
+Computed 8 initial states...
+Computed 16 initial states...
+Computed 32 initial states...
+Computed 64 initial states...
+Computed 128 initial states...
+Computed 256 initial states...
+Computed 512 initial states...
+Finished computing initial states: 576 distinct states generated at 2026-10-31 16:26:03.
+Error: Invariant ContentChangesDetected is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ changed = FALSE
+/\ indexed = FALSE
+/\ currentStatus = "available"
+/\ stored = "a"
+/\ current = "b"
+/\ phase = "observed"
+/\ newer = FALSE
+/\ storedStatus = "available"
+
+State 2: <Classify line 21, col 5 to line 28, col 81 of module SourceObservation>
+/\ changed = FALSE
+/\ indexed = FALSE
+/\ currentStatus = "available"
+/\ stored = "a"
+/\ current = "b"
+/\ phase = "classified"
+/\ newer = FALSE
+/\ storedStatus = "available"
+
+579 states generated, 579 distinct states found, 575 states left on queue.
+The depth of the complete state graph search is 2.
+The average outdegree of the complete state graph is 1 (minimum is 1, the maximum 1 and the 95th percentile is 1).
+Finished in 00s at (2026-10-31 16:26:03)

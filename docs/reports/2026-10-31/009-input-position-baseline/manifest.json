@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "009-input-position-baseline",
+  "created_on": "2026-10-31",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "base-commit",
+    "note": "回収可能な公開基準をgit showで読んだ新しい再構成記録。前回の未回収レポート本文や非公開実装を復元したという意味ではない。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "symbol": "bool RefreshInfoGenerator::didFileChange(",
+      "sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "excerpt": "if (diskFileInfo.lastWriteTime > info.lastWriteTime)",
+      "contracts": [
+        "INPUT-001",
+        "REFRESH-001"
+      ],
+      "finding_type": "observed",
+      "observation": "内容比較はmtimeが保存値より新しい場合にしか実行されない。同時刻・過去の変更を見落とす経路が基準コミットに残る。",
+      "uncertainty": "変更の実アプリ再現はこの基準読解では実施せず、再実装後の独立期待との照合を010へ記録する。",
+      "next_action": "レポート010・011の再実装、独立した人工期待、実行証跡をレビューする。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "src/lib/utility/text/TextAccess.cpp",
+      "symbol": "std::vector<std::string> TextAccess::readFile(",
+      "sha256": "c89f072cccc7d951f95bd8b9ee153f2b314abaaa4e4d0181c7fe39507a3da00d",
+      "excerpt": "result.push_back(line + '\\n');",
+      "contracts": [
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "読込失敗は空vectorとなり、createFromFileは常にTextAccessを返す。正常な空と失敗を返却型で区別できない。行読込時に改行を付加する。",
+      "uncertainty": "新しいchecked読込の導入は既存呼出元へ影響するため、設定読込と既存5試験群の再確認が必要。",
+      "next_action": "レポート010・011の再実装、独立した人工期待、実行証跡をレビューする。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "symbol": "void TaskExecuteCustomCommands::runPythonPostProcessing(",
+      "sha256": "48b09783bfae3f8ea262a76212598cffbae978fbcda7f1adf12775384059df95",
+      "excerpt": "startLoc->getColumnNumber() - 1,",
+      "contracts": [
+        "LOCATION-001",
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "後処理は保存された列をstd::stringのバイト添字として使う。基準版には旧Pythonの文字列位置をUTF-8バイトへ変換する検査段階がない。",
+      "uncertainty": "変換・不正出力拒否は011の新実装と実エンジン観測で評価する。一般Custom出力全体の意味検査とは区別する。",
+      "next_action": "レポート010・011の再実装、独立した人工期待、実行証跡をレビューする。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-31/009-input-position-baseline/evidence/recovery.json",
+      "description": "公開基準、未回収の旧コミット識別子、読解した内容のハッシュ。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/009-input-position-baseline/evidence/baseline-01.txt",
+      "description": "基準コミットの入力分類全文。02はTextAccess、03は外部処理の読解対象全文。"
+    }
+  ],
+  "review": {
+    "status": "pending",
+    "reviewer": "repository-user",
+    "note": "assistantの基準読解。ユーザーによるレビューは未実施。"
+  }
+}

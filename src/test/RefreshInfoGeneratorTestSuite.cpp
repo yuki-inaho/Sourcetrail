@@ -10,6 +10,7 @@
 #include "RefreshInfoGenerator.h"
 #include "SourceGroup.h"
 #include "SourceGroupSettings.h"
+#include "TextAccess.h"
 #include "utility.h"
 
 namespace
@@ -134,6 +135,18 @@ Id addFileToStorage(
 	bool complete,
 	std::shared_ptr<PersistentStorage> storage)
 {
+	// Give the fixture an actual saved observation. Previously these tests saved
+	// a missing file as empty and relied solely on a future timestamp to hide it.
+	const bool existed = filePath.recheckExists();
+	if (indexed && !existed)
+	{
+		addFileToFileSystem(filePath);
+		if (modificationTime < QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString())
+		{
+			std::ofstream previous(filePath.str());
+			previous << "Previous indexed content.\n";
+		}
+	}
 	const Id id =
 		storage
 			->addNode(StorageNodeData(
@@ -142,6 +155,10 @@ Id addFileToStorage(
 			.first;
 	storage->addFile(
 		StorageFile(id, filePath.wstr(), L"someLanguage", modificationTime, indexed, complete));
+	if (indexed && !existed)
+	{
+		FileSystem::remove(filePath);
+	}
 	return id;
 }
 
@@ -1121,4 +1138,55 @@ TEST_CASE(
 			utility::toVector(refreshInfo.filesToIndex), upToDateSourceFilePath));
 	}
 	cleanup();
+}
+
+TEST_CASE("refresh compares saved contents independently of modification time", "[contract][input]")
+{
+	QTemporaryDir directory;
+	REQUIRE(directory.isValid());
+	const FilePath root(directory.path().toStdWString());
+	const FilePath source = root.getConcatenated(L"observed.cpp");
+	addFileToFileSystem(source);
+	auto storage = std::make_shared<PersistentStorage>(
+		root.getConcatenated(L"project.srctrldb"), root.getConcatenated(L"project.srctrlbm"));
+	storage->setup();
+	addVeryNewFileToStorage(source, true, true, storage);
+	storage->buildCaches();
+	const std::vector<std::shared_ptr<SourceGroup>> groups {
+		std::make_shared<SourceGroupTest>(std::set<FilePath> {source})};
+	REQUIRE(RefreshInfoGenerator::getRefreshInfoForUpdatedFiles(groups, storage).filesToIndex.empty());
+	SECTION("content changed while timestamp is older than the stored timestamp")
+	{
+		std::ofstream changed(source.str());
+		changed << "The new source content.\n";
+	}
+	SECTION("the source was truncated to a successful empty file")
+	{
+		std::ofstream empty(source.str());
+	}
+	const RefreshInfo info = RefreshInfoGenerator::getRefreshInfoForUpdatedFiles(groups, storage);
+	REQUIRE(info.filesToIndex == std::set<FilePath> {source});
+	REQUIRE(info.filesToClear == std::set<FilePath> {source});
+}
+
+TEST_CASE("refresh does not confuse stored empty content with a missing observation", "[contract][input]")
+{
+	QTemporaryDir directory;
+	REQUIRE(directory.isValid());
+	const FilePath root(directory.path().toStdWString());
+	const FilePath source = root.getConcatenated(L"empty.cpp");
+	{ std::ofstream empty(source.str()); }
+	auto storage = std::make_shared<PersistentStorage>(
+		root.getConcatenated(L"project.srctrldb"), root.getConcatenated(L"project.srctrlbm"));
+	storage->setup();
+	addVeryNewFileToStorage(source, true, true, storage);
+	storage->buildCaches();
+	REQUIRE(storage->hasContentForFile(source));
+	const std::vector<std::shared_ptr<SourceGroup>> groups {
+		std::make_shared<SourceGroupTest>(std::set<FilePath> {source})};
+	REQUIRE(RefreshInfoGenerator::getRefreshInfoForUpdatedFiles(groups, storage).filesToIndex.empty());
+	{ std::ofstream changed(source.str()); changed << "int added;\n"; }
+	REQUIRE(storage->getFileContent(source, false)->getText().empty());
+	REQUIRE(RefreshInfoGenerator::getRefreshInfoForUpdatedFiles(groups, storage).filesToIndex ==
+		std::set<FilePath> {source});
 }

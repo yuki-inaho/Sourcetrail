@@ -1,0 +1,32 @@
+{
+  "state": "passed",
+  "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+  "command": "pixi run --locked verify",
+  "exit_code": 0,
+  "ctest_suites": 15,
+  "ctest_failed": 0,
+  "modern_cases_in_full_verify": 205,
+  "formal_cases": 9,
+  "formal_all_expected": true,
+  "portability_status": "passed",
+  "portability_vectors_per_language": 32778,
+  "scope": "Linux x86_64, source/SQLite/CLI, finite models; GUI, other OS and crash-atomic publication excluded",
+  "subsequent_modern_rerun": "All modern tests were rerun after implementation and tests were frozen, including the final two namespace/module sharing cases.",
+  "modern_frozen_command": "pixi run --locked -e modern python -m pytest tests/modern_indexers -v --junitxml=build/modern-indexers/final-results.xml",
+  "modern_frozen_exit_code": 0,
+  "modern_frozen_cases": 207,
+  "modern_frozen_failures": 0,
+  "modern_frozen_errors": 0,
+  "modern_frozen_skips": 0,
+  "modern_cases_by_module": {
+    "tests.modern_indexers.test_app_e2e": 12,
+    "tests.modern_indexers.test_cli": 25,
+    "tests.modern_indexers.test_cpp_indexer": 32,
+    "tests.modern_indexers.test_graph": 40,
+    "tests.modern_indexers.test_integration_review_e2e": 3,
+    "tests.modern_indexers.test_python_indexer": 62,
+    "tests.modern_indexers.test_rust_indexer": 33
+  },
+  "modern_frozen_sources_match": true,
+  "modern_seconds": 157.142
+}

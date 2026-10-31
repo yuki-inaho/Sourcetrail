@@ -51,11 +51,28 @@ build-core = { cmd = "cmake --build build/core --parallel 2", depends-on = ["con
 test-core = { cmd = "ctest --test-dir build/core --output-on-failure --no-tests=error --output-junit core-results.xml", depends-on = ["build-core"] }
 verify-portability = { cmd = "python script/verification/check_portability.py", depends-on = ["test-core"], description = "Check a Rust reference port and C++ core against shared independent refresh vectors" }
 
+[feature.modern.dependencies]
+python = "3.14.*"
+pytest = "8.*"
+clangxx = "18.1.*"
+libclang13 = "18.1.*"
+gxx_linux-64 = "12.*"
+sysroot_linux-64 = "2.17.*"
+rust = "1.85.*"
+
+[feature.modern.pypi-dependencies]
+libclang = "==18.1.1"
+
+[feature.modern.tasks]
+prepare-rust-indexer = { cmd = "python -m script.indexers.rust_runtime", description = "Fetch and verify the pinned Rust semantic engine and standard-library sources" }
+test-modern-indexers = { cmd = "python -m pytest tests/modern_indexers -v --junitxml=build/modern-indexers/results.xml", depends-on = ["prepare-rust-indexer", { task = "build", environment = "default" }], description = "Check modern Python, C++ and Rust source adapters and their schema-25 output" }
+
 [environments]
 default = { features = [] }
 python-parser = { features = ["python-parser"], no-default-feature = true }
 formal = { features = ["formal"], no-default-feature = true }
 portability = { features = ["portability"], no-default-feature = true }
+modern = { features = ["modern"], no-default-feature = true }
 
 [activation.env]
 QT_QPA_PLATFORM = "offscreen"
@@ -72,5 +89,5 @@ test-contracts = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-t
 test-toys = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^toy-projects$'", depends-on = ["build"], description = "Run checked-in synthetic C++ and Python projects with independent semantic expectations" }
 test-external-indexer = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error -R '^external-indexer-e2e$'", depends-on = ["build"], description = "Check real external process failures, candidate rejection, and successful retry" }
 verify-docs = { cmd = "python script/verification/check_docs.py", description = "Validate contract traceability, source anchors, reports, and documentation links" }
-verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }, { task = "verify-portability", environment = "portability" }], description = "Run implementation and toy tests, documentation, bounded models, and portable core conformance" }
+verify = { depends-on = ["test", "verify-docs", { task = "verify-models", environment = "formal" }, { task = "verify-portability", environment = "portability" }, { task = "test-modern-indexers", environment = "modern" }], description = "Run implementation and toy tests, documentation, bounded models, portable core conformance and modern language adapters" }
 test = { cmd = "ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml", depends-on = ["build"], description = "Run the existing suite and both languages' regression and E2E tests" }

@@ -16,6 +16,7 @@
 #include "SourceLocationCollection.h"
 #include "SourceLocationFile.h"
 #include "TextAccess.h"
+#include "SourceChange.h"
 #include "TextCodec.h"
 #include "TimeStamp.h"
 #include "TokenComponentAccess.h"
@@ -1779,24 +1780,32 @@ std::shared_ptr<TextAccess> PersistentStorage::getFileContent(
 {
 	TRACE();
 
-	std::shared_ptr<TextAccess> fileContent = m_sqliteIndexStorage.getFileContentByPath(
-		filePath.wstr());
-	if (fileContent->getLineCount() > 0)
+	const auto content = tryGetStoredFileContent(filePath);
+	if (content.status == sourcetrail::core::SourceContentStatus::Available)
 	{
-		return fileContent;
+		return TextAccess::createFromString(content.text, filePath);
 	}
-	return TextAccess::createFromFile(FilePath(filePath));
+	return TextAccess::createFromFile(filePath);
 }
 
 bool PersistentStorage::hasContentForFile(const FilePath& filePath) const
 {
-	std::shared_ptr<TextAccess> fileContent = m_sqliteIndexStorage.getFileContentByPath(
-		filePath.wstr());
-	if (fileContent->getLineCount() > 0)
-	{
-		return true;
-	}
-	return false;
+	return tryGetStoredFileContent(filePath).status ==
+		sourcetrail::core::SourceContentStatus::Available;
+}
+
+sourcetrail::core::SourceContent PersistentStorage::tryGetStoredFileContent(
+	const FilePath& filePath) const
+{
+	return m_sqliteIndexStorage.tryGetStoredFileContentByPath(filePath.wstr());
+}
+
+bool PersistentStorage::normalizePythonSourceLocations(
+	const std::set<FilePath>& sourceFiles, std::string& error)
+{
+	const bool success = m_sqliteIndexStorage.normalizePythonSourceLocations(sourceFiles, error);
+	clearCaches();
+	return success;
 }
 
 FileInfo PersistentStorage::getFileInfoForFileId(Id id) const

@@ -1,0 +1,172 @@
+[
+  {
+    "overlap": false,
+    "threads": 1,
+    "exit": 0,
+    "command": [
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail",
+      "index",
+      "--shallow",
+      "--full",
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/project.srctrlprj"
+    ],
+    "log": "build/input-position-mixed-review/disjoint-1/run.log",
+    "files": [
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/modern/z_source.py",
+        "Python"
+      ],
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/project.srctrlcfg",
+        ""
+      ],
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/legacy/old.py",
+        "python"
+      ]
+    ],
+    "tokens": [
+      [
+        ".\tmz_source\ts\tp\tn日本語\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/modern/z_source.py",
+        1,
+        5,
+        1,
+        13,
+        "日本語"
+      ],
+      [
+        ".\tmz_source\ts\tp\tn呼出元\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/modern/z_source.py",
+        4,
+        5,
+        4,
+        13,
+        "呼出元"
+      ],
+      [
+        ".\tmold\ts\tp\tn旧関数\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-1/legacy/old.py",
+        1,
+        5,
+        1,
+        13,
+        "旧関数"
+      ]
+    ]
+  },
+  {
+    "overlap": false,
+    "threads": 2,
+    "exit": 0,
+    "command": [
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail",
+      "index",
+      "--shallow",
+      "--full",
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/project.srctrlprj"
+    ],
+    "log": "build/input-position-mixed-review/disjoint-2/run.log",
+    "files": [
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/modern/z_source.py",
+        "Python"
+      ],
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/project.srctrlcfg",
+        ""
+      ],
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/legacy/old.py",
+        "python"
+      ]
+    ],
+    "tokens": [
+      [
+        ".\tmz_source\ts\tp\tn日本語\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/modern/z_source.py",
+        1,
+        5,
+        1,
+        13,
+        "日本語"
+      ],
+      [
+        ".\tmz_source\ts\tp\tn呼出元\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/modern/z_source.py",
+        4,
+        5,
+        4,
+        13,
+        "呼出元"
+      ],
+      [
+        ".\tmold\ts\tp\tn旧関数\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/disjoint-2/legacy/old.py",
+        1,
+        5,
+        1,
+        13,
+        "旧関数"
+      ]
+    ]
+  },
+  {
+    "overlap": true,
+    "threads": 1,
+    "exit": 1,
+    "command": [
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail",
+      "index",
+      "--shallow",
+      "--full",
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlprj"
+    ],
+    "log": "build/input-position-mixed-review/overlap-1/run.log",
+    "files": [],
+    "tokens": []
+  },
+  {
+    "overlap": true,
+    "threads": 2,
+    "exit": 0,
+    "command": [
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/Sourcetrail",
+      "index",
+      "--shallow",
+      "--full",
+      "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-2/project.srctrlprj"
+    ],
+    "log": "build/input-position-mixed-review/overlap-2/run.log",
+    "files": [
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-2/shared/z_source.py",
+        "Python"
+      ],
+      [
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-2/project.srctrlcfg",
+        ""
+      ]
+    ],
+    "tokens": [
+      [
+        ".\tmz_source\ts\tp\tn日本語\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-2/shared/z_source.py",
+        1,
+        5,
+        1,
+        13,
+        "日本語"
+      ],
+      [
+        ".\tmz_source\ts\tp\tn呼出元\ts\tp",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-2/shared/z_source.py",
+        4,
+        5,
+        4,
+        13,
+        "呼出元"
+      ]
+    ]
+  }
+]

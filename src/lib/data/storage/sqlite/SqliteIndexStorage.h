@@ -24,6 +24,8 @@
 #include "utility.h"
 #include "utilityString.h"
 
+namespace sourcetrail { namespace core { struct SourceContent; } }
+
 class TextAccess;
 class Version;
 class SourceLocationCollection;
@@ -109,6 +111,10 @@ public:
 	std::vector<StorageFile> getFilesByPaths(const std::vector<FilePath>& filePaths) const;
 	std::shared_ptr<TextAccess> getFileContentByPath(const std::wstring& filePath) const;
 	std::shared_ptr<TextAccess> getFileContentById(Id fileId) const;
+	sourcetrail::core::SourceContent tryGetStoredFileContentByPath(
+		const std::wstring& filePath) const;
+	// Normalize only freshly executed legacy Python outputs, once per database.
+	bool normalizePythonSourceLocations(const std::set<FilePath>& sourceFiles, std::string& error);
 
 	void setFileIndexed(Id fileId, bool indexed);
 	void setFileCompleteIfNoError(Id fileId, const std::wstring& filePath, bool complete);

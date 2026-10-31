@@ -1,0 +1,18 @@
+[
+  {
+    "original": "build/input-position-mixed-review/disjoint-1/run.log",
+    "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-1.log"
+  },
+  {
+    "original": "build/input-position-mixed-review/disjoint-2/run.log",
+    "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-2.log"
+  },
+  {
+    "original": "build/input-position-mixed-review/overlap-1/run.log",
+    "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-3.log"
+  },
+  {
+    "original": "build/input-position-mixed-review/overlap-2/run.log",
+    "published": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-4.log"
+  }
+]

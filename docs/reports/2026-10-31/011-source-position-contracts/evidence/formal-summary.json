@@ -1,0 +1,141 @@
+{
+  "results": [
+    {
+      "passed": true,
+      "returncode": 0,
+      "expected_violation": null,
+      "actual_violation": null,
+      "states": {
+        "generated": 1728,
+        "distinct": 1152,
+        "pending": 0
+      },
+      "name": "source-observation",
+      "module": "SourceObservation.tla",
+      "config": "SourceObservation.cfg",
+      "command": [
+        "/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/formal/bin/java",
+        "-XX:+UseParallelGC",
+        "-Xmx1024m",
+        "-jar",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/formal/tla2tools-1.7.4.jar",
+        "-workers",
+        "1",
+        "-fp",
+        "0",
+        "-seed",
+        "1",
+        "-metadir",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation-formal-final/source-observation-y3p2tihy",
+        "-config",
+        "SourceObservation.cfg",
+        "SourceObservation.tla"
+      ],
+      "seconds": 0.875,
+      "log": "source-observation.log"
+    },
+    {
+      "passed": true,
+      "returncode": 12,
+      "expected_violation": "ContentChangesDetected",
+      "actual_violation": "ContentChangesDetected",
+      "states": {
+        "generated": 579,
+        "distinct": 579,
+        "pending": 575
+      },
+      "name": "source-observation-negative-control",
+      "module": "SourceObservation.tla",
+      "config": "SourceObservationMutant.cfg",
+      "command": [
+        "/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/formal/bin/java",
+        "-XX:+UseParallelGC",
+        "-Xmx1024m",
+        "-jar",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/formal/tla2tools-1.7.4.jar",
+        "-workers",
+        "1",
+        "-fp",
+        "0",
+        "-seed",
+        "1",
+        "-metadir",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation-formal-final/source-observation-negative-control-yvwi83bi",
+        "-config",
+        "SourceObservationMutant.cfg",
+        "SourceObservation.tla"
+      ],
+      "seconds": 0.855,
+      "log": "source-observation-negative-control.log"
+    },
+    {
+      "passed": true,
+      "returncode": 0,
+      "expected_violation": null,
+      "actual_violation": null,
+      "states": {
+        "generated": 28,
+        "distinct": 20,
+        "pending": 0
+      },
+      "name": "python-output-validation",
+      "module": "PythonOutputValidation.tla",
+      "config": "PythonOutputValidation.cfg",
+      "command": [
+        "/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/formal/bin/java",
+        "-XX:+UseParallelGC",
+        "-Xmx1024m",
+        "-jar",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/formal/tla2tools-1.7.4.jar",
+        "-workers",
+        "1",
+        "-fp",
+        "0",
+        "-seed",
+        "1",
+        "-metadir",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation-formal-final/python-output-validation-bb0suo7u",
+        "-config",
+        "PythonOutputValidation.cfg",
+        "PythonOutputValidation.tla"
+      ],
+      "seconds": 0.773,
+      "log": "python-output-validation.log"
+    },
+    {
+      "passed": true,
+      "returncode": 12,
+      "expected_violation": "NoPublicationAfterInvalidOutput",
+      "actual_violation": "NoPublicationAfterInvalidOutput",
+      "states": {
+        "generated": 22,
+        "distinct": 18,
+        "pending": 3
+      },
+      "name": "python-output-negative-control",
+      "module": "PythonOutputValidation.tla",
+      "config": "PythonOutputValidationMutant.cfg",
+      "command": [
+        "/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/formal/bin/java",
+        "-XX:+UseParallelGC",
+        "-Xmx1024m",
+        "-jar",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/formal/tla2tools-1.7.4.jar",
+        "-workers",
+        "1",
+        "-fp",
+        "0",
+        "-seed",
+        "1",
+        "-metadir",
+        "/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation-formal-final/python-output-negative-control-itkjgk1b",
+        "-config",
+        "PythonOutputValidationMutant.cfg",
+        "PythonOutputValidation.tla"
+      ],
+      "seconds": 0.758,
+      "log": "python-output-negative-control.log"
+    }
+  ],
+  "passed": true
+}

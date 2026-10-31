@@ -1,0 +1,21 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.10, pytest-8.4.2, pluggy-1.7.0 -- /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/modern/bin/python
+cachedir: .pytest_cache
+rootdir: /workspace/scratch/b7462e898297/Sourcetrail
+collecting ... collected 12 items
+
+tests/modern_indexers/test_app_e2e.py::test_real_app_refresh_delete_empty_and_clean_equivalence[python] PASSED [  8%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_refresh_delete_empty_and_clean_equivalence[cpp] PASSED [ 16%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rust_workspace_refresh_delete_and_clean_equivalence PASSED [ 25%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[python] PASSED [ 33%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[cpp] PASSED [ 41%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[rust] PASSED [ 50%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_modern_crlf_input_does_not_reindex_without_changes PASSED [ 58%]
+tests/modern_indexers/test_app_e2e.py::test_existing_python_common_capabilities_match_both_engines PASSED [ 66%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains[1] PASSED [ 75%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains[2] PASSED [ 83%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_same_source_is_rejected_and_retries[1] PASSED [ 91%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_same_source_is_rejected_and_retries[2] PASSED [100%]
+
+- generated xml file: /workspace/scratch/b7462e898297/Sourcetrail/build/modern-indexers/app-results.xml -
+======================== 12 passed in 69.15s (0:01:09) =========================

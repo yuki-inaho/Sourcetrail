@@ -1,6 +1,6 @@
-# 更新計画と外部索引結果の有限モデル検査
+# 更新計画・入力観測・外部索引結果の有限モデル検査
 
-このディレクトリは、更新対象を選ぶ `REFRESH-001` の集合契約と、その段階的な計算、外部解析コマンドの結果を扱う `EXECUTION-001` の安全性を TLA+ で記述する。
+このディレクトリは、更新対象を選ぶ `REFRESH-001` の集合契約とその段階的な計算、内容変更を分類する `INPUT-001`、旧Python出力を検査する `LOCATION-001`、外部解析コマンドの結果を扱う `EXECUTION-001` の安全性を TLA+ で記述する。
 TLC によって**指定した有限範囲内のモデル**を検査する。C++ ソースを自動変換したものではなく、Sourcetrail 全体や任意サイズの入力についての証明ではない。
 
 ## 入口
@@ -12,6 +12,10 @@ TLC によって**指定した有限範囲内のモデル**を検査する。C++
 - [保護条件を外した変異モデル設定](RefreshPlanMutant.cfg): 失敗を期待する検証器の自己確認。
 - [外部索引結果のモデル](ExternalIndexing.tla)と[通常設定](ExternalIndexing.cfg): 試行・終了・成功・失敗の集計、失敗候補の破棄、後片付けと通知の順序。
 - [過去の失敗を忘れる変異モデル設定](ExternalIndexingMutant.cfg): 後続の成功による誤公開を反例として要求する。
+- [入力内容観測](SourceObservation.tla)と[通常設定](SourceObservation.cfg): 内容差・空内容・保存欠落・読込失敗の分類。
+- [mtimeだけで内容差を見落とす変異設定](SourceObservationMutant.cfg)。
+- [Python出力検査](PythonOutputValidation.tla)と[通常設定](PythonOutputValidation.cfg): DB／ソースごとに一度だけ検査し、異常出力を公開しない。
+- [異常出力を許容する変異設定](PythonOutputValidationMutant.cfg)。
 - [実行器](../../../script/verification/check_models.py): 配布物の検証、実行、終了コード・結果判定、証跡の出力。
 - [実行器の誤判定防止テスト](../../../tests/contracts/test_models.py)。
 
@@ -43,10 +47,14 @@ python script/verification/check_models.py --offline
 | `build/formal/refresh-negative-control.log` | 意図した共有依存の消去を示す反例 |
 | `build/formal/external-indexing.log` | 2〜3個の外部コマンドについての有限モデル検査 |
 | `build/formal/external-indexing-negative-control.log` | 過去の失敗を忘れた場合の誤公開の反例 |
+| `build/formal/source-observation.log` | 保存内容と現在内容による変更分類 |
+| `build/formal/source-observation-negative-control.log` | 同時刻の内容変更を見落とす反例 |
+| `build/formal/python-output-validation.log` | 一回の出力検査と異常候補の破棄 |
+| `build/formal/python-output-negative-control.log` | 異常出力を採用する反例 |
 
 通常モデルの終了コード 0 だけでは合格としない。検査完了の表示、非ゼロの探索状態数、未処理状態が 0 であることも確認する。
 各検査にはモデルのモジュール名と設定名を指定し、実行器と証跡に両方を残す。新しい設定を誤って従来の `RefreshPlan.tla` に適用しないよう、実行器自身でもモジュール選択を試験する。
-変異モデルは TLC の不変条件違反の終了コード `12`、指定した不変条件の違反、反例の表示を要求する。更新計画では `SharedDependenciesPreserved`、外部索引結果では `NoPublicationAfterFailure` を指定する。
+変異モデルは TLC の不変条件違反の終了コード `12`、指定した不変条件の違反、反例の表示を要求する。更新計画では `SharedDependenciesPreserved`、外部索引結果では `NoPublicationAfterFailure`、入力観測では `ContentChangesDetected`、Python出力検査では `NoPublicationAfterInvalidOutput` を指定する。
 構文エラー、Java の起動失敗、タイムアウト、別の不変条件の違反は、変異モデルでも合格にならない。
 各設定の制限時間は既定で 300 秒。全体の実行器は一つでも期待と違えば非ゼロで終了する。
 
@@ -205,6 +213,16 @@ TLA+の集合は各試行の識別子を保持して集計を検査する参照�
 対象外は、OSでの子プロセス制御そのもの、タイムアウト、取消、スレッドのロック実装、DB内容の正しさ・版交渉、構文診断と部分結果の品質、クラッシュ時のファイル置換の原子性である。
 特に `published` は候補を採用する判断の抽象状態であり、ファイルシステム操作の成功・耐障害性の証明ではない。
 実装との対応はC++の状態集計試験と実アプリの故障注入試験でも確認し、モデルの成功だけで同等性を主張しない。
+
+## 入力内容観測とPython出力検査
+
+2026-10-31（Asia/Tokyo）に二つの境界を追加した。以前のレポートの未回収ファイルを復元したという意味ではなく、現在の実装から再構成したモデルである。
+
+`SourceObservation.tla` は索引済みかどうか、保存・現在の取得状態4種類、内容3種類（空、a、b）、mtimeが進んだかどうかを列挙する。保存内容と現在内容を取得できた場合は内容差だけで判定し、取得できない現在入力と索引済みの保存欠落を変更扱いにする。非索引依存で保存内容がない場合に限りmtimeの互換判定を明示する。通常設定は1,152状態を探索し未処理0で完了した。mtimeを必須条件に戻す変異は、内容が違うのに変更なしとする `ContentChangesDetected` の反例で終了コード12を返した。
+
+`PythonOutputValidation.tla` はワーカー完了後の二つのDB／ソースの組を扱う。各組を一度だけ検査し、全検査後に公開を判断する。どれかが異常なら候補を破棄し、後続の正常な組で拒否状態を取り消さない。通常設定は20状態を探索し未処理0で完了した。異常出力を許す変異は `NoPublicationAfterInvalidOutput` の指定反例で終了した。
+
+実装との対応は[SourceChange.h](../../../src/lib_core/SourceChange.h)、[TaskExecuteCustomCommands.cpp](../../../src/lib/data/indexer/TaskExecuteCustomCommands.cpp)、[SqliteIndexStorage.cpp](../../../src/lib/data/storage/sqlite/SqliteIndexStorage.cpp)にある。C++の観測分類、UTF-8位置変換、SQLiteの検査・ロールバック、実アプリの異常出力試験を別途実行する。モデルは文字列のUnicode復号、ファイルシステムやSQLiteのI/O、ワーカー障壁そのもの、全入力の原子的な取得を証明しない。
 
 ## ツールの固定と一次資料
 

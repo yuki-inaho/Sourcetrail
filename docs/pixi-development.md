@@ -168,6 +168,21 @@ version before installing the archive. Failed downloads or validation leave an
 existing installation intact, and repeated builds reuse a verified installation.
 
 GitHub Actions installs the committed lock, builds both language packages, and
-runs all seven CTest suites, documentation checks, and bounded TLA+ verification.
+runs the registered CTest suites, modern language adapter tests, documentation
+checks, and bounded TLA+ verification. The CTest inventory is available with
+`pixi run --locked ctest --test-dir build/pixi -N`.
 Test logs, the JUnit report, model results, and model counterexamples are retained
 as workflow artifacts, including on failure.
+
+## Modern Python, C++ and Rust adapters
+
+The separate `modern` environment pins Python 3.14, Clang 18.1.8 and Rust/Cargo 1.85.1.
+`pixi run --locked -e modern test-modern-indexers` prepares the checksum-verified Rust engine,
+builds the application, and runs engine, output-validation and real-application E2E cases.
+It is also included in `pixi run --locked verify`. The previous Python 3.8 and Clang 11
+paths remain available. See [modern indexers](architecture/modern-indexers.md) for project
+creation, engine options, exact tested capabilities, and unsupported configurations.
+
+Input observation tests and two additional portable C++ core programs are registered
+in CTest. Four new normal/mutant TLA+ configurations cover content observations and
+Python output acceptance; each negative control requires its named invariant violation.

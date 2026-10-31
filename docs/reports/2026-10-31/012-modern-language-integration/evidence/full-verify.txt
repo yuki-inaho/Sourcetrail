@@ -1,0 +1,508 @@
+✨ Pixi task (configure in default): cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON: (Configure the application with C++ and Python indexing)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Version: 0.0.0
+-- setting up the buildtype for versioning
+bash: ''
+-- 'Treat warnings as errors' policy is disabled
+-- Found LLVM 11.1.0
+-- Trying to find Clang compiler headers in '.' build config in directory '/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/./lib/clang/11.1.0/include'.
+-- Found headers for '.' build config.
+CMake Warning (dev) at CMakeLists.txt:188 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Qt 5.15.8
+CMake Deprecation Warning at src/lib_core/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Building the Java indexer will be skipped. You can enable building this target by setting 'BUILD_JAVA_LANGUAGE_PACKAGE' to 'ON'.
+CMake Warning (dev) at CMakeLists.txt:558 (add_custom_command):
+  The following keywords are not supported when using
+  add_custom_command(TARGET): DEPENDS.
+
+  Policy CMP0175 is not set: add_custom_command() rejects invalid arguments.
+  Run "cmake --help-policy CMP0175" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:753 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:754 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- create symlink: /workspace/scratch/b7462e898297/Sourcetrail/bin/app/data -> /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/data
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+
+✨ Pixi task (python-parser-ready in python-parser): python --version: (Prepare the Python environment inspected by the legacy indexer)
+Python 3.8.20
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/8] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+[2/7] Automatic MOC for target Sourcetrail_lib_gui
+
+✨ Pixi task (test in default): ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml: (Run the existing suite and both languages' regression and E2E tests)
+Internal ctest changing into directory: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+Test project /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+      Start  1: external-indexer-e2e
+ 1/15 Test  #1: external-indexer-e2e .............   Passed   24.17 sec
+      Start  2: input-observation-e2e
+ 2/15 Test  #2: input-observation-e2e ............   Passed   96.85 sec
+      Start  3: toy-projects
+ 3/15 Test  #3: toy-projects .....................   Passed   27.65 sec
+      Start  4: legacy
+ 4/15 Test  #4: legacy ...........................   Passed    4.20 sec
+      Start  5: cpp-contracts
+ 5/15 Test  #5: cpp-contracts ....................   Passed    1.21 sec
+      Start  6: verification-contracts
+ 6/15 Test  #6: verification-contracts ...........   Passed   10.19 sec
+      Start  7: cpp-regression
+ 7/15 Test  #7: cpp-regression ...................   Passed    0.15 sec
+      Start  8: cpp-e2e
+ 8/15 Test  #8: cpp-e2e ..........................   Passed   11.59 sec
+      Start  9: python-regression
+ 9/15 Test  #9: python-regression ................   Passed    2.34 sec
+      Start 10: python-e2e
+10/15 Test #10: python-e2e .......................   Passed   11.11 sec
+      Start 11: core-input-contracts
+11/15 Test #11: core-input-contracts .............   Passed    0.00 sec
+      Start 12: core-location-contracts
+12/15 Test #12: core-location-contracts ..........   Passed    0.00 sec
+      Start 13: core-refresh-contracts
+13/15 Test #13: core-refresh-contracts ...........   Passed    0.03 sec
+      Start 14: core-command-contracts
+14/15 Test #14: core-command-contracts ...........   Passed    0.00 sec
+      Start 15: core-execution-contracts
+15/15 Test #15: core-execution-contracts .........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Label Time Summary:
+contract             = 160.11 sec*proc (10 tests)
+cpp                  = 161.66 sec*proc (11 tests)
+e2e                  = 171.38 sec*proc (5 tests)
+external-indexer     =  24.17 sec*proc (1 test)
+input-observation    =  96.85 sec*proc (1 test)
+legacy               =   4.20 sec*proc (1 test)
+portability          =   0.04 sec*proc (5 tests)
+python               = 172.32 sec*proc (6 tests)
+regression           =   6.69 sec*proc (3 tests)
+toy                  =  27.65 sec*proc (1 test)
+
+Total Test time (real) = 189.51 sec
+
+✨ Pixi task (verify-docs in default): python script/verification/check_docs.py: (Validate contract traceability, source anchors, reports, and documentation links)
+{"passed": true, "markdown_files": 45, "contracts": 20, "language_profiles": 6, "reports": 12, "error_count": 0}
+
+✨ Pixi task (verify-models in formal): python script/verification/check_models.py: (Check bounded TLA+ refinement and the required negative control)
+Checking refresh-mixed ...
+  PASS: {'generated': 627264, 'distinct': 522720, 'pending': 0}
+Checking refresh-single-relation ...
+  PASS: {'generated': 82944, 'distinct': 69120, 'pending': 0}
+Checking refresh-negative-control ...
+  PASS: {'generated': 25, 'distinct': 25, 'pending': 5}
+Checking external-indexing ...
+  PASS: {'generated': 656, 'distinct': 374, 'pending': 0}
+Checking external-indexing-negative-control ...
+  PASS: {'generated': 270, 'distinct': 178, 'pending': 88}
+Checking source-observation ...
+  PASS: {'generated': 1728, 'distinct': 1152, 'pending': 0}
+Checking source-observation-negative-control ...
+  PASS: {'generated': 579, 'distinct': 579, 'pending': 575}
+Checking python-output-validation ...
+  PASS: {'generated': 28, 'distinct': 20, 'pending': 0}
+Checking python-output-negative-control ...
+  PASS: {'generated': 22, 'distinct': 18, 'pending': 3}
+Evidence: /workspace/scratch/b7462e898297/Sourcetrail/build/formal/summary.json
+
+✨ Pixi task (configure-core in portability): cmake -S src/lib_core -B build/core -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON: (Configure the reusable core without Qt, Boost, LLVM or SQLite)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- The CXX compiler identification is GNU 12.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/portability/bin/x86_64-conda-linux-gnu-c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done (0.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/scratch/b7462e898297/Sourcetrail/build/core
+
+✨ Pixi task (build-core in portability): cmake --build build/core --parallel 2
+[1/12] Building CXX object CMakeFiles/core-input-contracts.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/core/source_change_test.cpp.o
+[2/12] Building CXX object CMakeFiles/core-location-contracts.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/core/utf8_source_location_test.cpp.o
+[3/12] Building CXX object CMakeFiles/core-refresh-driver.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/portability/refresh_driver.cpp.o
+[4/12] Building CXX object CMakeFiles/core-command-contracts.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/core/indexer_command_template_test.cpp.o
+[5/12] Building CXX object CMakeFiles/core-refresh-contracts.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/core/refresh_planner_test.cpp.o
+[6/12] Linking CXX executable core-input-contracts
+[7/12] Linking CXX executable core-location-contracts
+[8/12] Linking CXX executable core-refresh-driver
+[9/12] Linking CXX executable core-refresh-contracts
+[10/12] Linking CXX executable core-command-contracts
+[11/12] Building CXX object CMakeFiles/core-execution-contracts.dir/workspace/scratch/b7462e898297/Sourcetrail/tests/core/external_indexer_outcome_test.cpp.o
+[12/12] Linking CXX executable core-execution-contracts
+
+✨ Pixi task (test-core in portability): ctest --test-dir build/core --output-on-failure --no-tests=error --output-junit core-results.xml
+Internal ctest changing into directory: /workspace/scratch/b7462e898297/Sourcetrail/build/core
+Test project /workspace/scratch/b7462e898297/Sourcetrail/build/core
+    Start 1: core-input-contracts
+1/5 Test #1: core-input-contracts .............   Passed    0.00 sec
+    Start 2: core-location-contracts
+2/5 Test #2: core-location-contracts ..........   Passed    0.00 sec
+    Start 3: core-refresh-contracts
+3/5 Test #3: core-refresh-contracts ...........   Passed    0.02 sec
+    Start 4: core-command-contracts
+4/5 Test #4: core-command-contracts ...........   Passed    0.00 sec
+    Start 5: core-execution-contracts
+5/5 Test #5: core-execution-contracts .........   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Label Time Summary:
+contract       =   0.03 sec*proc (5 tests)
+cpp            =   0.03 sec*proc (5 tests)
+portability    =   0.03 sec*proc (5 tests)
+
+Total Test time (real) =   0.03 sec
+
+✨ Pixi task (verify-portability in portability): python script/verification/check_portability.py: (Check a Rust reference port and C++ core against shared independent refresh vectors)
+{
+  "schema_version": 1,
+  "profile": "refresh-sets-v1",
+  "status": "passed",
+  "versions": {
+    "python": "3.11.18 (main, Oct 26 2026, 11:35:17) [GCC 15.3.0]",
+    "rustc": "rustc 1.85.1 (4eb161250 2025-03-15)",
+    "cxx": "x86_64-conda-linux-gnu-c++ (conda-forge gcc 12.4.0-2) 12.4.0",
+    "linker_driver": "x86_64-conda-linux-gnu-cc (conda-forge gcc 12.4.0-2) 12.4.0"
+  },
+  "compile_command": [
+    "/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/portability/bin/rustc",
+    "--edition=2021",
+    "-C",
+    "opt-level=2",
+    "-C",
+    "linker=/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/portability/bin/x86_64-conda-linux-gnu-cc",
+    "/workspace/scratch/b7462e898297/Sourcetrail/tests/portability/refresh_reference.rs",
+    "-o",
+    "/workspace/scratch/b7462e898297/Sourcetrail/build/portability/refresh-reference"
+  ],
+  "source_sha256": {
+    "src/lib_core/RefreshPlanner.h": "4c32def458952d47966880659ad369add2ea06aeeb4266b0c8fcfc2f75f3a539",
+    "tests/portability/refresh_driver.cpp": "77d0cbc810efdf54c0f6b544e4a9be51ee9e541ed07022e124d8137773a7352a",
+    "tests/portability/refresh_reference.rs": "2d753433eb4ca0361684d6163a04146a985745f3733707b1e667a56c1b71ebf3",
+    "tests/portability/refresh_vectors.json": "ec761c7ce16fcf3e4720f52e123173c596445327da466ac37c81d9f60b8c8b88",
+    "script/verification/check_portability.py": "dca07ac484b61d0968cb7d3d75736f3a881e9ce2a25d760c50133a00887b1fa6"
+  },
+  "fixed_cases": 10,
+  "fixed_case_ids": [
+    "empty",
+    "no-op",
+    "new-source",
+    "shared-and-private",
+    "changed-header",
+    "deleted-source",
+    "protect-static-source",
+    "dependency-cycle",
+    "affected-beats-shared",
+    "high-opaque-identity"
+  ],
+  "bounded_cases": 32768,
+  "bounded_domain": {
+    "identities": 3,
+    "directed_nonself_graphs": 64,
+    "source_subsets": 8,
+    "changed_subsets": 8,
+    "unchanged_subsets": 8,
+    "overlapping_changed_unchanged_included": true
+  },
+  "implementations": {
+    "cpp": {
+      "status": "passed",
+      "cases": 32778,
+      "mismatches": 0,
+      "binary_sha256": "c2e19152d5e09be1864b76ea2722d4afcb75463774093814a4d15dc344d42a68",
+      "result_sha256": "c18ff1dd414a61ad212f3cf75a7beb96f767c49c7c57e38f5337528a4f8b32d2"
+    },
+    "rust": {
+      "status": "passed",
+      "cases": 32778,
+      "mismatches": 0,
+      "binary_sha256": "839a44bb6dc5c2bcd282ac5b5bbb046fcc66a38fc66006e30aebb5e7b7aabfe5",
+      "result_sha256": "c18ff1dd414a61ad212f3cf75a7beb96f767c49c7c57e38f5337528a4f8b32d2"
+    }
+  },
+  "negative_control": {
+    "status": "expected-mismatch",
+    "cases": 10,
+    "rejected_case_ids": [
+      "shared-and-private",
+      "protect-static-source"
+    ],
+    "required_rejected_case": "shared-and-private"
+  },
+  "duration_seconds": 0.992,
+  "scope": "C++ production value core / Rust reference policy; no Rust indexing or OS application proof"
+}
+
+✨ Pixi task (prepare-rust-indexer in modern): python -m script.indexers.rust_runtime: (Fetch and verify the pinned Rust semantic engine and standard-library sources)
+{"cargo_home": "/workspace/scratch/b7462e898297/Sourcetrail/build/modern-runtimes/rust/cargo-home", "rust_analyzer": "/workspace/scratch/b7462e898297/Sourcetrail/build/modern-runtimes/rust/rust-analyzer", "rust_src": "/workspace/scratch/b7462e898297/Sourcetrail/build/modern-runtimes/rust/library"}
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/3] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+
+✨ Pixi task (test-modern-indexers in modern): python -m pytest tests/modern_indexers -v --junitxml=build/modern-indexers/results.xml: (Check modern Python, C++ and Rust source adapters and their schema-25 output)
+============================= test session starts ==============================
+platform linux -- Python 3.14.10, pytest-8.4.2, pluggy-1.7.0 -- /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/modern/bin/python
+cachedir: .pytest_cache
+rootdir: /workspace/scratch/b7462e898297/Sourcetrail
+collecting ... collected 205 items
+
+tests/modern_indexers/test_app_e2e.py::test_real_app_refresh_delete_empty_and_clean_equivalence[python] PASSED [  0%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_refresh_delete_empty_and_clean_equivalence[cpp] PASSED [  0%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rust_workspace_refresh_delete_and_clean_equivalence PASSED [  1%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[python] PASSED [  1%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[cpp] PASSED [  2%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_rejects_protocol_mismatch_preserves_index_and_retries[rust] PASSED [  2%]
+tests/modern_indexers/test_app_e2e.py::test_real_app_modern_crlf_input_does_not_reindex_without_changes PASSED [  3%]
+tests/modern_indexers/test_app_e2e.py::test_existing_python_common_capabilities_match_both_engines PASSED [  3%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains[1] PASSED [  4%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_python_keep_separate_coordinate_domains[2] PASSED [  4%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_same_source_is_rejected_and_retries[1] PASSED [  5%]
+tests/modern_indexers/test_app_e2e.py::test_mixed_legacy_and_modern_same_source_is_rejected_and_retries[2] PASSED [  5%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[language-value0] PASSED [  6%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[language-value1] PASSED [  6%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[language-1] PASSED [  7%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[options-value3] PASSED [  7%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[options-False] PASSED [  8%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[root-] PASSED [  8%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[root-bad\x00path] PASSED [  9%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[root-1] PASSED [  9%]
+tests/modern_indexers/test_cli.py::test_read_config_rejects_invalid_field_types[protocol_version-True] PASSED [ 10%]
+tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.srctrlcfg] PASSED [ 10%]
+tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.srctrldb] PASSED [ 11%]
+tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[.xml] PASSED [ 11%]
+tests/modern_indexers/test_cli.py::test_configure_requires_a_project_suffix_and_cannot_overwrite_its_config[] PASSED [ 12%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[False] PASSED [ 12%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options1] PASSED [ 13%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[1] PASSED [ 13%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[bad] PASSED [ 14%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options4] PASSED [ 14%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options5] PASSED [ 15%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options6] PASSED [ 15%]
+tests/modern_indexers/test_cli.py::test_configure_validates_options_used_to_enumerate_sources[options7] PASSED [ 16%]
+tests/modern_indexers/test_cli.py::test_configure_python_excludes_the_same_build_directory_as_the_adapter PASSED [ 16%]
+tests/modern_indexers/test_cli.py::test_configure_rejects_non_path_compilation_database PASSED [ 17%]
+tests/modern_indexers/test_cli.py::test_cpp_native_extensions_cover_the_engine_discovery_profile PASSED [ 17%]
+tests/modern_indexers/test_cli.py::test_missing_extensionless_rust_configurations_are_registered_for_later_creation PASSED [ 18%]
+tests/modern_indexers/test_cpp_indexer.py::test_engine_version_and_position_contract PASSED [ 18%]
+tests/modern_indexers/test_cpp_indexer.py::test_unselected_source_and_header_are_observed_without_invented_symbols PASSED [ 19%]
+tests/modern_indexers/test_cpp_indexer.py::test_external_response_is_a_stored_dependency_of_the_translation_unit PASSED [ 19%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_error_highlights_complete_utf8_scalars[-\n] PASSED [ 20%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_error_highlights_complete_utf8_scalars[\ufeff-\r\n] PASSED [ 20%]
+tests/modern_indexers/test_cpp_indexer.py::test_modern_concepts_consteval_designators_and_generic_lambda PASSED [ 20%]
+tests/modern_indexers/test_cpp_indexer.py::test_constrained_overloads_with_identical_clang_usr_remain_distinct PASSED [ 21%]
+tests/modern_indexers/test_cpp_indexer.py::test_explicit_template_specialization_and_ordinary_overload_remain_distinct PASSED [ 21%]
+tests/modern_indexers/test_cpp_indexer.py::test_real_coroutine_keeps_user_call_and_source_positions PASSED [ 22%]
+tests/modern_indexers/test_cpp_indexer.py::test_modules_exported_concept_and_real_bmi_import PASSED [ 22%]
+tests/modern_indexers/test_cpp_indexer.py::test_invalid_bmi_is_an_execution_failure_not_a_complete_empty_graph PASSED [ 23%]
+tests/modern_indexers/test_cpp_indexer.py::test_compilation_database_keeps_cwd_macros_and_quoted_paths PASSED [ 23%]
+tests/modern_indexers/test_cpp_indexer.py::test_conflicting_build_context_is_rejected PASSED [ 24%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_positions_are_bytes_in_exact_stored_content[\n-False] PASSED [ 24%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_positions_are_bytes_in_exact_stored_content[\r\n-False] PASSED [ 25%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_positions_are_bytes_in_exact_stored_content[\n-True] PASSED [ 25%]
+tests/modern_indexers/test_cpp_indexer.py::test_unicode_positions_are_bytes_in_exact_stored_content[\r\n-True] PASSED [ 26%]
+tests/modern_indexers/test_cpp_indexer.py::test_syntax_error_is_diagnostic_and_incomplete_then_repairs PASSED [ 26%]
+tests/modern_indexers/test_cpp_indexer.py::test_missing_include_is_an_incomplete_graph_with_a_fatal_diagnostic PASSED [ 27%]
+tests/modern_indexers/test_cpp_indexer.py::test_inheritance_override_and_macro_provenance PASSED [ 27%]
+tests/modern_indexers/test_cpp_indexer.py::test_member_access_is_preserved_in_the_common_graph PASSED [ 28%]
+tests/modern_indexers/test_cpp_indexer.py::test_static_same_basename_translation_units_keep_distinct_identities PASSED [ 28%]
+tests/modern_indexers/test_cpp_indexer.py::test_legacy_toy_shared_capabilities_and_exact_name_token_positions PASSED [ 29%]
+tests/modern_indexers/test_cpp_indexer.py::test_invalid_source_encoding_is_rejected[int x;\x00] PASSED [ 29%]
+tests/modern_indexers/test_cpp_indexer.py::test_invalid_source_encoding_is_rejected[int \xff;] PASSED [ 30%]
+tests/modern_indexers/test_cpp_indexer.py::test_response_file_cycle_is_rejected PASSED [ 30%]
+tests/modern_indexers/test_cpp_indexer.py::test_response_file_is_an_observed_input_and_changes_the_context PASSED [ 31%]
+tests/modern_indexers/test_cpp_indexer.py::test_plugin_arguments_are_explicitly_rejected PASSED [ 31%]
+tests/modern_indexers/test_cpp_indexer.py::test_no_source_is_an_error PASSED [ 32%]
+tests/modern_indexers/test_cpp_indexer.py::test_last_translation_unit_deletion_with_explicit_empty_database PASSED [ 32%]
+tests/modern_indexers/test_cpp_indexer.py::test_empty_database_does_not_hide_existing_sources PASSED [ 33%]
+tests/modern_indexers/test_cpp_indexer.py::test_stale_database_with_missing_source_is_rejected PASSED [ 33%]
+tests/modern_indexers/test_graph.py::test_schema25_preserves_content_identity_and_utf8_positions PASSED [ 34%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[dangling] PASSED [ 34%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[byte-start] PASSED [ 35%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[byte-end] PASSED [ 35%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[past-eof] PASSED [ 36%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[reversed] PASSED [ 36%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[nul] PASSED [ 37%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[identity] PASSED [ 37%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[kind] PASSED [ 38%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[version] PASSED [ 38%]
+tests/modern_indexers/test_graph.py::test_invalid_output_is_rejected_before_database_creation[name] PASSED [ 39%]
+tests/modern_indexers/test_graph.py::test_unknown_existing_schema_is_not_modified PASSED [ 39%]
+tests/modern_indexers/test_graph.py::test_conflicting_content_rolls_back_the_whole_transaction PASSED [ 40%]
+tests/modern_indexers/test_graph.py::test_duplicate_injection_has_stable_semantics PASSED [ 40%]
+tests/modern_indexers/test_graph.py::test_empty_file_is_distinct_from_a_missing_file PASSED [ 40%]
+tests/modern_indexers/test_graph.py::test_crlf_sources_use_the_existing_lf_storage_convention PASSED [ 41%]
+tests/modern_indexers/test_graph.py::test_duplicate_injection_keeps_diagnostics_idempotent PASSED [ 41%]
+tests/modern_indexers/test_graph.py::test_native_name_lookup_cannot_distinguish_colliding_kinds PASSED [ 42%]
+tests/modern_indexers/test_graph.py::test_separate_groups_cannot_inject_conflicting_name_kinds PASSED [ 42%]
+tests/modern_indexers/test_graph.py::test_separate_groups_cannot_merge_distinct_explicit_definitions PASSED [ 43%]
+tests/modern_indexers/test_graph.py::test_existing_duplicate_names_are_rejected_without_mutation PASSED [ 43%]
+tests/modern_indexers/test_graph.py::test_same_columns_without_foreign_keys_are_not_a_valid_candidate PASSED [ 44%]
+tests/modern_indexers/test_graph.py::test_multiple_observers_preserve_indexed_and_incomplete_flags[False] PASSED [ 44%]
+tests/modern_indexers/test_graph.py::test_multiple_observers_preserve_indexed_and_incomplete_flags[True] PASSED [ 45%]
+tests/modern_indexers/test_graph.py::test_conflicting_file_languages_roll_back PASSED [ 45%]
+tests/modern_indexers/test_graph.py::test_non_newline_unicode_separators_do_not_add_source_lines PASSED [ 46%]
+tests/modern_indexers/test_graph.py::test_crlf_diagnostic_eof_anchor_maps_to_lf PASSED [ 46%]
+tests/modern_indexers/test_graph.py::test_crlf_scope_points_do_not_reverse_or_escape_the_line[3] PASSED [ 47%]
+tests/modern_indexers/test_graph.py::test_crlf_scope_points_do_not_reverse_or_escape_the_line[4] PASSED [ 47%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[file-shape] PASSED [ 48%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[symbol-shape] PASSED [ 48%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[edge-shape] PASSED [ 49%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-shape] PASSED [ 49%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[kind-type] PASSED [ 50%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[locations-type] PASSED [ 50%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-fatal] PASSED [ 51%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[diagnostic-nul] PASSED [ 51%]
+tests/modern_indexers/test_graph.py::test_malformed_graph_types_fail_before_creating_database[name-unicode] PASSED [ 52%]
+tests/modern_indexers/test_integration_review_e2e.py::test_excluded_directory_names_above_the_source_root_do_not_hide_sources PASSED [ 52%]
+tests/modern_indexers/test_integration_review_e2e.py::test_cdb_unselected_inputs_do_not_reindex_an_unchanged_project PASSED [ 53%]
+tests/modern_indexers/test_integration_review_e2e.py::test_external_response_preserves_noop_and_refreshes_same_time_content_changes PASSED [ 53%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\n-True-False] PASSED [ 54%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\n-True-True] PASSED [ 54%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\n-False-False] PASSED [ 55%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\n-False-True] PASSED [ 55%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\r\n-True-False] PASSED [ 56%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\r\n-True-True] PASSED [ 56%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\r\n-False-False] PASSED [ 57%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_positions_are_exact_utf8_byte_ranges[\r\n-False-True] PASSED [ 57%]
+tests/modern_indexers/test_python_indexer.py::test_modern_syntax_records_declarations_and_references PASSED [ 58%]
+tests/modern_indexers/test_python_indexer.py::test_relative_import_namespace_package_alias_and_inheritance PASSED [ 58%]
+tests/modern_indexers/test_python_indexer.py::test_scopes_do_not_resolve_method_names_through_class_scope PASSED [ 59%]
+tests/modern_indexers/test_python_indexer.py::test_dynamic_call_stays_unresolved_instead_of_fabricating_a_target PASSED [ 59%]
+tests/modern_indexers/test_python_indexer.py::test_nonidentifier_module_paths_are_observed_and_diagnosed[.hidden/main.py] PASSED [ 60%]
+tests/modern_indexers/test_python_indexer.py::test_nonidentifier_module_paths_are_observed_and_diagnosed[a.b/main.py] PASSED [ 60%]
+tests/modern_indexers/test_python_indexer.py::test_nonidentifier_module_paths_are_observed_and_diagnosed[a.b.py] PASSED [ 60%]
+tests/modern_indexers/test_python_indexer.py::test_nonidentifier_module_paths_are_observed_and_diagnosed[bad-name/main.py] PASSED [ 61%]
+tests/modern_indexers/test_python_indexer.py::test_explicit_source_root_can_exclude_a_nonidentifier_parent PASSED [ 61%]
+tests/modern_indexers/test_python_indexer.py::test_syntax_error_is_diagnostic_and_repair_rebuilds_cleanly PASSED [ 62%]
+tests/modern_indexers/test_python_indexer.py::test_imports_never_execute_source_code PASSED [ 62%]
+tests/modern_indexers/test_python_indexer.py::test_unknown_import_and_shadowing_are_explicit PASSED [ 63%]
+tests/modern_indexers/test_python_indexer.py::test_capability_profile_is_versioned PASSED [ 63%]
+tests/modern_indexers/test_python_indexer.py::test_empty_source_and_deleted_source_are_valid_inputs PASSED [ 64%]
+tests/modern_indexers/test_python_indexer.py::test_reassignment_invalidates_an_earlier_instance_type[42] PASSED [ 64%]
+tests/modern_indexers/test_python_indexer.py::test_reassignment_invalidates_an_earlier_instance_type[object()] PASSED [ 65%]
+tests/modern_indexers/test_python_indexer.py::test_reassignment_invalidates_an_earlier_instance_type[unknown()] PASSED [ 65%]
+tests/modern_indexers/test_python_indexer.py::test_rebinding_a_function_does_not_keep_its_old_call_target[target = 42] PASSED [ 66%]
+tests/modern_indexers/test_python_indexer.py::test_rebinding_a_function_does_not_keep_its_old_call_target[target += 1] PASSED [ 66%]
+tests/modern_indexers/test_python_indexer.py::test_rebinding_a_function_does_not_keep_its_old_call_target[del target] PASSED [ 67%]
+tests/modern_indexers/test_python_indexer.py::test_lambda_parameter_shadows_module_function PASSED [ 67%]
+tests/modern_indexers/test_python_indexer.py::test_annotations_do_not_override_the_observed_constructor PASSED [ 68%]
+tests/modern_indexers/test_python_indexer.py::test_annotation_alone_is_not_proof_of_a_runtime_instance PASSED [ 68%]
+tests/modern_indexers/test_python_indexer.py::test_exception_target_shadows_the_module_function PASSED [ 69%]
+tests/modern_indexers/test_python_indexer.py::test_defaults_use_the_enclosing_scope_before_parameter_binding[def run(target=target()): return target] PASSED [ 69%]
+tests/modern_indexers/test_python_indexer.py::test_defaults_use_the_enclosing_scope_before_parameter_binding[run = lambda target=target(): target] PASSED [ 70%]
+tests/modern_indexers/test_python_indexer.py::test_parameter_names_do_not_shadow_their_annotation_scope PASSED [ 70%]
+tests/modern_indexers/test_python_indexer.py::test_comprehensions_have_an_isolated_binding_scope[[target() for target in []]] PASSED [ 71%]
+tests/modern_indexers/test_python_indexer.py::test_comprehensions_have_an_isolated_binding_scope[{target() for target in []}] PASSED [ 71%]
+tests/modern_indexers/test_python_indexer.py::test_comprehensions_have_an_isolated_binding_scope[{target(): 1 for target in []}] PASSED [ 72%]
+tests/modern_indexers/test_python_indexer.py::test_comprehensions_have_an_isolated_binding_scope[(target() for target in [])] PASSED [ 72%]
+tests/modern_indexers/test_python_indexer.py::test_first_comprehension_iterable_runs_in_the_enclosing_scope PASSED [ 73%]
+tests/modern_indexers/test_python_indexer.py::test_possible_instance_types_from_different_branches_are_not_collapsed PASSED [ 73%]
+tests/modern_indexers/test_python_indexer.py::test_global_and_nonlocal_writes_invalidate_callable_assumptions[def target(): return 1\ndef change():\n    global target\n    target = 42\ndef run(): return target()\n-case.run-case.target] PASSED [ 74%]
+tests/modern_indexers/test_python_indexer.py::test_global_and_nonlocal_writes_invalidate_callable_assumptions[def outer():\n    def target(): return 1\n    def change():\n        nonlocal target\n        target = 42\n    return target()\n-case.outer-case.outer.target] PASSED [ 74%]
+tests/modern_indexers/test_python_indexer.py::test_global_import_rebinding_does_not_resolve_the_old_module_function PASSED [ 75%]
+tests/modern_indexers/test_python_indexer.py::test_nonlocal_skips_class_namespace_and_finds_enclosing_function PASSED [ 75%]
+tests/modern_indexers/test_python_indexer.py::test_compilation_scope_errors_are_diagnostics_without_execution[return 1\n] PASSED [ 76%]
+tests/modern_indexers/test_python_indexer.py::test_compilation_scope_errors_are_diagnostics_without_execution[break\n] PASSED [ 76%]
+tests/modern_indexers/test_python_indexer.py::test_compilation_scope_errors_are_diagnostics_without_execution[def run():\n    nonlocal absent\n] PASSED [ 77%]
+tests/modern_indexers/test_python_indexer.py::test_compilation_scope_errors_are_diagnostics_without_execution[def run(x, x): pass\n] PASSED [ 77%]
+tests/modern_indexers/test_python_indexer.py::test_compilation_scope_errors_are_diagnostics_without_execution[def run():\n    try: pass\n    except* ValueError: return None\n] PASSED [ 78%]
+tests/modern_indexers/test_python_indexer.py::test_relative_import_above_package_root_does_not_become_absolute PASSED [ 78%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_syntax_diagnostic_uses_byte_columns[False] PASSED [ 79%]
+tests/modern_indexers/test_python_indexer.py::test_unicode_syntax_diagnostic_uses_byte_columns[True] PASSED [ 79%]
+tests/modern_indexers/test_python_indexer.py::test_property_is_not_a_direct_method_call PASSED [ 80%]
+tests/modern_indexers/test_python_indexer.py::test_monkey_patch_invalidates_the_previous_method_target PASSED [ 80%]
+tests/modern_indexers/test_python_indexer.py::test_a_function_return_value_is_not_its_nested_function_namespace PASSED [ 80%]
+tests/modern_indexers/test_python_indexer.py::test_inheritance_resolution_is_independent_of_source_filename_order PASSED [ 81%]
+tests/modern_indexers/test_python_indexer.py::test_invalid_context_is_rejected_instead_of_an_empty_success[options0] PASSED [ 81%]
+tests/modern_indexers/test_python_indexer.py::test_invalid_context_is_rejected_instead_of_an_empty_success[options1] PASSED [ 82%]
+tests/modern_indexers/test_python_indexer.py::test_invalid_context_is_rejected_instead_of_an_empty_success[options2] PASSED [ 82%]
+tests/modern_indexers/test_python_indexer.py::test_invalid_context_is_rejected_instead_of_an_empty_success[options3] PASSED [ 83%]
+tests/modern_indexers/test_python_indexer.py::test_invalid_context_is_rejected_instead_of_an_empty_success[options4] PASSED [ 83%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_capabilities_negotiate_coordinate_and_database_contract PASSED [ 84%]
+tests/modern_indexers/test_rust_indexer.py::test_real_workspace_definitions_match_independent_expectations PASSED [ 84%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_semantic_relations[calls-call] PASSED [ 85%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_semantic_relations[trait_implementations-inheritance] PASSED [ 85%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_semantic_relations[method_implementations-override] PASSED [ 86%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_semantic_relations[macro_uses-macro_usage] PASSED [ 86%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_calls_are_not_guessed_by_unqualified_name PASSED [ 87%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_unicode_token_is_exact_utf8_span PASSED [ 87%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_cross_crate_dependencies_and_configuration_inputs PASSED [ 88%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_standard_library_call_is_resolved_without_invented_source PASSED [ 88%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_feature_selection_changes_active_symbols_and_identity PASSED [ 89%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_observes_inactive_and_configuration_files_for_native_refresh PASSED [ 89%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_target_option_environment_and_workspace_config_agree[config] PASSED [ 90%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_target_option_environment_and_workspace_config_agree[config.toml] PASSED [ 90%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_compiler_error_is_diagnostic_and_incomplete PASSED [ 91%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_change_and_delete_equal_clean_rebuild PASSED [ 91%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_bom_crlf_and_no_final_newline PASSED [ 92%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options0] PASSED [ 92%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options1] PASSED [ 93%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options2] PASSED [ 93%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options3] PASSED [ 94%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options4] PASSED [ 94%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options5] PASSED [ 95%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options6] PASSED [ 95%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options7] PASSED [ 96%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_rejects_unsupported_or_invalid_configuration[options8] PASSED [ 96%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_missing_manifest_is_not_empty_success PASSED [ 97%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_corrupt_coordinate_negative_control PASSED [ 97%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_half_open_range_conversion_does_not_include_crlf PASSED [ 98%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_protocol_failure_reaps_real_engine_process[bad_length-message size] PASSED [ 98%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_protocol_failure_reaps_real_engine_process[utf16-UTF-8] PASSED [ 99%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_protocol_failure_reaps_real_engine_process[silent-timed out] PASSED [ 99%]
+tests/modern_indexers/test_rust_indexer.py::test_rust_runtime_failed_download_preserves_existing_installation PASSED [100%]
+
+- generated xml file: /workspace/scratch/b7462e898297/Sourcetrail/build/modern-indexers/results.xml -
+======================= 205 passed in 152.54s (0:02:32) ========================

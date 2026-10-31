@@ -1,0 +1,76 @@
+16:12:36 | LogManager.cpp:35 setLoggingEnabled() | INFO: Enabled logging for Sourcetrail 64 bit, version 0.0.0
+16:12:36 | SharedMemoryGarbageCollector.cpp:59 run() | INFO: start shared memory garbage collection
+16:12:36 | ApplicationSettingsPrefiller.cpp:31 prefillJavaRuntimePath() | INFO: Prefilling Java path
+16:12:36 | INFO: send MessageStatus Starting Sourcetrail 64 bit, version 0.0.0
+16:12:36 | ApplicationSettingsPrefiller.cpp:84 prefillMavenExecutablePath() | INFO: Prefilling Maven path
+Starting Sourcetrail 64 bit, version 0.0.0
+16:12:36 | ApplicationSettingsPrefiller.cpp:57 prefillJreSystemLibraryPaths() | INFO: Prefilling JRE system library path
+16:12:36 | INFO: send MessageStatus Load settings: /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/home/.config/sourcetrail/ApplicationSettings.xml
+Load settings: /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/home/.config/sourcetrail/ApplicationSettings.xml
+16:12:36 | INFO: send MessageStatus Enabled console and file logging.
+Enabled console and file logging.
+16:12:36 | INFO: send MessageStatus Ran Java runtime path detection, no path found.
+Ran Java runtime path detection, no path found.
+16:12:36 | INFO: send MessageStatus Ran Maven executable path detection, no path found.
+Ran Maven executable path detection, no path found.
+16:12:36 | INFO: send MessageStatus Ran JRE system library path detection, no path found.
+Ran JRE system library path detection, no path found.
+16:12:36 | INFO: send MessageLoadProject /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlprj, settingsChanged: false, refreshMode: 3
+16:12:36 | INFO: send MessageStatus Loading Project: /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlprj - loading
+Loading Project: /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlprj
+16:12:37 | INFO: send MessageStatus Project could not load any symbols because the index database is empty. Please re-index the project.
+Project could not load any symbols because the index database is empty. Please re-index the project.
+16:12:37 | INFO: send MessageStatus Preparing Indexing - loading
+Preparing Indexing
+16:12:37 | INFO: send MessageErrorCountClear 
+16:12:37 | INFO: send MessageIndexingStatus 
+0% 
+16:12:37 | TaskExecuteCustomCommands.cpp:527 runIndexerCommand() | INFO: Start processing command ""/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/modern/bin/python3.14" "/workspace/scratch/b7462e898297/Sourcetrail/script/indexers/cli.py" "index" "--config" "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlcfg" "--database" "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrldb_tmp" "--database-version" "25" "--source" "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlcfg" "
+16:12:37 | TaskExecuteCustomCommands.cpp:534 runIndexerCommand() | INFO: Starting to index
+16:12:37 | INFO: send MessageStatus Starting Indexing: 2 source files - loading
+Starting Indexing: 2 source files
+16:12:37 | INFO: send MessageIndexingStarted 
+16:12:37 | INFO: send MessageIndexingStatus 
+0% 
+16:12:37 | INFO: Process output: {"capabilities": {"adapter": "python-ast", "capabilities": ["definitions", "project-imports", "relative-imports", "namespace-packages", "lexical-references", "resolved-calls", "inheritance", "async-await", "pattern-matching", "exception-groups", "type-parameters", "type-aliases", "template-strings", "diagnostics"], "coordinate_unit": "utf8-byte", "database_version": 25, "engine": "CPython ast", "engine_version": "3.14.10", "language": "Python", "limitations": ["Dynamic imports, monkey-patching and general type inference are unresolved.", "Project source roots are explicit; indexed code is never executed.", "This is a separate static profile, not a replacement for Jedi type inference."], "partial_clearing": false, "protocol_version": 1, "semantic_mode": "static-scoped", "syntax_version": "3.14"}, "counts": {"diagnostics": 0, "edges": 6, "files": 2, "symbols": 4}, "protocol_version": 1, "source_sha256": {"/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrlcfg": "382f58b9f894d7971a52093cf52c4fb4ec871b98531cd489ed3b5978079f19d4", "/workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/shared/z_source.py": "4b6214a5170c274a36e8da10c4298b277edcf67c4bf34e67b685b99ed2a150cb"}}
+16:12:37 | INFO: Process output: 
+16:12:37 | INFO: Process output: 
+16:12:37 | TaskExecuteCustomCommands.cpp:537 runIndexerCommand() | INFO: Finished indexing
+16:12:37 | TaskExecuteCustomCommands.cpp:577 runIndexerCommand() | INFO: Process returned successfully.
+
+16:12:37 | TaskExecuteCustomCommands.cpp:527 runIndexerCommand() | INFO: Start processing command "/workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/data/python/SourcetrailPythonIndexer index --source-file-path /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/shared/z_source.py --database-file-path /workspace/scratch/b7462e898297/Sourcetrail/build/input-position-mixed-review/overlap-1/project.srctrldb_tmp --environment-path /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/python-parser/bin/python --shallow"
+16:12:37 | TaskExecuteCustomCommands.cpp:534 runIndexerCommand() | INFO: Starting to index
+16:12:37 | INFO: send MessageIndexingStatus 
+50% 
+16:12:37 | INFO: Process output: INFO: Loaded database is compatible.
+16:12:37 | INFO: Process output: 
+16:12:37 | INFO: Process output: 
+16:12:37 | TaskExecuteCustomCommands.cpp:537 runIndexerCommand() | INFO: Finished indexing
+16:12:37 | TaskExecuteCustomCommands.cpp:577 runIndexerCommand() | INFO: Process returned successfully.
+
+16:12:37 | SqliteIndexStorage.cpp:1117 normalizePythonSourceLocations() | ERROR: Rejected Python output: Python source end position is outside its stored line
+16:12:37 | Project.cpp:841 discardTempStorage() | INFO: Discarding temporary indexing data
+16:12:37 | INFO: send MessageErrorCountClear 
+16:12:37 | INFO: send MessageStatus Invalid Python output: Python source end position is outside its stored line - error
+ERROR: Invalid Python output: Python source end position is outside its stored line
+16:12:37 | INFO: send MessageStatus Indexing failed: 2/2 source files indexed; 0 external commands failed; 1 invalid outputs. Discarding temporary index. - error
+ERROR: Indexing failed: 2/2 source files indexed; 0 external commands failed; 1 invalid outputs. Discarding temporary index.
+16:12:37 | INFO: send MessageIndexingStatus 
+16:12:37 | INFO: send MessageIndexingFinished 
+16:12:37 | Application.cpp:475 logStorageStats() | INFO: 
+Graph:
+	0 Nodes
+	0 Edges
+
+Code:
+	0 Files
+	0 Lines of Code
+
+Errors:
+	0 Errors
+	0 Fatal Errors
+
+16:12:37 | INFO: send MessageQuitApplication 
+Quitting
+16:12:37 | SharedMemoryGarbageCollector.cpp:77 stop() | INFO: stop shared memory garbage collection
+16:12:37 | SharedMemoryGarbageCollector.cpp:132 stop() | INFO: delete garbage collector memory: grbg_cllctr_64

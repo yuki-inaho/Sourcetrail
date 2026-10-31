@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "kind": "source",
+  "batch_id": "012-modern-language-integration",
+  "created_on": "2026-10-31",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree",
+    "note": "公開基準からの未コミット実装を実際のSHA-256で識別する。旧解析器を維持した機能別の新アダプターと統合境界。"
+  },
+  "report": "report.md",
+  "units": [
+    {
+      "id": "ANN-001",
+      "path": "script/indexers/python_indexer.py",
+      "symbol": "def index_project(",
+      "sha256": "4efab49ae90f658ef1cf63a6a75cc9b1a7b6fe7fc7b36a93105c449202fc4505",
+      "excerpt": "def index_project(root: Path, options: dict | None = None) -> dict:",
+      "contracts": [
+        "LANGUAGE-001",
+        "NAME-001",
+        "RELATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "CPython3.14のASTと静的コンパイル検査を使い、スコープ・import・確定できる呼出・新構文を共通グラフへ写す。再代入や局所スコープによる誤った呼出辺は独立レビューの反例で修正した。",
+      "uncertainty": "動的実行・一般型推論・旧Jedi全能力の等価性は宣言しない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-002",
+      "path": "script/indexers/cpp_indexer.py",
+      "symbol": "def index_project(",
+      "sha256": "2f1bf788eadecb6437149d6d72c4e7e20ef85905a5f02446312ce660280817d5",
+      "excerpt": "def index_project(root: Path, options: dict[str, Any] | None = None) -> dict[str, Any]:",
+      "contracts": [
+        "LANGUAGE-001",
+        "NAME-001",
+        "RELATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "Clang18.1.8のC索引APIで宣言・参照通知を取得し、export内部、制約付きtemplate、overload、coroutine、BMIを使うmodulesを扱う。CDBの引数と作業ディレクトリを保持する。",
+      "uncertainty": "BMI自動生成やC++20/23規格全体への適合ではない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-003",
+      "path": "script/indexers/rust_indexer.py",
+      "symbol": "def index_project(",
+      "sha256": "3840291cecaa450f1c6cba9beb2b7fd8f1b8b8be85903e1d047453c6fcb6e068",
+      "excerpt": "def index_project(root: Path, options: dict | None = None) -> dict:",
+      "contracts": [
+        "LANGUAGE-001",
+        "NAME-001",
+        "RELATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "固定rust-analyzerの意味問い合わせとCargo診断を使い、crate・構成・trait/impl・呼出・位置を保存する。全監視入力と有効crateの意味対象を分ける。",
+      "uncertainty": "build.rs/proc-macro依存、カスタムJSON target、依存ソース全体の取り込みは対応範囲外。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-004",
+      "path": "script/indexers/rust_lsp.py",
+      "symbol": "class RustLanguageServer:",
+      "sha256": "23f74edca417b42b5688af73a856215ceaeea954b3688c6f21f2bc620828d58f",
+      "excerpt": "class RustLanguageServer:",
+      "contracts": [
+        "EXECUTION-001",
+        "LANGUAGE-001"
+      ],
+      "finding_type": "observed",
+      "observation": "UTF-8位置を交渉し、要求ID・フレーミング・能力を検査する。stdout/stderrを並行排出し、期限超過やプロトコル失敗では実プロセスを回収する。",
+      "uncertainty": "任意CustomやGUI取消全体の子プロセス制御を置き換えない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-005",
+      "path": "script/indexers/graph.py",
+      "symbol": "def write_graph(",
+      "sha256": "23846f62ab24e3cc1fa9ac883f32509fbf3f8a39a49e8c3c80375d65a0bbdb1e",
+      "excerpt": "def write_graph(database: Path, graph: dict, *, expected_version: int = DATABASE_VERSION) -> dict[str, int]:",
+      "contracts": [
+        "STORAGE-001",
+        "NAME-001",
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "名前・参照・位置・DB版と構造を検査し、LF保存規約へ写した内容を一つのSQLトランザクションで注入する。後続注入の衝突も拒否する。",
+      "uncertainty": "DBファイル公開のクラッシュ原子性や全入力の原子的取得とは別。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-006",
+      "path": "script/indexers/cli.py",
+      "symbol": "def configure_project(",
+      "sha256": "93a7bd1100d1b8699445aaf29cef41bb94040beaf10b794b96c1330cd236523d",
+      "excerpt": "def configure_project(language: str, root: Path, project: Path, *, options: dict | None = None) -> tuple[Path, Path]:",
+      "contracts": [
+        "COMMAND-001",
+        "LANGUAGE-001",
+        "INPUT-001"
+      ],
+      "finding_type": "observed",
+      "observation": "版付き設定とModernグループを生成し、エンジン能力・入力内容の再照合を保存前に行う。ソースと設定を更新検出の入力に接続する。",
+      "uncertainty": "任意の実行環境移動に自動追従しない。明示した実行ファイルパスの更新が必要。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-007",
+      "path": "src/lib/project/SourceGroupCustomCommand.cpp",
+      "symbol": "SourceGroupCustomCommand::getIndexerCommands(",
+      "sha256": "2d31cc9d16c1f890620fc21bf6f64af36fd3e7b7e607fbe479906681101d245b",
+      "excerpt": "std::vector<std::shared_ptr<IndexerCommand>> SourceGroupCustomCommand::getIndexerCommands(",
+      "contracts": [
+        "SOURCE-GROUP-001",
+        "COMMAND-001"
+      ],
+      "finding_type": "observed",
+      "observation": "Modernグループを全体解析一回のコマンドへまとめ、明示した設定ファイルも入力として列挙する。部分消去は許可しない。",
+      "uncertainty": "GUIの実操作を検証したという意味ではない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-008",
+      "path": "src/lib/project/Project.cpp",
+      "symbol": "bool incompatiblePythonOwnership = false;",
+      "sha256": "9ca15a28acd67ddbd11a79608081e325de0f8ad2d942c32d2ea9ed9e4a28f7dd",
+      "excerpt": "\tbool incompatiblePythonOwnership = false;",
+      "contracts": [
+        "SOURCE-GROUP-001",
+        "EXECUTION-001",
+        "LOCATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "Modernを外部実行providerへ送り、旧Pythonとの所有集合重複を実行前に拒否する。代表コマンドのパスだけで重複を判断しない。",
+      "uncertainty": "一般的な全言語/全構成の重複統合規則を確立したものではない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-009",
+      "path": "tests/modern_indexers/test_app_e2e.py",
+      "symbol": "def test_real_app_refresh_delete_empty_and_clean_equivalence(",
+      "sha256": "93efd991179c34d37c70920e84303f9d94aea6aabace5d9bb0f7fbb1d647701e",
+      "excerpt": "def test_real_app_refresh_delete_empty_and_clean_equivalence(tmp_path, language):",
+      "contracts": [
+        "GRAPH-001",
+        "REFRESH-001",
+        "EXECUTION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "実アプリで無変更・編集・削除・空化・全体再構築との一致、版不一致の既存索引保持と再試行を確認する。旧/Modern混在も1/2ワーカーで観測する。",
+      "uncertainty": "Linux CLIの人工対象であり実GUI・他OS・大規模性能を保証しない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    },
+    {
+      "id": "ANN-010",
+      "path": "pixi.toml",
+      "symbol": "[feature.modern.dependencies]",
+      "sha256": "a6a79ab79b1e427c45b8216867936f0a4afad0121bd48052f894fe29f7ecdb74",
+      "excerpt": "[feature.modern.dependencies]",
+      "contracts": [
+        "LANGUAGE-001",
+        "VERIFICATION-001"
+      ],
+      "finding_type": "observed",
+      "observation": "旧解析環境を維持してModern環境を追加し、最終verifyへ新しい解析器の実エンジン試験を接続する。依存の解決結果はpixi.lockへ固定する。",
+      "uncertainty": "将来の最新版の追随や他OSへの配布完了を意味しない。",
+      "next_action": "最終verifyと公開版CIを同じソースへ照合し、記録した能力境界を維持する。"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/app-tests.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/app-tests.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/core-results.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/ctest-results.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/docs-export-check.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/docs-worktree-check.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing-negative-control.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/external-indexing.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-modern-results.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-modern-tests.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-report-review.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/final-source-snapshot.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/formal-summary.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/full-verify-modern-results.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/full-verify.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/initial-verification-failure.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/input-report-review.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-after.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-app-before.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-before.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-containers.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review-name-before.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-1.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-2.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-3.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before-4.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-before.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-evidence-paths.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/mixed-coordinate-review.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/portability-summary.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-cpp-review.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-negative-control.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/python-output-validation.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-mixed.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-negative-control.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/refresh-single-relation.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/rust-tests.txt",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/rust-tests.xml",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation-negative-control.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/source-observation.log",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    },
+    {
+      "path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/verification.json",
+      "description": "実測した検証結果・生ログ・修正前反例・レビュー・固定ソースの根拠。"
+    }
+  ],
+  "review": {
+    "status": "completed",
+    "reviewer": "assistant agents with scoped ownership; root integration",
+    "evidence_path": "docs/reports/2026-10-31/012-modern-language-integration/evidence/integration-review.json",
+    "note": "別担当の保存/設定/意味解析レビューと実反例の修正を実施。旧Python著者の報告書第二読解とは区別し、ユーザー側レビュー・実GUIは未実施。"
+  }
+}

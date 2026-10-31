@@ -8,6 +8,7 @@ bool SourceGroupFactoryModuleCustom::supports(SourceGroupType type) const
 	switch (type)
 	{
 	case SOURCE_GROUP_CUSTOM_COMMAND:
+	case SOURCE_GROUP_MODERN:
 		return true;
 	default:
 		break;

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "reviewer": "assistant child /root/modern_cpp",
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree"
+  },
+  "scope": "Independent review of the parent Python/common graph/CLI implementation followed by user-authorized fixes delegated by the parent. This is not a user-local-agent review.",
+  "findings": [
+    {
+      "id": "CPP-REV-001",
+      "observed_before": "C++20 export declarations disappear in ordinary cursor-tree walks",
+      "resolution": "Use clang_indexTranslationUnit declaration/reference callbacks; test real module BMI imports.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "CPP-REV-002",
+      "observed_before": "Clang18 assigns equal USRs to distinct constrained function templates",
+      "resolution": "Use canonical template declaration identity and full declaration signature; preserve explicit specializations separately.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-001",
+      "observed_before": "x=A(); x=42; x.m() incorrectly resolved to A.m",
+      "resolution": "Invalidate repeated/unknown instance writes; no resolved method edge for the counterexample.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-002",
+      "observed_before": "Reassigned function name still resolved to its earlier declaration",
+      "resolution": "Mark rebound callable/import bindings unresolved, including global/nonlocal writes.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-003",
+      "observed_before": "Lambda and exception-handler names resolved to a same-named module function",
+      "resolution": "Create lambda/comprehension scopes and register handler bindings.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-004",
+      "observed_before": "x:A=B(); x.m() incorrectly resolved to A.m",
+      "resolution": "Keep annotation type_usage, infer the observed constructor B only; annotations alone prove no runtime type.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-005",
+      "observed_before": "Parameter bindings shadowed default expressions and annotations",
+      "resolution": "Evaluate defaults in enclosing scope; annotation scope includes type parameters without ordinary parameters.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-006",
+      "observed_before": "Relative import beyond the package root was converted to an absolute import",
+      "resolution": "Reject excess relative levels with explicit diagnostic; do not fabricate a call target.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-007",
+      "observed_before": "ast.parse accepted module return, bad nonlocal, duplicate arguments and return in except* as complete code",
+      "resolution": "Compile AST without executing code to check scope legality. Repair the normal fixture and retain forbidden except* return as a negative case.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "PY-REV-008",
+      "observed_before": "Additional conservative-scope checks",
+      "resolution": "Add branch assignment, property, monkey patch, factory result, comprehension iterable, filename-order inheritance and UTF8 diagnostic cases.",
+      "status": "corrected-and-tested"
+    },
+    {
+      "id": "GRAPH-REV-001",
+      "observed_before": "Duplicate diagnostic injection increased error rows from one to two",
+      "resolution": "Reported to parent; parent implemented deduplication. Latest shared graph suite passes.",
+      "status": "corrected-and-tested"
+    }
+  ],
+  "commands": [
+    {
+      "command": "../tools/pixi run --locked -e modern python -m pytest tests/modern_indexers/test_python_indexer.py tests/modern_indexers/test_cpp_indexer.py tests/modern_indexers/test_graph.py -q --tb=short --junitxml=build/modern-indexers/python-cpp-review-results.xml",
+      "exit_code": 0,
+      "log": "build/modern-indexers/python-cpp-review-results.log",
+      "junit": "build/modern-indexers/python-cpp-review-results.xml"
+    }
+  ],
+  "test_cases_by_class": {
+    "tests.modern_indexers.test_python_indexer": 57,
+    "tests.modern_indexers.test_cpp_indexer": 28,
+    "tests.modern_indexers.test_graph": 18
+  },
+  "test_cases_total": 103,
+  "files": [
+    {
+      "path": "script/indexers/cpp_indexer.py",
+      "sha256": "b1fc53f5b0770c2997178061d828083add6c034b4b4e7e45dbc68db9aa435480"
+    },
+    {
+      "path": "script/indexers/python_indexer.py",
+      "sha256": "8b4f7483ddc6506d1ce4fd911e213a137a902ddfc1808d630770da336a68d5cf"
+    },
+    {
+      "path": "script/indexers/graph.py",
+      "sha256": "4343af98a08109ef8093989a1f03d982336a4e012c73f07e99ecaa8b3070ffef"
+    },
+    {
+      "path": "script/indexers/cli.py",
+      "sha256": "58367a6f0856c3bd7d58da0ff2631ffd5611baf81203909831c89341e47e3469"
+    },
+    {
+      "path": "tests/modern_indexers/test_cpp_indexer.py",
+      "sha256": "e29e27684d151e0e2224c3994a8aaf7df453297b20872f9ee0c6de3788c05a28"
+    },
+    {
+      "path": "tests/modern_indexers/test_python_indexer.py",
+      "sha256": "46bf361710b6f5e1aece2ef67ceda3e26e3559b5e53079db740028053a3564a2"
+    },
+    {
+      "path": "docs/adr/0012-modern-cpp-indexer.md",
+      "sha256": "47c76bcfe88c28b7e04bc4c3feb7f6bcee50da04f72d70fd7e4928054ee9ec5b"
+    }
+  ],
+  "limits": [
+    "No GUI, cross-OS or full C++/Python language-specification proof is implied.",
+    "Python remains a conservative static profile: uncertain dynamic bindings are diagnosed rather than assigned invented call targets.",
+    "C++ module BMI generation is explicit and must match Clang18.1.8.",
+    "The parent may subsequently change integration files; these hashes identify this reviewed working-tree snapshot."
+  ]
+}

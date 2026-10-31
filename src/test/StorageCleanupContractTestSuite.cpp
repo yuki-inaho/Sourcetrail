@@ -197,3 +197,27 @@ TEST_CASE(
 	REQUIRE(db.storage.isNode(child));
 	REQUIRE_FALSE(db.storage.isEdge(member));
 }
+
+TEST_CASE("storage cleanup collects only newly unused built in types", "[contract][storage-cleanup]")
+{
+	CleanupDatabase db;
+	const Id removed = db.file(L"removed.cpp");
+	const Id retained = db.file(L"retained.cpp");
+	const Id oldFunction = db.node(L"oldFunction");
+	const Id survivingFunction = db.node(L"survivingFunction");
+	const Id builtin = db.storage.addNode(StorageNodeData(nodeKindToInt(NODE_BUILTIN_TYPE), L"int"));
+	const Id untouched = db.storage.addNode(StorageNodeData(nodeKindToInt(NODE_BUILTIN_TYPE), L"bool"));
+	db.occurrence(oldFunction, removed, 1);
+	db.edge(oldFunction, builtin, Edge::EDGE_TYPE_USAGE);
+	bool shared = false;
+	SECTION("last use is cleared") {}
+	SECTION("another source still uses the same type")
+	{
+		shared = true;
+		db.occurrence(survivingFunction, retained, 1);
+		db.edge(survivingFunction, builtin, Edge::EDGE_TYPE_USAGE);
+	}
+	db.clear({removed});
+	REQUIRE(db.storage.isNode(builtin) == shared);
+	REQUIRE(db.storage.isNode(untouched));
+}

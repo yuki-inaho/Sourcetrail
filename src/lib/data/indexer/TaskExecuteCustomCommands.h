@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <memory>
+#include <map>
 #include <mutex>
 #include <set>
 #include <vector>
@@ -68,6 +69,8 @@ private:
 	bool m_hasPythonCommands;
 	std::set<FilePath> m_sourceDatabaseFilePaths;
 	std::mutex m_sourceDatabaseFilePathsMutex;
+	std::map<FilePath, std::set<FilePath>> m_pythonSourcesByDatabase;
+	std::mutex m_pythonSourcesMutex;
 };
 
 #endif	  // TASK_EXECUTE_CUSTOM_COMMANDS_H

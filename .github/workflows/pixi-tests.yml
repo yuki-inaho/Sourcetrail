@@ -7,6 +7,7 @@ on:
       - chore/pixi-python-cpp-tests
       - refactor/semantic-contracts
       - refactor/portable-toy-contracts
+      - refactor/input-observation-contracts
   pull_request:
   workflow_dispatch:
 
@@ -20,7 +21,7 @@ concurrency:
 jobs:
   linux:
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - name: Check out source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -57,5 +58,11 @@ jobs:
             build/toy-projects/current/**/*.diff
             build/external-indexer/current/**/*.json
             build/external-indexer/current/**/*.log
+            build/input-observation/results.xml
+            build/input-observation/current/**/run-*.log
+            build/modern-indexers/*.xml
+            build/modern-indexers/*.log
+            build/modern-indexers/e2e/**/*.log
+            build/modern-indexers/e2e/**/*.snapshot.json
           if-no-files-found: ignore
           retention-days: 14

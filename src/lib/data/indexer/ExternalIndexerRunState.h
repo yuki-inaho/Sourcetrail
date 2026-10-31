@@ -23,6 +23,12 @@ public:
 		m_outcome.settleCommand(outcome);
 	}
 
+	void rejectOutput()
+	{
+		std::lock_guard<std::mutex> lock(m_mutex);
+		m_outcome.observeOutput(sourcetrail::core::ExternalOutputOutcome::InvalidOutput);
+	}
+
 	sourcetrail::core::ExternalIndexerOutcome snapshot() const
 	{
 		std::lock_guard<std::mutex> lock(m_mutex);

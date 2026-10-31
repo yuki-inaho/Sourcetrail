@@ -216,7 +216,8 @@ std::vector<std::shared_ptr<SourceGroupSettings>> ProjectSettings::getAllSourceG
 			break;
 #endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
 		case SOURCE_GROUP_CUSTOM_COMMAND:
-			settings = std::make_shared<SourceGroupSettingsCustomCommand>(id, this);
+		case SOURCE_GROUP_MODERN:
+			settings = std::make_shared<SourceGroupSettingsCustomCommand>(id, this, type);
 			break;
 		default:
 			settings = std::make_shared<SourceGroupSettingsUnloadable>(id, this);

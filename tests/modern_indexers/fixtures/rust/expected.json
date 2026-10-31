@@ -1,0 +1,32 @@
+{
+  "definitions": [
+    "shapes::operations",
+    "shapes::operations::double",
+    "shapes::Measure",
+    "shapes::Measure::measure",
+    "shapes::Square",
+    "shapes::Square::side",
+    "shapes::impl Square::new",
+    "shapes::impl Measure for Square::measure",
+    "shapes::計算",
+    "shapes::identity",
+    "shape_app::run",
+    "shape_app::main"
+  ],
+  "calls": [
+    ["shape_app::main", "shape_app::run"],
+    ["shape_app::run", "shapes::impl Square::new"],
+    ["shape_app::run", "shapes::impl Measure for Square::measure"],
+    ["shape_app::run", "shapes::operations::double"],
+    ["shapes::impl Measure for Square::measure", "shapes::operations::double"]
+  ],
+  "trait_implementations": [
+    ["shapes::Square", "shapes::Measure"]
+  ],
+  "method_implementations": [
+    ["shapes::impl Measure for Square::measure", "shapes::Measure::measure"]
+  ],
+  "macro_uses": [
+    ["shapes::計算", "shapes::identity"]
+  ]
+}

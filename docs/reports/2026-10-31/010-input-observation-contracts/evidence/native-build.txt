@@ -1,0 +1,79 @@
+✨ Pixi task (configure in default): cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON: (Configure the application with C++ and Python indexing)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Version: 0.0.0
+-- setting up the buildtype for versioning
+bash: ''
+-- 'Treat warnings as errors' policy is disabled
+-- Found LLVM 11.1.0
+-- Trying to find Clang compiler headers in '.' build config in directory '/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/./lib/clang/11.1.0/include'.
+-- Found headers for '.' build config.
+CMake Warning (dev) at CMakeLists.txt:188 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Qt 5.15.8
+CMake Deprecation Warning at src/lib_core/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Building the Java indexer will be skipped. You can enable building this target by setting 'BUILD_JAVA_LANGUAGE_PACKAGE' to 'ON'.
+CMake Warning (dev) at CMakeLists.txt:558 (add_custom_command):
+  The following keywords are not supported when using
+  add_custom_command(TARGET): DEPENDS.
+
+  Policy CMP0175 is not set: add_custom_command() rejects invalid arguments.
+  Run "cmake --help-policy CMP0175" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:753 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:754 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- create symlink: /workspace/scratch/b7462e898297/Sourcetrail/bin/app/data -> /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/data
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+
+✨ Pixi task (python-parser-ready in python-parser): python --version: (Prepare the Python environment inspected by the legacy indexer)
+Python 3.8.20
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/9] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+[2/8] Building CXX object CMakeFiles/Sourcetrail_lib.dir/src/lib/utility/ConfigManager.cpp.o
+[3/8] Building CXX object CMakeFiles/Sourcetrail_lib.dir/src/lib/data/storage/sqlite/SqliteIndexStorage.cpp.o
+[4/8] Linking CXX static library libSourcetrail_lib.a
+[5/8] Linking CXX executable app/sourcetrail_indexer
+[6/8] Linking CXX executable app/Sourcetrail
+[7/8] Building CXX object CMakeFiles/Sourcetrail_test.dir/src/test/ConfigManagerTestSuite.cpp.o
+[8/8] Linking CXX executable test/Sourcetrail_test

@@ -1,0 +1,33 @@
+{
+  "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+  "branch": "refactor/input-observation-contracts",
+  "mode": "base-commit",
+  "unrecovered_prior_commit": "f843501e6c5ced44d6269f67f16809ec5c78d6d9",
+  "provenance": "GitHubで取得可能な公開ブランチから再開。前回の非公開実装本体・元レポート一式は回収できなかったため再実装・再検証した。",
+  "baseline_command": [
+    "git",
+    "show",
+    "4d69a44ac67d03e4117c266d491c01a7a4ba87f7:<unit.path>"
+  ],
+  "baseline_execution": "source read only; no baseline binary/E2E execution in this batch",
+  "captured_sources": [
+    {
+      "path": "src/lib/project/RefreshInfoGenerator.cpp",
+      "sha256": "7e723e59e604dc15b95f5f8c958ea2026cb98940087b94bf3b1235fa8bceb436",
+      "symbol": "bool RefreshInfoGenerator::didFileChange(",
+      "excerpt": "if (diskFileInfo.lastWriteTime > info.lastWriteTime)"
+    },
+    {
+      "path": "src/lib/utility/text/TextAccess.cpp",
+      "sha256": "c89f072cccc7d951f95bd8b9ee153f2b314abaaa4e4d0181c7fe39507a3da00d",
+      "symbol": "std::vector<std::string> TextAccess::readFile(",
+      "excerpt": "result.push_back(line + '\\n');"
+    },
+    {
+      "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+      "sha256": "48b09783bfae3f8ea262a76212598cffbae978fbcda7f1adf12775384059df95",
+      "symbol": "void TaskExecuteCustomCommands::runPythonPostProcessing(",
+      "excerpt": "startLoc->getColumnNumber() - 1,"
+    }
+  ]
+}

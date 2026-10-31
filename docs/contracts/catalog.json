@@ -125,8 +125,8 @@
     {
       "id": "LOCATION-001",
       "title": "ソース位置と出現の保存",
-      "status": "characterized",
-      "scope": "ファイル、位置種別、開始終了位置、対象要素との結び付きを保持する。",
+      "status": "enforced",
+      "scope": "共通保存は行・列1始まり、UTF-8バイト、終端込み。旧Pythonの文字位置を保存内容へ変換し、Modernのバイト位置は内容のUTF-8境界・範囲として検証する。",
       "sources": [
         {
           "path": "src/lib/data/parser/ParserClientImpl.cpp",
@@ -135,6 +135,26 @@
         {
           "path": "src/lib/data/location/LocationType.h",
           "symbol": "LOCATION_TOKEN"
+        },
+        {
+          "path": "src/lib_core/Utf8SourceLocationMap.h",
+          "symbol": "class Utf8SourceLocationMap"
+        },
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "SqliteIndexStorage::normalizePythonSourceLocations"
+        },
+        {
+          "path": "src/lib/data/indexer/TaskExecuteCustomCommands.cpp",
+          "symbol": "m_pythonSourcesByDatabase"
+        },
+        {
+          "path": "script/indexers/graph.py",
+          "symbol": "def validate_graph"
+        },
+        {
+          "path": "script/indexers/graph.py",
+          "symbol": "def canonical_graph"
         }
       ],
       "verification": [
@@ -153,15 +173,59 @@
         {
           "path": "tests/toy_projects/test_runner.py",
           "anchor": "test_real_toy_project_phases_and_clean_rebuild_equivalence"
+        },
+        {
+          "path": "tests/core/utf8_source_location_test.cpp",
+          "anchor": "8 authored ranges and 14 invalid inputs"
+        },
+        {
+          "path": "src/test/InputObservationTestSuite.cpp",
+          "anchor": "Python source normalization preserves location identity and ownership"
+        },
+        {
+          "path": "src/test/InputObservationTestSuite.cpp",
+          "anchor": "invalid Python output rolls back all source position updates"
+        },
+        {
+          "path": "tests/input_observation/test_input_observation.py",
+          "anchor": "test_python_positions_select_utf8_tokens_in_stored_content"
+        },
+        {
+          "path": "tests/input_observation/test_input_observation.py",
+          "anchor": "test_repeated_python_source_is_normalized_once_per_database"
+        },
+        {
+          "path": "docs/contracts/formal/PythonOutputValidation.tla",
+          "anchor": "OncePerDatabaseAndSource"
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "anchor": "test_schema25_preserves_content_identity_and_utf8_positions"
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "anchor": "test_invalid_output_is_rejected_before_database_creation"
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "anchor": "test_crlf_sources_use_the_existing_lf_storage_convention"
         }
       ],
       "docs": [
         "docs/architecture/domain-model.md",
-        "docs/contracts/toy-problems.md"
+        "docs/contracts/toy-problems.md",
+        "docs/contracts/input-observations.md",
+        "docs/adr/0009-canonical-python-source-positions.md",
+        "tests/input_observation/README.md",
+        "docs/adr/0011-modern-language-adapters.md",
+        "docs/architecture/modern-indexers.md"
       ],
       "limitations": [
-        "UTF-8バイト/文字/UTF-16列の言語横断規約はGAP-003。",
-        "空行の終端列0等を一律に拒否する仕様へは変更していない。"
+        "旧Python索引DBは全体再索引化が必要。保存行から座標版を推測する自動移行はしない。",
+        "末尾のゼロ幅・列0はスコープや診断の明示的な境界として変換し、通常トークンの不正範囲は拒否する。",
+        "この変換器は旧Pythonスカラー列専用。UTF-16や任意のCustom出力、生成コードの由来を一般に変換しない。",
+        "入力の原子的取得や、全言語・GUI表示層の完全な同等性を証明するものではない。",
+        "固定版の旧Pythonが省略する正常な空内容行は、実入力空・一意の索引済みPython所有行・位置行なしを確認して具体化する。"
       ]
     },
     {
@@ -337,28 +401,89 @@
     },
     {
       "id": "INPUT-001",
-      "title": "ファイル変化の分類条件",
-      "status": "characterized",
-      "scope": "現在はmtimeが保存値より新しい場合に内容を比較する。",
+      "title": "取得済み内容で変更を判定し、空内容と観測失敗を区別する",
+      "status": "enforced",
+      "scope": "索引済み入力の取得済み保存内容と現在内容をmtimeに関係なく比較する。正常な空、保存行欠落、NULL、読込失敗、SQL失敗を区別する。",
       "sources": [
         {
+          "path": "src/lib_core/SourceChange.h",
+          "symbol": "didSourceChange"
+        },
+        {
           "path": "src/lib/project/RefreshInfoGenerator.cpp",
-          "symbol": "didFileChange"
+          "symbol": "RefreshInfoGenerator::didFileChange"
+        },
+        {
+          "path": "src/lib/utility/text/TextAccess.cpp",
+          "symbol": "TextAccess::tryCreateFromFile"
+        },
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "tryGetStoredFileContentByPath"
+        },
+        {
+          "path": "src/lib/data/storage/PersistentStorage.cpp",
+          "symbol": "PersistentStorage::getFileContent"
+        },
+        {
+          "path": "src/lib/utility/ConfigManager.cpp",
+          "symbol": "ConfigManager::load"
         }
       ],
       "verification": [
         {
+          "path": "tests/core/source_change_test.cpp",
+          "anchor": "INPUT-001 observation mismatch"
+        },
+        {
+          "path": "src/test/InputObservationTestSuite.cpp",
+          "anchor": "stored content distinguishes empty missing null and SQL failure"
+        },
+        {
+          "path": "src/test/InputObservationTestSuite.cpp",
+          "anchor": "checked source reads preserve empty content and the final newline"
+        },
+        {
           "path": "src/test/RefreshInfoGeneratorTestSuite.cpp",
-          "anchor": "indexed changed sourcefile that is toindex"
+          "anchor": "refresh compares saved contents independently of modification time"
+        },
+        {
+          "path": "tests/input_observation/test_input_observation.py",
+          "anchor": "test_input_content_changes_and_clean_rebuild"
+        },
+        {
+          "path": "tests/input_observation/fixtures/expected.json",
+          "anchor": "same-mtime"
+        },
+        {
+          "path": "docs/contracts/formal/SourceObservation.tla",
+          "anchor": "ContentChangesDetected"
+        },
+        {
+          "path": "docs/contracts/formal/SourceObservationMutant.cfg",
+          "anchor": "ContentChangesDetected"
+        },
+        {
+          "path": "src/test/InputObservationTestSuite.cpp",
+          "anchor": "legacy Python empty output materializes an explicit empty observation"
+        },
+        {
+          "path": "src/test/ConfigManagerTestSuite.cpp",
+          "anchor": "configuration XML at EOF is parsed without a final newline"
         }
       ],
       "docs": [
+        "docs/adr/0008-content-based-input-observations.md",
+        "docs/contracts/input-observations.md",
+        "tests/input_observation/README.md",
         "docs/architecture/indexing-lifecycle.md",
         "docs/architecture/evolution-plan.md"
       ],
       "limitations": [
-        "同一/逆行mtimeの内容変更を網羅検出しない。",
-        "同時編集、読込時スナップショット、削除競合は追加試験が必要。"
+        "保存内容のない非索引依存だけはmtimeによる弱い互換判定を残す。",
+        "CRLF/CRは保存・表示と同じLFへ正規化する。最終改行の有無、BOMは保持する。",
+        "読込中の変更や全入力の同時点取得を原子的に固定するものではない。",
+        "有限モデルは観測状態と分類の契約であり、ファイルシステム・SQL実装全体の証明ではない。"
       ]
     },
     {
@@ -428,7 +553,7 @@
         "docs/architecture/indexing-lifecycle.md"
       ],
       "limitations": [
-        "外部プロセスの起動・非ゼロ終了はEXECUTION-001で別管理。取消・タイムアウトと出力の意味検査はGAP-005に残る。",
+        "外部プロセスの起動・非ゼロ終了はEXECUTION-001で別管理。旧Pythonの内容・位置検査とModernのプロトコル・グラフ検査は実装済みだが、一般Customの取消・タイムアウト・任意出力の意味検査はこの契約で保証しない。",
         "異なるコンパイラー版の診断文面一致は別プロファイルで判断する。"
       ]
     },
@@ -498,8 +623,8 @@
     {
       "id": "LANGUAGE-001",
       "title": "解析能力と版を分離して宣言する",
-      "status": "planned",
-      "scope": "実行環境・解析エンジン・対象言語版・対応能力を識別し、共通範囲比較と新能力試験を分ける。",
+      "status": "enforced",
+      "scope": "Modernアダプタは実行環境・解析エンジン・対象言語版・対応能力を宣言し、プロトコル1・DB25・UTF-8バイト位置を照合する。既存解析器との共通範囲比較と新能力試験を分ける。",
       "sources": [
         {
           "path": "src/lib/app/LanguagePackage.h",
@@ -508,18 +633,58 @@
         {
           "path": "src/lib/project/SourceGroup.h",
           "symbol": "allowsPartialClearing"
+        },
+        {
+          "path": "script/indexers/cli.py",
+          "symbol": "read_config"
+        },
+        {
+          "path": "script/indexers/cli.py",
+          "symbol": "Adapter capability mismatch"
+        },
+        {
+          "path": "script/indexers/python_indexer.py",
+          "symbol": "def capabilities"
+        },
+        {
+          "path": "script/indexers/cpp_indexer.py",
+          "symbol": "def capabilities"
+        },
+        {
+          "path": "script/indexers/rust_indexer.py",
+          "symbol": "def capabilities"
         }
       ],
-      "verification": [],
+      "verification": [
+        {
+          "path": "tests/modern_indexers/test_python_indexer.py",
+          "anchor": "test_capability_profile_is_versioned"
+        },
+        {
+          "path": "tests/modern_indexers/test_cpp_indexer.py",
+          "anchor": "test_engine_version_and_position_contract"
+        },
+        {
+          "path": "tests/modern_indexers/test_rust_indexer.py",
+          "anchor": "test_rust_capabilities_negotiate_coordinate_and_database_contract"
+        },
+        {
+          "path": "tests/modern_indexers/test_app_e2e.py",
+          "anchor": "test_real_app_rejects_protocol_mismatch_preserves_index_and_retries"
+        }
+      ],
       "docs": [
         "docs/architecture/language-compatibility.md",
         "docs/adr/0004-language-capabilities.md",
-        "docs/contracts/language-profiles.json"
+        "docs/contracts/language-profiles.json",
+        "docs/adr/0011-modern-language-adapters.md",
+        "docs/adr/0012-modern-cpp-indexer.md",
+        "docs/architecture/modern-indexers.md"
       ],
       "limitations": [
-        "機械可読プロファイルは本変更で追加するが、実行時の交渉APIは未実装。",
-        "新版Python/C++とRustの対応完了を示さない。",
-        "外部実行の起動・非ゼロ終了の境界はEXECUTION-001。版・能力・出力の交渉は未実装。"
+        "任意の外部Customプログラムとの実行時交渉APIは提供しない。宣言と照合は同梱Modernアダプタの固定プロトコル境界に限る。",
+        "各機械可読プロファイルに記載した版・構文・名前解決範囲を対象とし、全言語機能、全コンパイラー版、動的実行結果の同等性を保証しない。",
+        "旧Pythonの文字位置変換と内容検査はLOCATION-001/EXECUTION-001に従う。旧解析器へModernの能力を遡って付与するものではない。"
       ]
     },
     {
@@ -578,13 +743,17 @@
     },
     {
       "id": "STORAGE-002",
-      "title": "生存する記号間の階層メンバー関係を保持する",
+      "title": "生存する階層関係を保持し、今回不要になった組み込み型を回収する",
       "status": "enforced",
-      "scope": "ファイル消去で候補に入った親の位置なしMEMBER辺について、両端に消去集合外の出現が残る場合は保持する。",
+      "scope": "ファイル消去で候補に入った親の位置なしMEMBER辺について、両端に消去集合外の出現が残る場合は保持する。 今回消去される参照から到達した組み込み型だけを候補とし、残る出現・入辺・出辺がないものを回収する。",
       "sources": [
         {
           "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
           "symbol": "Membership belongs to the name hierarchy"
+        },
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "builtin_id_to_check"
         }
       ],
       "verification": [
@@ -595,16 +764,26 @@
         {
           "path": "tests/toy_projects/test_runner.py",
           "anchor": "missing-member"
+        },
+        {
+          "path": "src/test/StorageCleanupContractTestSuite.cpp",
+          "anchor": "storage cleanup collects only newly unused built in types"
+        },
+        {
+          "path": "tests/input_observation/fixtures/expected.json",
+          "anchor": "truncate"
         }
       ],
       "docs": [
         "docs/contracts/toy-problems.md",
-        "docs/architecture/storage-and-query.md"
+        "docs/architecture/storage-and-query.md",
+        "docs/adr/0010-clearing-unused-builtin-types.md"
       ],
       "limitations": [
         "旧版の削除専用トイで失われていた3辺を修正する意図した振る舞い変更である。",
         "辺自身が消去対象に出現する場合の先行消去と、MEMBER以外の辺の消去規則は変更しない。",
-        "自分の出現がない中間親を含む一般階層の保持・全関係の出所追跡は今回の契約外。"
+        "自分の出現がない中間親を含む一般階層の保持・全関係の出所追跡は今回の契約外。",
+        "未使用組み込み型の回収は今回触れた候補だけ。一般的な孤立ノードの回収へ広げない。"
       ]
     },
     {
@@ -654,7 +833,7 @@
       "id": "EXECUTION-001",
       "title": "外部実行の失敗を保持し、失敗した候補索引を採用しない",
       "status": "enforced",
-      "scope": "Python/Customのプロセス実行エラーと非ゼロ終了を分類・集約し、成功件数、候補破棄、後始末後の完了通知、CLI非ゼロ終了へ接続する。",
+      "scope": "Custom/Python外部コマンドの起動失敗・非ゼロ終了を集約する。旧Pythonの内容・位置検査、およびModernのプロトコル・能力・グラフ検査で無効な出力は採用せず、CLI失敗・旧索引保持・修復後再試行へつなぐ。",
       "sources": [
         {
           "path": "src/lib_core/ExternalIndexerOutcome.h",
@@ -679,6 +858,22 @@
         {
           "path": "src/lib/app/Application.cpp",
           "symbol": "MessageQuitApplication(message->exitCode)"
+        },
+        {
+          "path": "src/lib_core/ExternalIndexerOutcome.h",
+          "symbol": "ExternalOutputOutcome"
+        },
+        {
+          "path": "src/lib/data/storage/sqlite/SqliteIndexStorage.cpp",
+          "symbol": "SAVEPOINT python_source_positions"
+        },
+        {
+          "path": "script/indexers/cli.py",
+          "symbol": "def index("
+        },
+        {
+          "path": "script/indexers/graph.py",
+          "symbol": "def write_graph"
         }
       ],
       "verification": [
@@ -717,6 +912,34 @@
         {
           "path": "docs/contracts/formal/ExternalIndexing.tla",
           "anchor": "CleanupBeforeNotification"
+        },
+        {
+          "path": "src/test/ExternalIndexerOutcomeTestSuite.cpp",
+          "anchor": "invalid output rejects a run without inventing a process failure"
+        },
+        {
+          "path": "tests/input_observation/test_input_observation.py",
+          "anchor": "test_invalid_python_output_keeps_accepted_index_and_allows_retry"
+        },
+        {
+          "path": "tests/input_observation/test_input_observation.py",
+          "anchor": "test_conflicting_output_owners_are_rejected_before_execution"
+        },
+        {
+          "path": "docs/contracts/formal/PythonOutputValidation.tla",
+          "anchor": "NoPublicationAfterInvalidOutput"
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "anchor": "test_conflicting_content_rolls_back_the_whole_transaction"
+        },
+        {
+          "path": "tests/modern_indexers/test_graph.py",
+          "anchor": "test_invalid_output_is_rejected_before_database_creation"
+        },
+        {
+          "path": "tests/modern_indexers/test_app_e2e.py",
+          "anchor": "test_real_app_rejects_protocol_mismatch_preserves_index_and_retries"
         }
       ],
       "docs": [
@@ -724,13 +947,17 @@
         "docs/contracts/external-indexing.md",
         "docs/architecture/indexing-lifecycle.md",
         "docs/architecture/language-compatibility.md",
-        "docs/contracts/formal/README.md"
+        "docs/contracts/formal/README.md",
+        "docs/adr/0009-canonical-python-source-positions.md",
+        "docs/contracts/input-observations.md",
+        "docs/adr/0011-modern-language-adapters.md",
+        "docs/architecture/modern-indexers.md"
       ],
       "limitations": [
         "起動・非ゼロ終了を成功扱いしていた既存挙動への意図した修正。成功経路の保存観測は別途比較する。",
-        "終了コード0でstderr出力やDB書き込みがなくてもプロセス成功。意味的完全性、保存版、出力妥当性の交渉は未実装。",
-        "スケジューラーの正常終了と索引器の実行成功は別の結果。取消、タイムアウト、子孫回収、内部C++/Javaワーカーは本契約の範囲外。",
-        "有限モデルは2〜3コマンドの結果確定・集約・採用方針・後始末・通知を扱う。全スレッド実行やOSの原子性の証明ではない。",
+        "終了コード0でstderr出力やDB書き込みがなくてもプロセス分類は成功。旧Pythonの内容・位置とModernのプロトコル・グラフは別途検査するが、任意Custom出力の意味的完全性は保証しない。",
+        "スケジューラーの正常終了と索引器の実行成功は別の結果。一般Customの取消・タイムアウト・子孫回収、内部C++/Javaワーカーは本契約の範囲外。Modernエンジン個別の失敗処理は各能力プロファイルと試験を参照する。",
+        "既存モデルは2〜3コマンド、新しい出力モデルは2つのDB/ソース組の有限検査。全スレッド・SQLite更新・OS原子性の証明ではない。",
         "失敗が判明した候補の採用を抑止する範囲であり、DB置換中のクラッシュ復旧はPUBLICATION-001に残る。"
       ]
     },

@@ -1,0 +1,128 @@
+{
+  "comment": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "# 日本語\n"
+      ]
+    ],
+    "locations": [],
+    "errors": []
+  },
+  "docstring": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "'''日本語\n文字列\n'''\n"
+      ]
+    ],
+    "locations": [
+      [
+        1,
+        1,
+        3,
+        3,
+        5
+      ]
+    ],
+    "errors": []
+  },
+  "incomplete-call": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "def f(\n"
+      ]
+    ],
+    "locations": [
+      [
+        1,
+        5,
+        1,
+        5,
+        9
+      ]
+    ],
+    "errors": []
+  },
+  "missing-body": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "def f():\n"
+      ]
+    ],
+    "locations": [
+      [
+        1,
+        5,
+        1,
+        5,
+        9
+      ]
+    ],
+    "errors": []
+  },
+  "blank-lines": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "\n\ndef 日本語():\n    return 1\n\n\n"
+      ]
+    ],
+    "locations": [
+      [
+        3,
+        5,
+        3,
+        7,
+        0
+      ],
+      [
+        3,
+        1,
+        5,
+        0,
+        1
+      ]
+    ],
+    "errors": []
+  },
+  "comment-tail": {
+    "exit": 0,
+    "log": "INFO: Loaded database is compatible.\n",
+    "content": [
+      [
+        1,
+        "def f():\n    return 1 # 日本語\n"
+      ]
+    ],
+    "locations": [
+      [
+        1,
+        5,
+        1,
+        5,
+        0
+      ],
+      [
+        1,
+        1,
+        2,
+        12,
+        1
+      ]
+    ],
+    "errors": []
+  }
+}

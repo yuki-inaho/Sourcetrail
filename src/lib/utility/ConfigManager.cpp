@@ -351,8 +351,10 @@ std::vector<std::string> ConfigManager::getSublevelKeys(const std::string& key) 
 bool ConfigManager::load(const std::shared_ptr<TextAccess> textAccess)
 {
 	TiXmlDocument doc;
-	const char* pTest = doc.Parse(textAccess->getText().c_str(), 0, TIXML_ENCODING_UTF8);
-	if (pTest != nullptr)
+	doc.Parse(textAccess->getText().c_str(), 0, TIXML_ENCODING_UTF8);
+	// TinyXML can return null after a successful parse ending exactly at EOF.
+	// Source reads preserve the final newline, so inspect the actual error state.
+	if (!doc.Error())
 	{
 		TiXmlHandle docHandle(&doc);
 		TiXmlNode* rootNode = docHandle.FirstChild("config").ToNode();

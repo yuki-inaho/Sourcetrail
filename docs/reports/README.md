@@ -28,6 +28,10 @@
 | [2026-10-30 / 006-published-evidence-repair](2026-10-30/006-published-evidence-repair/report.md) | CIで検出した証跡の追跡漏れと、Git indexだけでの文書再検査 | 2 source 単位 | 元の失敗と訂正を保持、ユーザー側のレビュー待ち |
 | [2026-10-30 / 007-external-indexer-failure-baseline](2026-10-30/007-external-indexer-failure-baseline/report.md) | 人工外部索引器の設計と、実行失敗の誤成功・旧索引置換の再現 | 3 source 単位 | 独立した期待と失敗基準を保持、修正後の照合とユーザー側レビューへ |
 | [2026-10-30 / 008-external-indexer-outcomes](2026-10-30/008-external-indexer-outcomes/report.md) | 外部実行の成否・候補破棄・終端通知、838ケース、14観測一致とTLA+の検証 | 10 source 単位 | assistant側指摘と観測器の初期状態認識を修正、ユーザー側レビュー待ち |
+| [2026-10-31 / 009-input-position-baseline](2026-10-31/009-input-position-baseline/report.md) | 回収可能な公開基準の入力・位置境界を再読解。元レポートの回収ではない | 3 source 単位 | 新しい実装と検証の010・011へ |
+| [2026-10-31 / 010-input-observation-contracts](2026-10-31/010-input-observation-contracts/report.md) | 内容変更・取得状態・組込み型清掃の再実装と人工対象 | 10 source 単位 | 実装担当の検証と親担当照合を実施、ユーザー側レビュー待ち |
+| [2026-10-31 / 011-source-position-contracts](2026-10-31/011-source-position-contracts/report.md) | 旧PythonのUTF-8位置と不正出力拒否。実アプリ28件と有限モデル | 7 source 単位 | 旧DBは全体再索引化。新版言語の統合検証は後続バッチへ |
+| [2026-10-31 / 012-modern-language-integration](2026-10-31/012-modern-language-integration/report.md) | Python3.14／Clang18／Rustソース索引器と実アプリ統合、最終検証 | 10 source 単位 | 実エンジン・保存・更新・混在の根拠と対応範囲を記録 |
 
 ## 入力版と履歴
 

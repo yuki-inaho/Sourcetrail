@@ -11,6 +11,8 @@ class TextAccess
 {
 public:
 	static std::shared_ptr<TextAccess> createFromFile(const FilePath& filePath);
+	// A successful empty file is non-null; open/read failures return nullptr.
+	static std::shared_ptr<TextAccess> tryCreateFromFile(const FilePath& filePath);
 	static std::shared_ptr<TextAccess> createFromString(
 		const std::string& text, const FilePath& filePath = FilePath());
 	static std::shared_ptr<TextAccess> createFromLines(
@@ -37,7 +39,6 @@ public:
 	std::string getText() const;
 
 private:
-	static std::vector<std::string> readFile(const FilePath& filePath);
 	static std::vector<std::string> splitStringByLines(const std::string& text);
 
 	TextAccess();

@@ -1,0 +1,558 @@
+✨ Pixi task (configure in default): cmake -S . -B build/pixi -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=$CONDA_PREFIX -DPython3_EXECUTABLE=$CONDA_PREFIX/bin/python -DBoost_USE_STATIC_LIBS=OFF -DBUILD_CXX_LANGUAGE_PACKAGE=ON -DBUILD_PYTHON_LANGUAGE_PACKAGE=ON -DBUILD_JAVA_LANGUAGE_PACKAGE=OFF -DLLVM_LINK_LLVM_DYLIB=ON -DBUILD_TESTING=ON: (Configure the application with C++ and Python indexing)
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Version: 0.0.0
+-- setting up the buildtype for versioning
+bash: ''
+-- 'Treat warnings as errors' policy is disabled
+-- Found LLVM 11.1.0
+-- Trying to find Clang compiler headers in '.' build config in directory '/workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/./lib/clang/11.1.0/include'.
+-- Found headers for '.' build config.
+CMake Warning (dev) at CMakeLists.txt:188 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found Qt 5.15.8
+CMake Deprecation Warning at src/lib_core/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.10 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  to tell CMake that the project requires at least <min> but has been updated
+  to work with policies introduced by <max> or earlier.
+
+
+-- Building the Java indexer will be skipped. You can enable building this target by setting 'BUILD_JAVA_LANGUAGE_PACKAGE' to 'ON'.
+CMake Warning (dev) at CMakeLists.txt:558 (add_custom_command):
+  The following keywords are not supported when using
+  add_custom_command(TARGET): DEPENDS.
+
+  Policy CMP0175 is not set: add_custom_command() rejects invalid arguments.
+  Run "cmake --help-policy CMP0175" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:753 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning (dev) at .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:44 (message):
+  qt5_use_modules is not part of the official API, and might be removed in Qt
+  6.
+Call Stack (most recent call first):
+  .pixi/envs/default/lib/cmake/Qt5Core/Qt5CoreMacros.cmake:434 (_qt5_warn_deprecated)
+  CMakeLists.txt:754 (qt5_use_modules)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- create symlink: /workspace/scratch/b7462e898297/Sourcetrail/bin/app/data -> /workspace/scratch/b7462e898297/Sourcetrail/build/pixi/app/data
+-- Configuring done (0.3s)
+-- Generating done (0.1s)
+-- Build files have been written to: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+
+✨ Pixi task (python-parser-ready in python-parser): python --version: (Prepare the Python environment inspected by the legacy indexer)
+Python 3.8.20
+
+✨ Pixi task (build in default): cmake --build build/pixi --parallel 2: (Build Sourcetrail, its indexers, and the C++ test executable)
+[1/8] Running utility command for versionnumber
+-- Found Git: /workspace/scratch/b7462e898297/Sourcetrail/.pixi/envs/default/bin/git (found version "2.53.0")
+-- Version: 0.0.0
+[2/7] Automatic MOC for target Sourcetrail_lib_gui
+[3/7] Building CXX object CMakeFiles/Sourcetrail_lib_gui.dir/Sourcetrail_lib_gui_autogen/mocs_compilation.cpp.o
+[4/7] Linking CXX static library libSourcetrail_lib_gui.a
+[5/7] Linking CXX executable app/sourcetrail_indexer
+[6/7] Linking CXX executable app/Sourcetrail
+[7/7] Linking CXX executable test/Sourcetrail_test
+
+✨ Pixi task (test in default): ctest --test-dir build/pixi --output-on-failure --no-tests=error --output-junit test-results.xml: (Run the existing suite and both languages' regression and E2E tests)
+Internal ctest changing into directory: /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+Test project /workspace/scratch/b7462e898297/Sourcetrail/build/pixi
+      Start  1: external-indexer-e2e
+ 1/15 Test  #1: external-indexer-e2e .............   Passed   24.13 sec
+      Start  2: input-observation-e2e
+ 2/15 Test  #2: input-observation-e2e ............***Failed    0.55 sec
+EEEEEEEEEEEEEEEEEEEEEEEEEEEE                                             [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[same-mtime-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[same-mtime-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[past-mtime-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[past-mtime-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+__ ERROR at setup of test_input_content_changes_and_clean_rebuild[touch-cxx] ___
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[touch-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[truncate-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[truncate-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[remove-final-newline-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[remove-final-newline-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[missing-stored-content-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[missing-stored-content-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[null-stored-content-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[null-stored-content-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[empty-to-populated-cxx] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_input_content_changes_and_clean_rebuild[empty-to-populated-python] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[lf-plain] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[lf-bom] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[crlf-plain] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[crlf-bom] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[no-final-lf-plain] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[no-final-lf-bom] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[no-final-crlf-plain] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_python_positions_select_utf8_tokens_in_stored_content[no-final-crlf-bom] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_repeated_python_source_is_normalized_once_per_database[1] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_repeated_python_source_is_normalized_once_per_database[2] _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_invalid_python_output_keeps_accepted_index_and_allows_retry _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+_ ERROR at setup of test_conflicting_output_owners_are_rejected_before_execution _
+
+self = PosixPath('/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/current'
+
+.pixi/envs/default/lib/python3.11/pathlib.py:1116: FileNotFoundError
+- generated xml file: /workspace/scratch/b7462e898297/Sourcetrail/build/input-observation/results.xml -
+=========================== short test summary info ============================
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[same-mtime-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[same-mtime-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[past-mtime-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[past-mtime-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[touch-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[touch-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[truncate-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[truncate-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[remove-final-newline-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[remove-final-newline-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[missing-stored-content-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[missing-stored-content-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[null-stored-content-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[null-stored-content-python]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[empty-to-populated-cxx]
+ERROR tests/input_observation/test_input_observation.py::test_input_content_changes_and_clean_rebuild[empty-to-populated-python]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[lf-plain]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[lf-bom]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[crlf-plain]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[crlf-bom]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[no-final-lf-plain]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[no-final-lf-bom]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[no-final-crlf-plain]
+ERROR tests/input_observation/test_input_observation.py::test_python_positions_select_utf8_tokens_in_stored_content[no-final-crlf-bom]
+ERROR tests/input_observation/test_input_observation.py::test_repeated_python_source_is_normalized_once_per_database[1]
+ERROR tests/input_observation/test_input_observation.py::test_repeated_python_source_is_normalized_once_per_database[2]
+ERROR tests/input_observation/test_input_observation.py::test_invalid_python_output_keeps_accepted_index_and_allows_retry
+ERROR tests/input_observation/test_input_observation.py::test_conflicting_output_owners_are_rejected_before_execution
+28 errors in 0.40s
+
+      Start  3: toy-projects
+ 3/15 Test  #3: toy-projects .....................   Passed   25.64 sec
+      Start  4: legacy
+ 4/15 Test  #4: legacy ...........................   Passed    4.20 sec
+      Start  5: cpp-contracts
+ 5/15 Test  #5: cpp-contracts ....................   Passed    1.36 sec
+      Start  6: verification-contracts
+ 6/15 Test  #6: verification-contracts ...........   Passed   10.27 sec
+      Start  7: cpp-regression
+ 7/15 Test  #7: cpp-regression ...................   Passed    0.16 sec
+      Start  8: cpp-e2e
+ 8/15 Test  #8: cpp-e2e ..........................   Passed   11.62 sec
+      Start  9: python-regression
+ 9/15 Test  #9: python-regression ................   Passed    2.53 sec
+      Start 10: python-e2e
+10/15 Test #10: python-e2e .......................   Passed   10.90 sec
+      Start 11: core-input-contracts
+11/15 Test #11: core-input-contracts .............   Passed    0.00 sec
+      Start 12: core-location-contracts
+12/15 Test #12: core-location-contracts ..........   Passed    0.00 sec
+      Start 13: core-refresh-contracts
+13/15 Test #13: core-refresh-contracts ...........   Passed    0.02 sec
+      Start 14: core-command-contracts
+14/15 Test #14: core-command-contracts ...........   Passed    0.00 sec
+      Start 15: core-execution-contracts
+15/15 Test #15: core-execution-contracts .........   Passed    0.00 sec
+
+93% tests passed, 1 tests failed out of 15
+
+Label Time Summary:
+contract             =  61.98 sec*proc (10 tests)
+cpp                  =  63.49 sec*proc (11 tests)
+e2e                  =  72.84 sec*proc (5 tests)
+external-indexer     =  24.13 sec*proc (1 test)
+input-observation    =   0.55 sec*proc (1 test)
+legacy               =   4.20 sec*proc (1 test)
+portability          =   0.03 sec*proc (5 tests)
+python               =  74.02 sec*proc (6 tests)
+regression           =   6.89 sec*proc (3 tests)
+toy                  =  25.64 sec*proc (1 test)
+
+Total Test time (real) =  91.39 sec
+
+The following tests FAILED:
+	  2 - input-observation-e2e (Failed)                    contract cpp e2e input-observation python
+Errors while running CTest

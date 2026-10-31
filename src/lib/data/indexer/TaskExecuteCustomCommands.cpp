@@ -271,6 +271,7 @@ void TaskExecuteCustomCommands::doEnter(std::shared_ptr<Blackboard> blackboard)
 
 	if (m_indexerCommandProvider)
 	{
+		std::map<FilePath, bool> outputOwners;
 		for (const FilePath& sourceFilePath:
 			 utility::partitionFilePathsBySize(m_indexerCommandProvider->getAllSourceFilePaths(), 2))
 		{
@@ -282,12 +283,19 @@ void TaskExecuteCustomCommands::doEnter(std::shared_ptr<Blackboard> blackboard)
 				{
 					m_targetDatabaseFilePath = indexerCommand->getDatabaseFilePath();
 				}
+				bool python = false;
 #if BUILD_PYTHON_LANGUAGE_PACKAGE
-				if (indexerCommand->getIndexerCommandType() == INDEXER_COMMAND_PYTHON)
+				python = indexerCommand->getIndexerCommandType() == INDEXER_COMMAND_PYTHON;
+				m_hasPythonCommands = m_hasPythonCommands || python;
+#endif
+				const FilePath ownedPath = sourceFilePath.getCanonical();
+				const auto previousOwner = outputOwners.find(ownedPath);
+				if (previousOwner != outputOwners.end() && previousOwner->second != python)
 				{
-					m_hasPythonCommands = true;
+					m_runState->rejectOutput();
+					LOG_ERROR("Conflicting Python/Custom output ownership: " + ownedPath.str());
 				}
-#endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
+				outputOwners[ownedPath] = python;
 
 				if (indexerCommand->getRunInParallel())
 				{
@@ -307,7 +315,7 @@ void TaskExecuteCustomCommands::doEnter(std::shared_ptr<Blackboard> blackboard)
 
 Task::TaskState TaskExecuteCustomCommands::doUpdate(std::shared_ptr<Blackboard> blackboard)
 {
-	if (m_interrupted)
+	if (m_interrupted || m_runState->snapshot().hasFailure())
 	{
 		return STATE_SUCCESS;
 	}
@@ -351,6 +359,39 @@ Task::TaskState TaskExecuteCustomCommands::doUpdate(std::shared_ptr<Blackboard> 
 			FileSystem::remove(sourceDatabaseFilePath);
 		}
 		return STATE_SUCCESS;
+	}
+
+	// Each DB/source pair is converted once after all writers have stopped.
+	// Converting after each command would double-convert repeated Python input;
+	// converting after injection would mix Unicode and byte coordinate domains.
+	for (const auto& output: m_pythonSourcesByDatabase)
+	{
+		std::string error;
+		bool valid = false;
+		try
+		{
+			PersistentStorage storage(output.first, FilePath());
+			valid = storage.normalizePythonSourceLocations(output.second, error);
+		}
+		catch (CppSQLite3Exception& failure)
+		{
+			error = failure.errorMessage();
+		}
+		catch (const std::exception& failure)
+		{
+			error = failure.what();
+		}
+		if (!valid)
+		{
+			m_runState->rejectOutput();
+			MessageStatus(utility::decodeFromUtf8("Invalid Python output: " + error), true, false)
+				.dispatch();
+			for (const FilePath& sourceDatabaseFilePath: m_sourceDatabaseFilePaths)
+			{
+				FileSystem::remove(sourceDatabaseFilePath);
+			}
+			return STATE_SUCCESS;
+		}
 	}
 
 	{
@@ -497,6 +538,15 @@ void TaskExecuteCustomCommands::runIndexerCommand(
 		const sourcetrail::core::ExternalProcessOutcome outcome =
 			sourcetrail::core::classifyExternalProcess(!out.error.empty(), out.exitCode);
 		m_runState->settleCommand(outcome);
+
+#if BUILD_PYTHON_LANGUAGE_PACKAGE
+		if (indexerCommand->getIndexerCommandType() == INDEXER_COMMAND_PYTHON &&
+			outcome == sourcetrail::core::ExternalProcessOutcome::Succeeded)
+		{
+			std::lock_guard<std::mutex> lock(m_pythonSourcesMutex);
+			m_pythonSourcesByDatabase[indexerCommand->getDatabaseFilePath()].insert(sourcePath);
+		}
+#endif
 
 		if (storage && outcome == sourcetrail::core::ExternalProcessOutcome::Succeeded)
 		{

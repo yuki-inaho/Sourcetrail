@@ -1,0 +1,87 @@
+{
+  "source_revision": {
+    "base_commit": "4d69a44ac67d03e4117c266d491c01a7a4ba87f7",
+    "mode": "working-tree",
+    "note": "現セッションの再実装。元未公開コミットを回収した記録ではない。"
+  },
+  "verification": {
+    "native_build": "/workspace/scratch/b7462e898297/build-input-xml-fix.log",
+    "cpp_contracts": {
+      "passed": true,
+      "cases": 39,
+      "assertions": 65801,
+      "log": "/workspace/scratch/b7462e898297/input-cpp-contracts-final.log",
+      "junit": "build/pixi/input-cpp-contracts-final.xml"
+    },
+    "input_e2e": {
+      "passed": true,
+      "cases": 28,
+      "seconds": 96.4,
+      "log": "/workspace/scratch/b7462e898297/input-observation-e2e-fixed.log",
+      "junit": "build/input-observation-results-fixed.xml",
+      "cli_receipts": "build/input-observation-e2e-fixed"
+    },
+    "existing_suites": {
+      "passed": true,
+      "legacy": {
+        "cases": 608,
+        "assertions": 1616
+      },
+      "cpp_regression": {
+        "cases": 7,
+        "assertions": 54
+      },
+      "cpp_e2e": {
+        "cases": 3,
+        "assertions": 270
+      },
+      "python_regression": 4,
+      "python_e2e": 4,
+      "log": "/workspace/scratch/b7462e898297/input-existing-suites.log",
+      "junit": "build/pixi/input-existing-suites.xml"
+    },
+    "formal": "build/input-observation-formal-final/summary.json",
+    "raw_parser_observations": [
+      "build/input-position-raw-probes/observations.json",
+      "build/input-position-raw-probes/boundaries.json"
+    ]
+  },
+  "failures_and_corrections": [
+    {
+      "issue": "RefreshInfoGenerator used const FileInfo but old TimeStamp::operator> is nonconst",
+      "result": "ローカルFileInfoからconstを外して再ビルド成功",
+      "log": "/workspace/scratch/b7462e898297/build-retry.log"
+    },
+    {
+      "issue": "quoted test path was interpolated by pre-existing getFileByPath",
+      "result": "束縛変数へ限定変更、最終cpp-contracts成功",
+      "log": "/workspace/scratch/b7462e898297/input-cpp-contracts.log"
+    },
+    {
+      "issue": "ConfigManager treated TinyXML Parse null return at valid EOF as failure",
+      "result": "doc.Errorで判定し、最終改行あり/なし成功と不正XML拒否の回帰を追加。初回E2E停止の自己プロセスを停止して別出力先で28件成功",
+      "log": "build/input-observation-e2e/test_input_content_changes_and0/input 日本語/home/.config/sourcetrail/log/log_2026-10-31_16-04-10.txt"
+    },
+    {
+      "issue": "relinked Catch executable mode was 0644",
+      "result": "生成物chmod +x後39ケース成功。ソースの隠れた回避は追加していない",
+      "log": "/workspace/scratch/b7462e898297/input-cpp-contracts-fixed.log"
+    },
+    {
+      "issue": "TLC local RMI listener is unavailable in restricted sandbox",
+      "result": "許可された通常環境で再実行。修正前モデルの括弧不足も保持し、最終4モデル成功",
+      "logs": [
+        "build/input-observation-formal",
+        "build/input-observation-formal-escalated",
+        "build/input-observation-formal-final"
+      ]
+    }
+  ],
+  "limitations": [
+    "旧Python索引は全体再索引化が必要。既存DBの座標単位を推測移行しない。",
+    "正常保存のLF正規化は維持し、BOM/最終改行有無を保持する。",
+    "内容を保存しない非索引依存ではmtime互換判定が残る。",
+    "一般Custom出力の意味妥当性・GUI・Windows/macOS・原子的入力取得/公開は本実装の保証外。"
+  ],
+  "evidence_note": "絶対パスは当時の実行位置。再現可能な試験本体はリポジトリに含まれる。コピーしたtxt/XML/JSONが公開用の結果記録。"
+}

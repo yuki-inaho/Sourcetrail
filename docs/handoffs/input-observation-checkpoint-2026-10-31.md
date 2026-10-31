@@ -101,3 +101,9 @@
 4. GitHubへ反映したツリーと検証対象の一致、CI、レビューを確認してからマージを判断する。
 
 新版Python／C++解析器、Rustソース索引器、実GUI・Windows、UTF-16位置、入力の原子的取得、一般のCustom出力プロトコル、タイムアウト・取消、クラッシュ時の公開原子性は、今回の引継ぎでも実装完了としない。
+
+## 同日後続作業の追記
+
+上記は公開チェックポイント時点の記録として保持する。後続作業では原ファイル一式を回収できなかったため、GAP-002/003、人工対象、ADR-0008〜0010を再実装・再構成した。新版Python3.14、Clang18、Rustソース索引器も追加し、Modernグループでアプリへ接続した。
+
+現在の実装・証跡は[公開基準の再読解009](../reports/2026-10-31/009-input-position-baseline/report.md)、[入力観測010](../reports/2026-10-31/010-input-observation-contracts/report.md)、[位置と出力011](../reports/2026-10-31/011-source-position-contracts/report.md)、[新版言語と統合012](../reports/2026-10-31/012-modern-language-integration/report.md)を参照する。前回の未公開コミットと同一の内容を復元したとは扱わない。実GUI・他OS・原子的入力取得/公開・一般Customの全失敗処理は引き続き別の課題である。

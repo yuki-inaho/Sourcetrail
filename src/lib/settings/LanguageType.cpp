@@ -86,6 +86,7 @@ LanguageType getLanguageTypeForSourceGroupType(SourceGroupType t)
 		return LANGUAGE_PYTHON;
 #endif	  // BUILD_PYTHON_LANGUAGE_PACKAGE
 	case SOURCE_GROUP_CUSTOM_COMMAND:
+	case SOURCE_GROUP_MODERN:
 		return LANGUAGE_CUSTOM;
 	default:
 		break;
